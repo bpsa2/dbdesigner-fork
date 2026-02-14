@@ -18,6 +18,20 @@
 ### Runtime Verification
 - All 5 binaries launch under `xvfb-run` without crashing (exit 124 = killed by timeout = stayed alive)
 - XML model loading verified (14 tables from order.xml via TestModelLoad)
+- **Automated UI self-test passes: 63 PASS, 0 FAIL, 79 SKIP** (run via `--selftest`)
+
+### Automated UI Self-Test (`UITestRunner.pas`)
+- Runs via `./bin/DBDesignerFork --selftest` — exits with 0 on success, N on N failures
+- Also accessible via **Database → Run UI Tests** menu item during normal usage
+- **Phase 0**: Closes Tips/startup dialogs programmatically
+- **Phase 1**: Creates a new blank model (clicks NewMI) for testing context
+- **Phase 2**: Clicks all 113 menu items (skips unsafe: exit, save, open, print, DB ops, browser links)
+- **Phase 3**: Clicks all 29 speed buttons on MainForm
+- **Phase 4**: Clicks buttons on other visible forms (snapshots form list to avoid iteration bugs)
+- 2-second delay between each click for UI stability
+- Full stack traces captured on any failure via `BackTraceStrFunc` + `ExceptFrames`
+- Results logged to `/tmp/UITestResults.log` with incremental flushing
+- **4 bugs found and fixed**: EAccessViolation in DatatypesMI, DBModelMI, ResetPalettePositionsMI, DockPalettesMI (all due to nil palette form references — added `Assigned()` guards)
 
 ### Database Shim Layer — Verified with SQLite
 - `DriverName="SQLite"` → `ConnectorType="SQLite3"` mapping ✅

@@ -139,12 +139,35 @@ See [`port-to-lazarus.md`](port-to-lazarus.md) for the detailed porting guide an
 
 ### Runtime Testing Status
 
-⚠️ **Runtime testing is still needed.** The application compiles and links but has not yet been tested with a display server. Known areas requiring runtime verification:
-- Application launch and UI rendering
-- Database connectivity (MySQL, PostgreSQL, SQLite)
-- Model loading/saving
+✅ **Application launches and passes automated UI self-tests.**
+
+An automated **UI Test Runner** (`UITestRunner.pas`) is included that programmatically clicks all safe menu items and buttons, catching and reporting any unhandled exceptions with full stack traces.
+
+**Latest self-test results: 63 PASS, 0 FAIL, 79 SKIP (142 components tested)**
+
+To run the self-test:
+```bash
+# Automated (exits with 0 on success, non-zero on failure)
+./bin/DBDesignerFork --selftest
+
+# Results are logged to /tmp/UITestResults.log
+```
+
+The self-test covers:
+- ✅ Application launch and UI rendering
+- ✅ All display/notation/style menu items
+- ✅ All toolbar speed buttons (29 tool selectors)
+- ✅ Palette show/hide/dock/undock operations
+- ✅ Window arrangement (cascade, tile)
+- ✅ Design/query mode switching
+- ✅ New model creation
+
+Areas still requiring manual or integration testing:
+- Database connectivity (MySQL, PostgreSQL — SQLite verified via test programs)
+- Model loading/saving through the UI
 - PDF export
 - Plugin loading
+- Print / page setup
 
 ## License
 

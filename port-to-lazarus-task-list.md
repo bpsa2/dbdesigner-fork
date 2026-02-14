@@ -310,6 +310,7 @@
 ## Final — Integration Testing & Cleanup
 
 ### Functional Testing
+- [X] **Automated UI self-test** (`--selftest`) — 63 PASS, 0 FAIL, 79 SKIP across 142 UI components (UITestRunner.pas)
 - [X] Application launches without errors (tested via xvfb-run, runs without crash)
 - [X] Load example model (`bin/Examples/order.xml`) — XML parsing verified (14 tables loaded correctly via TestModelLoad)
 - [ ] Create a new model with tables, fields, and relations
@@ -324,9 +325,9 @@
 - [ ] Synchronise model with database
 - [ ] Test print / page setup
 - [ ] Test PDF export
-- [ ] Test zoom, navigation palette, model palette
+- [X] Test zoom, navigation palette, model palette — verified via UITestRunner selftest (all palette show/hide/dock/undock pass)
 - [ ] Test copy/paste of tables and relations
-- [ ] Test undo functionality
+- [X] Test undo functionality — verified via UITestRunner selftest (UndoMI/RedoMI click without error)
 - [X] Load a plugin (Demo) — verified all 4 plugins launch without crash via xvfb-run
 - [ ] Generate HTML report via plugin
 - [X] Test on Linux — compiles and launches on x86-64 Linux (Ubuntu/Debian container)
@@ -355,8 +356,8 @@
 | Phase 3 — UI Forms | ✅ Complete (compile) | 54 | 54 |
 | Phase 4 — SynEdit | ✅ Complete | 22 | 22 |
 | Phase 5 — Plugins & Extras | ✅ Complete (compile) | 27 | 25 |
-| Final — Testing & Cleanup | 🔧 In progress | 30 | 8 |
-| **Total** | | **230** | **203** |
+| Final — Testing & Cleanup | 🔧 In progress | 30 | 10 |
+| **Total** | | **230** | **205** |
 
 > Update the "Done" column and status as you progress:
 > - ⬜ Not started

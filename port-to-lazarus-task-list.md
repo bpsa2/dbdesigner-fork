@@ -148,7 +148,7 @@
 ### 2.5 Configuration Compatibility
 - [X] Review `bin/Data/DBConn_DefaultSettings.ini` — parameter names preserved via shim layer
 - [X] Review `bin/Data/DBDesignerFork_DatabaseInfo.ini` — compatible
-- [ ] Test connection with at least one database engine (requires runtime testing)
+- [X] Test connection with at least one database engine (SQLite verified: connect, DDL, DML, query, schema info)
 
 ### 2.6 Phase 2 Wrap-up
 - [X] All database-related units compile
@@ -318,8 +318,9 @@
 - [ ] Export SQL script (PostgreSQL) — verify output
 - [ ] Export SQL script (Oracle) — verify output
 - [ ] Export SQL script (SQLite) — verify output
+- [X] Connect to a live SQLite database (verified via TestSQLExprShim)
 - [ ] Connect to a live MySQL database
-- [ ] Reverse-engineer a database schema
+- [X] Reverse-engineer a database schema (stTables, stColumns, stIndexes all verified with SQLite)
 - [ ] Synchronise model with database
 - [ ] Test print / page setup
 - [ ] Test PDF export
@@ -354,8 +355,8 @@
 | Phase 3 — UI Forms | ✅ Complete (compile) | 54 | 54 |
 | Phase 4 — SynEdit | ✅ Complete | 22 | 22 |
 | Phase 5 — Plugins & Extras | ✅ Complete (compile) | 27 | 25 |
-| Final — Testing & Cleanup | 🔧 In progress | 29 | 5 |
-| **Total** | | **229** | **200** |
+| Final — Testing & Cleanup | 🔧 In progress | 30 | 8 |
+| **Total** | | **230** | **203** |
 
 > Update the "Done" column and status as you progress:
 > - ⬜ Not started

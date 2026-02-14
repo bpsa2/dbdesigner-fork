@@ -13520,6 +13520,7 @@ end;
 procedure TEERImage.LoadImageFromFile;
 var theOpenDialog: TOpenDialog;
   RecentOpenImageDir: string;
+  thePic: TPicture;
 begin
   theOpenDialog:=TOpenDialog.Create(nil);
   try
@@ -13552,7 +13553,17 @@ begin
     begin
       RecentOpenImageDir:=ExtractFilePath(theOpenDialog.Filename);
 
-      Img.LoadFromFile(theOpenDialog.Filename);
+      // Use TPicture to auto-detect format (PNG, BMP, etc.)
+      // since TBitmap.LoadFromFile only supports BMP in LCL
+      thePic := TPicture.Create;
+      try
+        thePic.LoadFromFile(theOpenDialog.Filename);
+        Img.Width := thePic.Width;
+        Img.Height := thePic.Height;
+        Img.Canvas.Draw(0, 0, thePic.Graphic);
+      finally
+        thePic.Free;
+      end;
 
       if(Obj_W<2)then
       begin
@@ -13620,6 +13631,7 @@ end;
 procedure TEERImage.SetXML(theXMLImage: IXMLIMAGEType);
 var imgdata: string;
   theImgFile: TMemoryStream;
+  thePic: TPicture;
 begin
   try
     Obj_id:=theXMLImage.ID;
@@ -13649,7 +13661,18 @@ begin
     theImgFile:=TMemoryStream.Create;
     try
       DMMain.DecodeStreamFromXML(imgdata, theImgFile);
-      Img.LoadFromStream(theImgFile);
+      // Use TPicture to auto-detect format (PNG, BMP, etc.)
+      // since TBitmap.LoadFromStream only supports BMP in LCL
+      thePic := TPicture.Create;
+      try
+        theImgFile.Position := 0;
+        thePic.LoadFromStream(theImgFile);
+        Img.Width := thePic.Width;
+        Img.Height := thePic.Height;
+        Img.Canvas.Draw(0, 0, thePic.Graphic);
+      finally
+        thePic.Free;
+      end;
     finally
       FreeAndNil(theImgFile);
     end;
@@ -13673,6 +13696,7 @@ end;
 procedure TEERImage.SetXML2(theXMLParser: TXmlParser);
 var imgdata: string;
   theImgFile: TMemoryStream;
+  thePic: TPicture;
 begin
   try
     Obj_id:=StrToInt(theXMLParser.CurAttr.Value('ID'));
@@ -13702,7 +13726,18 @@ begin
     theImgFile:=TMemoryStream.Create;
     try
       DMMain.DecodeStreamFromXML(imgdata, theImgFile);
-      Img.LoadFromStream(theImgFile);
+      // Use TPicture to auto-detect format (PNG, BMP, etc.)
+      // since TBitmap.LoadFromStream only supports BMP in LCL
+      thePic := TPicture.Create;
+      try
+        theImgFile.Position := 0;
+        thePic.LoadFromStream(theImgFile);
+        Img.Width := thePic.Width;
+        Img.Height := thePic.Height;
+        Img.Canvas.Draw(0, 0, thePic.Graphic);
+      finally
+        thePic.Free;
+      end;
     finally
       FreeAndNil(theImgFile);
     end;

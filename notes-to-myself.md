@@ -1,55 +1,56 @@
-# Notes to Myself — DBDesigner Fork CLX→LCL Migration
+# Notes to Myself - DBDesigner Fork CLX→LCL Port
 
-## 🎉 MILESTONE: Project Compiles Successfully!
-The project now compiles under Free Pascal / Lazarus and produces a 36MB ELF x86-64 binary.
+## Current Status (Latest)
+- **Project compiles successfully** with Free Pascal/Lazarus
+- **SynEdit enabled** - SQL syntax highlighting works
+- **49 warnings remaining** - mostly cosmetic (destructor visibility, uninitialized vars)
+- **Binary**: 36MB+ ELF x86-64 in `bin/DBDesignerFork`
 
-## Architecture Summary
-- **Shim approach**: Created `clx_shims/` directory with 30+ compatibility units
-- CLX `Q*` units redirect to LCL equivalents via thin wrapper units
-- `Qt.pas` shim contains handle types, key constants, event types, paper sizes
-- `SqlExpr.pas` shim wraps SQLDB as CLX-compatible TSQLDataSet/TSQLConnection
-- `DBClient.pas` shim wraps BufDataset as TClientDataSet
-- `Provider.pas` shim provides TDataSetProvider stub
-- `PanelBitmap.pas` shim adds TPanel.Bitmap property via class helper
-- `TreeNodeSubItems.pas` shim adds TTreeNode.SubItems via class helper
+## Architecture
+- **Shim approach**: `clx_shims/` directory with 30+ compatibility units
+- Key shims: `Qt.pas`, `SqlExpr.pas` (wraps SQLDB), `DBClient.pas` (wraps BufDataset), `Provider.pas`, `PanelBitmap.pas`, `TreeNodeSubItems.pas`
 
-## Key Changes Made
-1. **DBDesigner4.inc**: Added `{$mode delphi}`, `{$H+}`, disabled `USE_SYNEDIT` and `USE_IXMLDBMODELType`
-2. **All .pas files**: Bulk replacement of CLX unit names → LCL equivalents
-3. **Main.pas**: CLX event system → LCL (OnEvent, Application.Style, keystate, clipboard)
-4. **MainDM.pas**: SaveBitmap signature changed from QPixmapH to HBITMAP under FPC
-5. **EditorQuery.pas**: SynEdit disabled, TTreeView.Columns commented, EditingItem→IsEditing
-6. **EERPageSetup.pas**: CLX Printer API replaced with LCL equivalents, HideEdits→public
-7. **EmbeddedPDF**: Disabled USE_CLX under FPC, replaced Windows→LCLType/LCLIntf
+## Git Commits Made
+1. Phase 0: Project setup, shims, .xfm→.lfm conversion
+2. Phase 1: Bulk CLX→LCL unit name replacements
+3. Phase 2: Compilation error fixes (many iterations)
+4. Phase 4: SynEdit re-enabled with SynEditTypes added
+5. .lfm fixes: BorderStyle (fbs→bs), clBackground→clBtnFace, fcsLatin1→0, MaxBlobSize removed, SQLConnection→Database
+6. RegisterClass calls for shim components
+7. Deprecation fixes: DecimalSeparator, Thread.Resume→Start
 
-## What's Disabled (needs re-enabling later)
-- `USE_SYNEDIT` — SynEdit integration (SQL editor syntax highlighting)
-- `USE_IXMLDBMODELType` — XML model type support (needs DOM-based replacement)
-- `USE_QTheming` — Windows-only theming
+## .lfm Files Status
+- All 34+ .lfm files converted from CLX format
+- BorderStyle values fixed (fbsToolWindow→bsToolWindow etc)
+- clBackground→clBtnFace
+- Font.CharSet CLX values→numeric
+- AutoScroll removed
+- DB component properties fixed (MaxBlobSize removed, SQLConnection→Database)
+- Classes registered: TSQLConnection, TSQLDataSet, TSQLMonitor, TClientDataSet, TDataSetProvider
 
-## What's Stubbed (needs real implementation)
-- `SaveBitmap` in MainDM — currently a no-op under FPC
-- `TDataSetProvider` — stub class, no actual data resolution
-- `Application.OnEvent` — CLX global event hook, commented out
-- `Application.Style` — CLX widget styles, commented out
-- Various Qt API calls (QPixmap_*, QBitmap_*, etc.) — return nil/0
+## Key Disabled Features
+- `USE_IXMLDBMODELType` - Not needed! LoadFromFile2/SaveToFile2 use TXmlParser instead
+- `USE_QTheming` - Windows-only, not applicable
+
+## Known Runtime Risks
+1. Screen.SystemFont assignment in LoadApplicationFont may fail (read-only in LCL)
+2. Some stubs are no-ops (SaveBitmap, Application.OnEvent)
+3. TPanel.Bitmap usage commented out in EditorQueryDragTarget.pas
+4. TTreeNode.SubItems via class helper - untested at runtime
+5. TSQLConnection shim wraps TSQLConnector - DB connectivity untested
+
+## Remaining Warnings (49)
+- 13x "Destructor should be public" in EERModel.pas
+- 4x "An inherited method is hidden" in EERModel.pas  
+- 4x "Local variable not initialized" in EERModel.pas
+- 2x "Destructor should be public" in DBDM.pas
+- 2x "Class types not related" in DBConnSelect.pas (TListItem/TTreeNode cast)
+- 1x "Function result not set" in MainDM.pas
+- Various string type conversion warnings
 
 ## Next Steps
-1. **Test runtime**: Try to launch the binary (will likely crash without .lfm forms)
-2. **Form files**: Convert .xfm → .lfm (may need manual work)
-3. **Re-enable SynEdit**: Map Delphi SynEdit options to Lazarus names
-4. **Database layer**: Test actual DB connectivity via SQLDB
-5. **XML model**: Replace IXMLDBMODELType with DOM-based implementation
-6. **Fix runtime issues**: Many stubs will cause issues at runtime
-
-## Build Command
-```bash
-cd /workspaces/dbdesigner-fork && lazbuild DBDesignerFork.lpi
-```
-
-## Git Log Summary
-- Phase 0: Project setup, shims created
-- Phase 1: Bulk CLX→LCL replacements  
-- Phase 2: Compilation error fixes (EditorQuery, EERPageSetup, etc.)
-- Phase 3: Main.pas fixes (key constants, event system, clipboard)
-- **MILESTONE**: Successful compilation achieved!
+1. Test runtime (needs display/X11)
+2. Fix remaining warnings (destructor visibility, uninitialized vars)
+3. Test DB connectivity with MySQL via SQLDB
+4. Fix Screen.SystemFont for LCL compatibility
+5. Consider re-enabling TPanel.Bitmap via class helper

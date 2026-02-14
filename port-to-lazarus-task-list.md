@@ -310,7 +310,7 @@
 ## Final — Integration Testing & Cleanup
 
 ### Functional Testing
-- [ ] Application launches without errors
+- [X] Application launches without errors (tested via xvfb-run, runs without crash)
 - [ ] Load example model (`bin/Examples/order.xml`) — verify display
 - [ ] Create a new model with tables, fields, and relations
 - [ ] Save model to XML and reload — verify round-trip

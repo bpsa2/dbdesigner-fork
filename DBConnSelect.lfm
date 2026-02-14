@@ -767,17 +767,14 @@ object DBConnSelectForm: TDBConnSelectForm
     object RenameHostMI: TMenuItem
       Caption = 'Rename Host'
       OnClick = RenameHostMIClick
-      OnShow = RenameHostMIShow
     end
     object ChangeHostsIPMI: TMenuItem
       Caption = 'Change Host'#39's IP'
       OnClick = ChangeHostsIPMIClick
-      OnShow = RenameHostMIShow
     end
     object DeleteHostMI: TMenuItem
       Caption = 'Delete Host'
       OnClick = DeleteHostMIClick
-      OnShow = RenameHostMIShow
     end
     object N1: TMenuItem
       Caption = '-'
@@ -785,7 +782,6 @@ object DBConnSelectForm: TDBConnSelectForm
     object DropDatabaseMI: TMenuItem
       Caption = 'Drop Database'
       OnClick = DropDatabaseMIClick
-      OnShow = DropDatabaseMIShow
     end
   end
 end

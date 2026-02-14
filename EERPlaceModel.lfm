@@ -265,19 +265,16 @@ object EERPlaceModelForm: TEERPlaceModelForm
         Tag = 1
         Caption = 'Select All'
         OnClick = SelectAllMIClick
-        OnShow = SelectAllMIShow
       end
       object DeselectAllMI: TMenuItem
         Caption = 'Deselect All'
         OnClick = SelectAllMIClick
-        OnShow = SelectAllMIShow
       end
       object N3: TMenuItem
         Caption = '-'
       end
       object RegionsMI: TMenuItem
         Caption = 'Select Region'
-        OnShow = SelectAllMIShow
       end
     end
     object PlaceMI: TMenuItem
@@ -285,13 +282,11 @@ object EERPlaceModelForm: TEERPlaceModelForm
       object AddModelMI: TMenuItem
         Caption = 'Add selected Objects'
         OnClick = AddModelMIClick
-        OnShow = SelectAllMIShow
       end
       object LinkModelMI: TMenuItem
         Tag = 1
         Caption = 'Link selected Objects'
         OnClick = LinkModelMIClick
-        OnShow = SelectAllMIShow
       end
     end
   end

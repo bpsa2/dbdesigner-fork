@@ -1360,12 +1360,10 @@ object PaletteModelFrom: TPaletteModelFrom
     object ShowLinkedModelsMI: TMenuItem
       Caption = 'Show Linked Models'
       OnClick = ShowLinkedModelsMIClick
-      OnShow = ShowLinkedModelsMIShow
     end
     object RefreshLinkedObjectsMI: TMenuItem
       Caption = 'Refresh Linked Objects'
       OnClick = RefreshLinkedObjectsMIClick
-      OnShow = ShowLinkedModelsMIShow
     end
   end
 end

@@ -2048,12 +2048,10 @@ object EditorQueryForm: TEditorQueryForm
     object UndoMI: TMenuItem
       Caption = 'Undo'
       OnClick = UndoMIClick
-      OnShow = UndoMIShow
     end
     object RedoMI: TMenuItem
       Caption = 'Redo'
       OnClick = RedoMIClick
-      OnShow = RedoMIShow
     end
     object N1: TMenuItem
       Caption = '-'
@@ -2061,7 +2059,6 @@ object EditorQueryForm: TEditorQueryForm
     object CopyMI: TMenuItem
       Caption = 'Copy'
       OnClick = CopyMIClick
-      OnShow = CopyMIShow
     end
     object CopyforASPMI: TMenuItem
       Tag = 1
@@ -2084,12 +2081,10 @@ object EditorQueryForm: TEditorQueryForm
     object CutMI: TMenuItem
       Caption = 'Cut'
       OnClick = CutMIClick
-      OnShow = CopyMIShow
     end
     object PasteMI: TMenuItem
       Caption = 'Paste'
       OnClick = PasteMIClick
-      OnShow = PasteMIShow
     end
     object PasteremovingQuotesMI: TMenuItem
       Caption = 'Paste removing ASP/Kylix Quotes'
@@ -2105,7 +2100,6 @@ object EditorQueryForm: TEditorQueryForm
     object SelectAllMI: TMenuItem
       Caption = 'Select All'
       OnClick = SelectAllMIClick
-      OnShow = SelectAllMIShow
     end
     object N7: TMenuItem
       Caption = '-'
@@ -2284,12 +2278,10 @@ object EditorQueryForm: TEditorQueryForm
     object ExecuteSQLCommandMI: TMenuItem
       Caption = 'Execute SQL Command'
       OnClick = StoredSQLExecuteBtnClick
-      OnShow = DeleteSQLCommandMIShow
     end
     object EditSQLCommandsMI: TMenuItem
       Caption = 'Edit SQL Command'
       OnClick = StoredSQLEditBtnClick
-      OnShow = DeleteSQLCommandMIShow
     end
     object N3: TMenuItem
       Caption = '-'
@@ -2297,7 +2289,6 @@ object EditorQueryForm: TEditorQueryForm
     object DeleteSQLCommandMI: TMenuItem
       Caption = 'Delete Item(s)'
       OnClick = DeleteSQLCommandMIClick
-      OnShow = DeleteSQLCommandMIShow
     end
     object N4: TMenuItem
       Caption = '-'
@@ -2312,7 +2303,6 @@ object EditorQueryForm: TEditorQueryForm
     Top = 207
     object CopytoClipboardMI: TMenuItem
       Caption = 'Copy to Clipboard'
-      OnShow = CopytoClipboardMIShow
       object CopyallRecordsMI: TMenuItem
         Caption = 'Copy all Records'
         OnClick = CopyallRecordsMIClick
@@ -2335,7 +2325,6 @@ object EditorQueryForm: TEditorQueryForm
     object ExportallrecordsMI: TMenuItem
       Caption = 'Export Records to CVS'
       OnClick = ExportallrecordsMIClick
-      OnShow = CopytoClipboardMIShow
     end
     object PrintRecordstoPDFMI: TMenuItem
       Caption = 'Print Records to PDF'

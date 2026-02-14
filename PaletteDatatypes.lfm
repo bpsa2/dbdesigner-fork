@@ -1298,7 +1298,6 @@ object PaletteDataTypesForm: TPaletteDataTypesForm
     object EditDatatypeMI: TMenuItem
       Caption = 'Edit Datatype'
       OnClick = CommonDataTypesListViewDblClick
-      OnShow = EditDatatypeMIShow
     end
     object N1: TMenuItem
       Caption = '-'
@@ -1310,7 +1309,6 @@ object PaletteDataTypesForm: TPaletteDataTypesForm
     object AddDatatypetoCommonMI: TMenuItem
       Caption = 'Add to Common Datatypes'
       OnClick = AddDatatypetoCommonMIClick
-      OnShow = AddDatatypetoCommonMIShow
     end
     object N2: TMenuItem
       Caption = '-'
@@ -1318,12 +1316,10 @@ object PaletteDataTypesForm: TPaletteDataTypesForm
     object DeleteDatatypeMI: TMenuItem
       Caption = 'Delete Datatype'
       OnClick = DeleteDatatypeMIClick
-      OnShow = EditDatatypeMIShow
     end
     object DelDatatypefromCommonDatatypesMI: TMenuItem
       Caption = 'Del from Common Datatypes'
       OnClick = DelDatatypefromCommonDatatypesMIClick
-      OnShow = DelDatatypefromCommonDatatypesMIShow
     end
     object N3: TMenuItem
       Caption = '-'

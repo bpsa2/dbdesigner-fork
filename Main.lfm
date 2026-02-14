@@ -3038,7 +3038,6 @@ object MainForm: TMainForm
         Tag = 1
         Caption = 'Add/Link Model'
         GroupIndex = 11
-        OnShow = ActivateEERMIOnShow
         object AddLinkModelFromFileMI: TMenuItem
           Caption = 'Add/Link Model from File'
           OnClick = AddLinkModelFromFileMIClick
@@ -3058,12 +3057,10 @@ object MainForm: TMainForm
         object ShowLinkedModelsMI: TMenuItem
           Caption = 'Show Linked Models'
           OnClick = ShowLinkedModelsMIClick
-          OnShow = ShowLinkedModelsMIShow
         end
         object RefreshLinkedObjectsMI: TMenuItem
           Caption = 'Refresh Linked Objects'
           OnClick = RefreshLinkedObjectsMIClick
-          OnShow = ShowLinkedModelsMIShow
         end
       end
       object N2: TMenuItem
@@ -3074,25 +3071,21 @@ object MainForm: TMainForm
         Caption = 'Save'
         GroupIndex = 11
         OnClick = SaveMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object SaveAsMI: TMenuItem
         Caption = 'Save As ...'
         GroupIndex = 11
         OnClick = SaveAsMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object SaveinDatabaseMI: TMenuItem
         Caption = 'Save in Database ...'
         GroupIndex = 11
         OnClick = SaveinDatabaseMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object CloseMI: TMenuItem
         Caption = 'Close'
         GroupIndex = 11
         OnClick = CloseMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object CloseAllMI: TMenuItem
         Caption = 'Close All'
@@ -3106,7 +3099,6 @@ object MainForm: TMainForm
       object ExportMI: TMenuItem
         Caption = 'Export'
         GroupIndex = 11
-        OnShow = ActivateEERMIOnShow
         object SQLCreateScriptMI: TMenuItem
           Caption = 'SQL Create Script ...'
           GroupIndex = 11
@@ -3136,14 +3128,12 @@ object MainForm: TMainForm
           Caption = 'Export Model as Image ...'
           GroupIndex = 11
           OnClick = SaveModelasImageMIClick
-          OnShow = ActivateEERMIOnShow
         end
         object ExportSelectedObjectsAsImgMi: TMenuItem
           Tag = 2
           Caption = 'Export selected Objects as Image ...'
           GroupIndex = 11
           OnClick = SaveModelasImageMIClick
-          OnShow = DeleteMIShow
         end
         object N24: TMenuItem
           Caption = '-'
@@ -3171,13 +3161,11 @@ object MainForm: TMainForm
         Caption = 'Page && Printer Setup ...'
         GroupIndex = 11
         OnClick = PageSetupMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object PrintMI: TMenuItem
         Caption = 'Print ...'
         GroupIndex = 11
         OnClick = PrintMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object N10: TMenuItem
         Caption = '-'
@@ -3196,13 +3184,11 @@ object MainForm: TMainForm
         GroupIndex = 1
         ImageIndex = 0
         OnClick = UndoMIClick
-        OnShow = UndoMIShow
       end
       object RedoMI: TMenuItem
         Caption = 'Redo'
         GroupIndex = 1
         OnClick = RedoMIClick
-        OnShow = RedoMIShow
       end
       object N13: TMenuItem
         Caption = '-'
@@ -3214,14 +3200,12 @@ object MainForm: TMainForm
         GroupIndex = 1
         ImageIndex = 8
         OnClick = CopyMIClick
-        OnShow = DeleteMIShow
       end
       object CopyselectedObjectsasImageMI: TMenuItem
         Caption = 'Copy selected Object(s) as Image'
         Enabled = False
         GroupIndex = 1
         OnClick = CopyselectedObjectsasImageMIClick
-        OnShow = DeleteMIShow
       end
       object CutMI: TMenuItem
         Caption = 'Cut selected Object(s)'
@@ -3229,7 +3213,6 @@ object MainForm: TMainForm
         GroupIndex = 1
         ImageIndex = 1
         OnClick = CutMIClick
-        OnShow = DeleteMIShow
       end
       object PasteMI: TMenuItem
         Caption = 'Paste Object(s)'
@@ -3237,7 +3220,6 @@ object MainForm: TMainForm
         GroupIndex = 1
         ImageIndex = 4
         OnClick = PasteMIClick
-        OnShow = PasteMIShow
       end
       object N5: TMenuItem
         Caption = '-'
@@ -3249,14 +3231,12 @@ object MainForm: TMainForm
         ImageIndex = 2
         ShortCut = 20487
         OnClick = DeleteMIClick
-        OnShow = DeleteMIShow
       end
       object SelectAllMI: TMenuItem
         Caption = 'Select All Objects'
         Enabled = False
         GroupIndex = 1
         OnClick = SelectAllMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object N20: TMenuItem
         Caption = '-'
@@ -3267,7 +3247,6 @@ object MainForm: TMainForm
         Enabled = False
         GroupIndex = 1
         OnClick = CenterModelMIClick
-        OnShow = ActivateEERMIOnShow
       end
     end
     object DisplayMI: TMenuItem
@@ -3276,13 +3255,11 @@ object MainForm: TMainForm
         Caption = 'Design Mode'
         GroupIndex = 1
         OnClick = DesignModeMIClick
-        OnShow = DesignModeMIShow
       end
       object QueryModeMI: TMenuItem
         Caption = 'Query Mode'
         GroupIndex = 1
         OnClick = DesignModeMIClick
-        OnShow = DesignModeMIShow
       end
       object N19: TMenuItem
         Caption = '-'
@@ -3407,7 +3384,6 @@ object MainForm: TMainForm
       object DisconnectfromDatabaseMI: TMenuItem
         Caption = 'Disconnect from Database'
         OnClick = DisconnectfromDatabaseMIClick
-        OnShow = DisconnectfromDatabaseMIShow
       end
       object N9: TMenuItem
         Caption = '-'
@@ -3415,12 +3391,10 @@ object MainForm: TMainForm
       object DatabasesyncronisationMI: TMenuItem
         Caption = 'Database Synchronisation'
         OnClick = DatabasesyncronisationMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object ReverseEngineeringMI: TMenuItem
         Caption = 'Reverse Engineering'
         OnClick = ReverseEngineeringMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object Test1: TMenuItem
         Caption = 'Test'
@@ -3437,7 +3411,6 @@ object MainForm: TMainForm
       object EERModelOptionsMI: TMenuItem
         Caption = 'Model Options'
         OnClick = EERModelOptionsMIClick
-        OnShow = ActivateEERMIOnShow
       end
       object N3: TMenuItem
         Caption = '-'

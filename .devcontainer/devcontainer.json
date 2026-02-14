@@ -1,0 +1,19 @@
+{
+  "name": "DBDesigner Fork: Free Pascal + Lazarus",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/workspaces/dbdesigner-fork",
+  "postCreateCommand": "lazbuild --version && fpc -v || true",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "alefragnani.pascal",
+        "davidanson.vscode-markdownlint",
+        "ms-vscode.vscode-container-tools"
+      ]
+    }
+  }
+}

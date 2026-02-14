@@ -94,3 +94,9 @@ f52b469 Fix SetSchemaInfo test
 - **Fix**: Removed all 54 `Font.Weight` / `TitleFont.Weight` lines from 17 .lfm files.
 - **Also fixed**: Plugin .lpi files had hardcoded absolute paths (`/workspaces/dbdesigner-fork`); changed to relative paths (`../../`).
 - **Result**: All 5 binaries compile and run without the Weight error.
+
+### Fix: "Masked" Property Runtime Error
+- **Problem**: `TControl.ReadState` raised errors for unknown property "Masked" in .lfm files.
+- **Fix**: Removed all 27 `Masked = True` lines from 9 .lfm files.
+- **Reason**: `Masked` is a CLX/Qt-specific bitmap transparency property; LCL handles transparency differently.
+- **Result**: All 5 binaries compile and run clean (no stderr output).

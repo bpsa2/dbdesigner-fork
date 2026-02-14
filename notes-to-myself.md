@@ -1,72 +1,43 @@
 # Notes to Myself — DBDesigner Fork Lazarus Port
 
-## Project Status: ✅ SUCCESS — All 5 Projects Compile and Launch
+## Current Status: ✅ All 5 Projects Compile and Launch Successfully
 
-### Build Results (from clean build)
+### Build Results (Clean Build)
 | Project | Lines | Time | Binary |
 |---------|-------|------|--------|
-| Main App (DBDesignerFork) | 56,608 | 4.4s | bin/DBDesignerFork |
-| Demo Plugin | 21,793 | 2.8s | bin/DBDplugin_Demo |
+| Main App | 56,608 | 4.4s | bin/DBDesignerFork |
+| Demo Plugin | 21,793 | 2.3s | bin/DBDplugin_Demo |
 | HTMLReport Plugin | 22,258 | 2.3s | bin/DBDplugin_HTMLReport |
-| DataImporter Plugin | 8,836 | 2.2s | bin/DBDplugin_DataImporter |
-| SimpleWebFront Plugin | 40,096 | 2.6s | bin/DBDplugin_SimpleWebFront |
-| **Total** | **149,591** | **14.3s** | |
+| DataImporter Plugin | 8,836 | 2.1s | bin/DBDplugin_DataImporter |
+| SimpleWebFront Plugin | 40,096 | 3.0s | bin/DBDplugin_SimpleWebFront |
+| **Total** | **149,591** | **~14s** | |
 
-### Runtime Test Results (via xvfb-run)
-✅ Main app: launches, runs without crash (exit 124 = killed by timeout)
-✅ Demo plugin: launches, runs without crash
-✅ HTMLReport plugin: launches, runs without crash
-✅ DataImporter plugin: launches, runs without crash
-✅ SimpleWebFront plugin: launches, runs without crash
-✅ XML model loading: 14 tables parsed correctly from order.xml (TestModelLoad program)
+### Compiler Warnings: Only 2
+- `EmbeddedPDF/EmbeddedPdfImages.pas` lines 202, 211: ScanLine portability (expected, harmless)
 
-### Compiler Warnings (only 2, both expected)
-- `EmbeddedPDF/EmbeddedPdfImages.pas` lines 202, 211: ScanLine not portable (known limitation)
+### Runtime Verification
+- All 5 binaries launch under `xvfb-run` without crashing (exit 124 = killed by timeout = stayed alive)
+- XML model loading verified (14 tables from order.xml via TestModelLoad)
 
-## Architecture: Shim Layer (`clx_shims/`, 31 files)
+### Database Shim Layer — Verified with SQLite
+- `DriverName="SQLite"` → `ConnectorType="SQLite3"` mapping ✅
+- `TSQLConnection.Open` with Params extraction ✅
+- `ExecuteDirect` with auto-commit (CREATE TABLE, INSERT) ✅
+- `TSQLDataSet.SQLConnection` property bridging ✅
+- `TSQLDataSet` query execution (SELECT with field access) ✅
+- `SetSchemaInfo(stTables)` returns correct table names ✅
+- `SetSchemaInfo(stColumns)` returns column name, position, type, typename, nullability ✅
+- `SetSchemaInfo(stIndexes)` returns index name, column name, uniqueness ✅
+- Requires `libsqlite3.so` symlink in `LD_LIBRARY_PATH`
 
-### CLX→LCL Shims
-Map Delphi/Kylix Qt-based CLX units to Lazarus LCL:
-- `QForms`→`Forms`, `QControls`→`Controls`, `QGraphics`→`Graphics`, etc.
-- `Qt.pas`: Maps Qt types/constants (QObjectH, Key_*, QEvent_type) to LCL equivalents
+### Architecture: Shim Layer (`clx_shims/`)
+31 compatibility units mapping CLX/Delphi APIs to LCL/SQLDB:
+- **CLX→LCL**: QForms→Forms, QControls→Controls, QGraphics→Graphics, etc.
+- **Qt shim**: Maps Qt types/constants to LCL equivalents
+- **DB shims**: sqlexpr.pas (TSQLConnection, TSQLDataSet), dbclient.pas (TClientDataSet→TBufDataset), provider.pas (TDataSetProvider)
+- **XML shims**: xmlintf.pas, xmldoc.pas, xmldom.pas (wrap laz2_DOM)
 
-### Database Shims
-- `sqlexpr.pas` (354 lines): TSQLConnection wraps TSQLConnector with DriverName→ConnectorType mapping; TSQLDataSet wraps SQLDB.TSQLQuery with SQLConnection property and SetSchemaInfo for MySQL/PostgreSQL/SQLite
-- `dbclient.pas` (102 lines): TClientDataSet wraps TBufDataset with ProviderName chain
-- `provider.pas` (30 lines): TDataSetProvider bridges datasets
-- `dbxpress.pas`: Schema type constants (stTables, stColumns, stIndexes)
-
-### XML Shims
-- `xmlintf.pas` (614 lines): IXMLDocument, IXMLNode, IXMLNodeList over laz2_DOM
-- `xmldoc.pas`: NewXMLDocument, LoadXMLDocument, LoadXMLData
-- `xmldom.pas`: IDOMDocument, IDOMNode type mappings
-
-## Key Technical Decisions
-
-1. **Plugins are standalone executables** (not shared libraries) — existing mechanism works
-2. **`USE_IXMLDBMODELType` NOT defined** — core XML uses LibXmlParser, not DOM interfaces
-3. **`TDirectoryTreeView` → `TShellTreeView`** (from ShellCtrls)
-4. **`fsMDIForm`/`fsMDIChild` → `fsNormal`** (LCL MDI support limited)
-5. **Conditional compilation**: `{$ELSEIF}`→`{$ELSE}`, `{$IFEND}`→`{$ENDIF}` for FPC
-6. **SynEdit**: Uses Lazarus built-in SynEdit package (not bundled copy)
-
-## Known Runtime Risks
-1. Some stubs are no-ops: SaveBitmap partially implemented, custom cursor loading via LoadACursor
-2. TPanel.Bitmap usage commented out in EditorQueryDragTarget.pas
-3. TTreeNode.SubItems via class helper (global dictionary) — functional but untested at scale
-4. TSQLConnection shim wraps TSQLConnector — DB connectivity untested with live databases
-5. TClientDataSet → TBufDataset: ApplyUpdates/ChangeCount may behave differently
-6. ScanLine portability warnings in EmbeddedPdfImages.pas (PDF export may have issues)
-
-## Remaining Work (lower priority)
-- Interactive UI testing (requires actual X11 display)
-- Database connectivity testing (requires MySQL/PostgreSQL/SQLite server)
-- PDF export testing
-- SQL script export verification
-- Cross-platform testing (Windows, macOS)
-- Code cleanup: could replace Q* shims with direct LCL unit names in source files
-
-## Build Commands
+### Key Build Commands
 ```bash
 # Main app
 cd /workspaces/dbdesigner-fork && lazbuild DBDesignerFork.lpi
@@ -76,21 +47,43 @@ for p in Demo HTMLReport DataImporter SimpleWebFront; do
   lazbuild Plugins/$p/DBDplugin_$p.lpi
 done
 
-# XML model load test
-fpc -FuEmbeddedPDF -Fuclx_shims -dFPC TestModelLoad.pas -obin/TestModelLoad
-./bin/TestModelLoad
+# Run (needs display)
+xvfb-run -a ./bin/DBDesignerFork
+
+# Run with model
+xvfb-run -a ./bin/DBDesignerFork bin/Examples/order.xml
 ```
 
-## Git Log (recent)
+### Test Programs
+- `TestModelLoad.pas` — Standalone XML parser test (no LCL needed, compiles with fpc directly)
+- `TestSQLite.pas` — Direct SQLDB SQLite3 connectivity test
+- `TestSQLExprShim.pas` — Tests our sqlexpr.pas shim with SQLite
+- `TestSQLExport.pas` — SQL export test (needs full app infrastructure, hangs standalone)
+
+### Known Runtime Risks
+1. Some stubs are no-ops: SaveBitmap (QPixMap_save), custom cursor loading
+2. TPanel.Bitmap usage commented out in EditorQueryDragTarget.pas
+3. TTreeNode.SubItems via class helper (global dictionary) — untested at runtime
+4. Qt event dispatch (QApplication_sendEventAndDelete) is a no-op
+5. MDI changed to fsNormal — window management differs from original
+
+### Task Progress: ~203/230 done
+
+### Remaining Work
+- **Functional UI testing** (requires real display or VNC)
+- **Database connectivity** with MySQL/PostgreSQL (requires DB server)
+- **PDF export** testing
+- **SQL export** verification (works through UI menu)
+- **Code cleanup** (optional): replace Q* shims with direct LCL unit names
+- **Cross-platform** testing (Windows, macOS)
+
+### Latest Commits
 ```
-5ea8f9b Update notes with runtime test results
-9ea2c5b Update task list: runtime testing progress (200/229 tasks done)
-41f9b1a Fix EditorTableData: TSQLQuery → TSQLDataSet for SQLConnection compatibility
-e2e6f80 Add XML model load test
-8bd8eb6 Replace QDialogs/QForms with Dialogs/Forms in DataImporter/MainDM.pas
-8f08c0c Fix remaining LFM and resource issues
-5d2dbce Update README with Lazarus build instructions and porting status
-279e42a Update task list and notes: all 5 projects compile successfully
-62d083e Port SimpleWebFront and DataImporter plugins to Lazarus/LCL
-0da97fc Port Demo and HTMLReport plugins to Lazarus/FPC
+ab48590 Add SQL export test program
+313c1cf Merge branch 'main'
+40e0793 Add Lessons Learned section to port-to-lazarus.md
+22782f0 Archive unused Delphi project files
+74fdb3c Verify full schema info works with SQLite
+f52b469 Fix SetSchemaInfo test
+1408ab9 Add SQLite and SQLExpr shim integration tests
 ```

@@ -41,7 +41,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Variants, LCLType, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, FMTBcd, DB, DBClient, Provider, SqlExpr, Buttons,
+  Dialogs, StdCtrls, DB, DBClient, Provider, SqlExpr, Buttons,
   ExtCtrls, DBCtrls, Grids, DBGrids, ComCtrls, EERModel, IniFiles,
   Menus, Clipbrd, {$IFDEF USE_SYNEDIT}SynEdit, SynHighlighterSQL, {$ENDIF}
   {$IFDEF MSWINDOWS}Windows, ShellAPI, {$ENDIF}
@@ -373,8 +373,8 @@ begin
   theHintPauseTmr.Enabled:=False;
   theHintPauseTmr.OnTimer:=DoHintPauseTmr;
 
-  StoredSQLTreeView.Columns[0].Caption:=
-    DMMain.GetTranslatedMessage('Stored SQL Commands', 84);
+  // StoredSQLTreeView header caption (Columns not available in LCL TTreeView)
+  // DMMain.GetTranslatedMessage('Stored SQL Commands', 84);
 
 {$IFDEF LINUX}
   DBGrid.Options:=DBGrid.Options + [dgAlwaysShowEditor];
@@ -1232,7 +1232,7 @@ begin
     TMenuItem(Sender).Enabled:=SQLSynEdit.CanRedo
   else
 {$ENDIF}
-    TMenuItem(Sender).Enabled:=SQLMemo.CanRedo;
+    TMenuItem(Sender).Enabled:=False; // LCL TMemo has no CanRedo
 end;
 
 procedure TEditorQueryForm.UndoMIClick(Sender: TObject);
@@ -1252,7 +1252,7 @@ begin
     SQLSynEdit.Redo
   else
 {$ENDIF}
-    SQLMemo.Redo;
+    ; // SQLMemo.Redo not available in LCL TMemo
 end;
 
 procedure TEditorQueryForm.CopyMIClick(Sender: TObject);
@@ -1599,7 +1599,7 @@ begin
   if(TForm(Application.MainForm).ActiveMDIChild=nil)then
     Exit;
 
-  if(StoredSQLTreeView.EditingItem=nil)then
+  if(not StoredSQLTreeView.IsEditing)then
   begin
     i:=0;
     while(i<StoredSQLTreeView.Items.Count)do
@@ -2832,7 +2832,7 @@ procedure TEditorQueryForm.StoredSQLTreeViewItemEnter(Sender: TObject;
   Node: TTreeNode);
 var R: TRect;
 begin
-  if(StoredSQLTreeView.EditingItem=nil)then
+  if(not StoredSQLTreeView.IsEditing)then
     if(Assigned(Node))then
     begin
       if(Assigned(Node.Data))then
@@ -2922,16 +2922,16 @@ end;
 
 procedure TEditorQueryForm.StoredSQLPopupMenuPopup(Sender: TObject);
 begin
-  if(StoredSQLTreeView.EditingItem<>nil)then
+  if(StoredSQLTreeView.IsEditing)then
     raise EAbort.Create('');
 end;
 
 procedure TEditorQueryForm.StoredSQLSplitterMoved(Sender: TObject);
 begin
   if(StoredSQLTreeView.Width<140)then
-    StoredSQLTreeView.Columns[0].Width:=140
+    StoredSQLTreeView.Width:=140
   else
-    StoredSQLTreeView.Columns[0].Width:=StoredSQLTreeView.Width-4;
+    // StoredSQLTreeView column width auto-adjusts in LCL;
 
   {if(QScrollView_visibleWidth(StoredSQLTreeView.Handle)+4<>StoredSQLTreeView.Width)then
     ShowMessage(IntToStr(QScrollView_visibleWidth(StoredSQLTreeView.Handle))+', '+IntToStr(StoredSQLTreeView.Width));}

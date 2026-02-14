@@ -40,7 +40,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Variants, LCLType, Graphics, Controls, Forms, 
-  Dialogs, StdCtrls, FMTBcd, DB, DBClient, Provider, SqlExpr, Buttons,
+  Dialogs, StdCtrls, DB, DBClient, Provider, SqlExpr, Buttons,
   ExtCtrls, DBCtrls, Grids, DBGrids, ComCtrls, EERModel, IniFiles;
 
 type

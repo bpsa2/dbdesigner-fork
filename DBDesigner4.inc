@@ -34,8 +34,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 //Use this define to include SynEdit for SQL Memos
-{$DEFINE USE_SYNEDIT}
-{$DEFINE USE_IXMLDBMODELType}
+{.$DEFINE USE_SYNEDIT}  // disabled during port
+{.$DEFINE USE_IXMLDBMODELType}  // disabled during port
 {.$DEFINE USE_QTheming}
 
 // FPC/Lazarus compatibility

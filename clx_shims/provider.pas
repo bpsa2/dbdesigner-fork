@@ -4,6 +4,11 @@ interface
 uses Classes, DB;
 
 type
+  TResolverResponse = (rrSkip, rrAbort, rrMerge, rrApply, rrIgnore);
+
+  EUpdateError = class(EDatabaseError)
+  end;
+
   TDataSetProvider = class(TComponent)
   private
     FDataSet: TDataSet;

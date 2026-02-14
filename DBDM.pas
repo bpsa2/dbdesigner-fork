@@ -41,7 +41,7 @@ unit DBDM;
 interface
 
 uses
-  SysUtils, Classes, LCLType, DBXpress, FMTBcd, DBClient, Provider,
+  SysUtils, Classes, LCLType, DBXpress, DBClient, Provider,
   DB, SQLDB, SqlExpr, IniFiles, Forms, Controls, Qt, Dialogs, Contnrs;
 
 type

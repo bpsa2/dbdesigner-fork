@@ -44,7 +44,7 @@ interface
 uses
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, Buttons, ExtCtrls, EERModel, SqlExpr, ImgList, ComCtrls,
-  DB, Menus, LCLType, DBDM;
+  DB, Menus, LCLType, DBDM, TreeNodeSubItems;
 
 type
   TEERStoreInDatabaseForm = class(TForm)

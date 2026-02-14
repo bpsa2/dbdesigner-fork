@@ -21,6 +21,13 @@ type
   QRgb = LongWord;
   QEventType = type Integer;
 
+  // Page size enum (CLX/Qt paper sizes)
+  TPageSize = (psA0, psA1, psA2, psA3, psA4, psA5, psA6, psA7, psA8, psA9,
+    psB0, psB1, psB2, psB3, psB4, psB5, psB6, psB7, psB8, psB9, psB10,
+    psC5E, psComm10E, psDLE, psExecutive, psFolio, psLedger, psLegal,
+    psLetter, psTabloid, psNPageSize);
+
+
   // Widget flags
   WidgetFlags = Cardinal;
 

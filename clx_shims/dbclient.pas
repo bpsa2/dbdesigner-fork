@@ -4,7 +4,10 @@ interface
 uses Classes, DB, BufDataset;
 
 type
-  TClientDataSet = class(TBufDataset)
+  TCustomClientDataSet = class(TBufDataset)
+  end;
+
+  TClientDataSet = class(TCustomClientDataSet)
   end;
 
 implementation

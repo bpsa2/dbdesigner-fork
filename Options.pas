@@ -45,7 +45,7 @@ interface
 
 uses
   LCLType, SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ComCtrls, ExtCtrls, Buttons, IniFiles, Qt;
+  StdCtrls, ComCtrls, ExtCtrls, Buttons, IniFiles, Qt, PanelBitmap;
 
 type
   TOptionsForm = class(TForm)

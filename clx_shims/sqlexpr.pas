@@ -32,10 +32,13 @@ type
   end;
 
   // Re-export TSQLQuery with dbExpress extensions
+  TSQLQuery = SQLDB.TSQLQuery;
+
   TSQLDataSet = class(SQLDB.TSQLQuery)
   public
     procedure SetSchemaInfo(SchemaType: Integer; const SchemaObjectName, SchemaPattern: string);
     function ExecSQL(ExecDirect: Boolean): Integer; overload;
+    function GetQuoteChar: string;
   end;
 
   TSQLMonitor = class(TComponent)
@@ -60,6 +63,16 @@ procedure TSQLDataSet.SetSchemaInfo(SchemaType: Integer; const SchemaObjectName,
 begin
   // No-op stub - dbExpress schema info not directly applicable to SQLDB
   // The caller typically sets SQL.Text after this call anyway
+end;
+
+function TSQLDataSet.GetQuoteChar: string;
+begin
+  // Return the identifier quote character for the database
+  // Most databases use '"', MySQL uses '`'
+  if Assigned(Database) and (Database is TSQLConnection) then
+    Result := '"'
+  else
+    Result := '"';
 end;
 
 function TSQLDataSet.ExecSQL(ExecDirect: Boolean): Integer;

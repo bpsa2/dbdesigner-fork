@@ -8,7 +8,7 @@ interface
 uses
   SysUtils, Types, Classes, Variants, LCLType, Graphics, Controls, Forms, 
   Dialogs, StdCtrls, CheckLst, ExtCtrls, Buttons, EERModel, Menus,
-  ComCtrls, ImgList;
+  ComCtrls, ImgList, TreeNodeSubItems;
 
 type
   TEERPlaceModelForm = class(TForm)

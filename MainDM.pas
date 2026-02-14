@@ -56,7 +56,7 @@ uses
   Windows, Messages,
   ActiveX, ShellAPI, ShlObj, // for SHGetSpecialFolderLocation() und SHGetPathFromIDList()
   {$ENDIF}
-  SysUtils, Classes, DBXpress, DB, SqlExpr, FMTBcd, Provider, DBClient,
+  SysUtils, Classes, DBXpress, DB, SqlExpr, Provider, DBClient,
   DBLocal, Dialogs, ComCtrls, IniFiles, Forms, Qt,
   Buttons, Controls, Menus,
   {$IFDEF USE_IXMLDBMODELType}

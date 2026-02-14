@@ -92,7 +92,7 @@ object EditorRelationForm: TEditorRelationForm
       Width = 361
       Height = 125
       ActivePage = RefSheet
-      Style = tsNoTabs
+      ShowTabs = False
       TabOrder = 0
       object RefSheet: TTabSheet
         Caption = 'RefSheet'

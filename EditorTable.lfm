@@ -50,7 +50,7 @@ object EditorTableForm: TEditorTableForm
       Width = 541
       Height = 135
       ActivePage = IndexSheet
-      Style = tsNoTabs
+      ShowTabs = False
       TabOrder = 0
       object IndexSheet: TTabSheet
         Caption = 'IndexSheet'

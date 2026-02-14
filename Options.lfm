@@ -28,7 +28,7 @@ object OptionsForm: TOptionsForm
     Width = 563
     Height = 263
     ActivePage = DBOptionsSheet
-    Style = tsNoTabs
+    ShowTabs = False
     TabOrder = 0
     OnChange = PageControlChange
     object GenOptSheet: TTabSheet

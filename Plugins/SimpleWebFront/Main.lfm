@@ -684,7 +684,7 @@ object MainForm: TMainForm
 
     ActivePage = GridTabSheet
 
-    Style = tsNoTabs
+    ShowTabs = False
 
     TabOrder = 0
 

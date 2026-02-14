@@ -173,7 +173,7 @@ object PaletteNavForm: TPaletteNavForm
       Height = 135
       ActivePage = InfoSheet
       Align = alClient
-      Style = tsNoTabs
+      ShowTabs = False
       TabOrder = 1
       object InfoSheet: TTabSheet
         Caption = 'InfoSheet'

@@ -28,7 +28,7 @@ object OptionsModelForm: TOptionsModelForm
     Width = 563
     Height = 223
     ActivePage = EditOptionsSheet
-    Style = tsNoTabs
+    ShowTabs = False
     TabOrder = 0
     OnChange = PageControlChange
     object GeneralSheet: TTabSheet

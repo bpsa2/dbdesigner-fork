@@ -45,6 +45,15 @@ Maps Qt widget types (QObjectH, QEventH, etc.) to LCL equivalents. Provides `But
 
 4. **Conditional compilation** — `{$ELSEIF LINUX}` / `{$IFEND}` are Delphi-only; FPC uses `{$ELSE}` / `{$ENDIF}`.
 
+## Runtime Test Results (via xvfb-run)
+
+✅ Main app: launches, runs for 10+ seconds, no crash (exit 124 = timeout)
+✅ Demo plugin: launches, runs for 3+ seconds, no crash
+✅ HTMLReport plugin: launches, runs for 3+ seconds, no crash  
+✅ DataImporter plugin: launches, runs for 3+ seconds, no crash
+✅ SimpleWebFront plugin: launches, runs for 3+ seconds, no crash
+✅ XML model loading: 14 tables parsed from order.xml (TestModelLoad program)
+
 ## Known Runtime Risks
 
 1. Some stubs are no-ops (SaveBitmap, custom cursor loading)
@@ -56,7 +65,8 @@ Maps Qt widget types (QObjectH, QEventH, etc.) to LCL equivalents. Provides `But
 
 ## Remaining Work
 
-- **Runtime testing** (requires X11/display)
+- **Runtime testing** — basic launch test PASSED via xvfb-run (all 5 apps launch without crash)
+- **Interactive UI testing** (requires actual display)
 - Open each .lfm in Lazarus IDE to check for unknown properties
 - Test DB connections (MySQL, PostgreSQL, SQLite)
 - Test PDF export

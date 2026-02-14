@@ -5,7 +5,7 @@ interface
 uses
   {$IFDEF MSWINDOWS}Windows, {$ENDIF}
   SysUtils, Classes, DBXpress, FMTBcd, DB, SqlExpr, Controls,
-  QDialogs, QForms;
+  Dialogs, Forms;
 
 type
   PDBConn = ^TDBConn;     // Pointer for DBConn Data
@@ -74,11 +74,11 @@ implementation
 
 uses EditorString;
 
-{$R *.xfm}
+{$R *.lfm}
 
 function TDMMain.ReplaceText(txt, such, ers: string): string;
 begin
-  ReplaceText:=ReplaceText2(ReplaceText2(txt, such, '¢'), '¢', ers);
+  ReplaceText:=ReplaceText2(ReplaceText2(txt, such, 'Â¢'), 'Â¢', ers);
 end;
 
 function TDMMain.ReplaceText2(txt, such, ers: string): string;
@@ -92,7 +92,7 @@ end;
 
 function TDMMain.ReplaceString(txt, such, ers: string): string;
 begin
-  ReplaceString:=ReplaceString2(ReplaceString2(txt, such, ''), '', ers);
+  ReplaceString:=ReplaceString2(ReplaceString2(txt, such, 'Â'), 'Â', ers);
 end;
 
 function TDMMain.ReplaceString2(txt, such, ers: string): string;
@@ -109,7 +109,7 @@ var strCount: integer;
   ers: string;
 begin
   strCount:=0;
-  ers:='';
+  ers:='Â';
 
   while(Pos(such, txt)>0)do
   begin
@@ -139,8 +139,8 @@ begin
   s1:=s;
 
   //Ignore double-delims this time
-  s1:=ReplaceString(s1, delim+delim+delim, delim+'¦¦');
-  s1:=ReplaceString(s1, delim+delim, '¦¦');
+  s1:=ReplaceString(s1, delim+delim+delim, delim+'Â¦Â¦');
+  s1:=ReplaceString(s1, delim+delim, 'Â¦Â¦');
 
   if(Copy(s1, Length(s1), 1)<>sep)then
     s1:=s1+sep;
@@ -169,8 +169,8 @@ begin
     sep:=Chr(9);
 
   //Ignore double-delims this time
-  s1:=ReplaceString(s1, delim+delim+delim, delim+'¦¦');
-  s1:=ReplaceString(s1, delim+delim, '¦¦');
+  s1:=ReplaceString(s1, delim+delim+delim, delim+'Â¦Â¦');
+  s1:=ReplaceString(s1, delim+delim, 'Â¦Â¦');
 
   if(Copy(s1, Length(s1), 1)<>sep)then
     s1:=s1+sep;
@@ -189,7 +189,7 @@ begin
       s1:=Copy(s1, Pos(sep, s1)+1, Length(s1));
     end
     else
-      s1[Pos(sep, s1)]:='';
+      s1[Pos(sep, s1)]:='Â';
   end;
 
   s1:=Trim(Copy(s, p1, p2-p1-1));
@@ -313,7 +313,7 @@ begin
     Raise Exception.Create('Fehler beim Start des Programms '+command+'. (Error: ' +IntToStr(GetLastError)+' )');
 
 
-  //Wenn erwünscht, warten bis Programm beendet wird.
+  //Wenn erwÃ¼nscht, warten bis Programm beendet wird.
   if(wait4proz=1)then
   begin
     While(WaitForSingleObject(ProcessInfo.hProcess, 0) = WAIT_TIMEOUT)Do

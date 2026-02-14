@@ -2,12 +2,11 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
   Left = 355
   Top = 61
   ActiveControl = BuildRelPrimKeyRBtn
-  AutoScroll = False
-  BorderStyle = fbsSizeToolWin
+  BorderStyle = bsSizeToolWin
   Caption = 'Reverse Engineering'
   ClientHeight = 627
   ClientWidth = 573
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MaxWidth = 573
   Constraints.MinWidth = 573
   FormStyle = fsStayOnTop
@@ -93,10 +92,10 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
       Width = 122
       Height = 12
       Caption = 'Not connected to a Database.'
-      Font.CharSet = fcsLatin1
+      Font.CharSet = 0
       Font.Color = clBlack
       Font.Height = 9
-      Font.Name = 'Microsoft Sans Serif'
+      Font.Name = 'Sans'
       Font.Pitch = fpVariable
       Font.Style = []
       Font.Weight = 40
@@ -584,7 +583,7 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
         Caption = 'Important'
         Font.Color = clGray
         Font.Height = 11
-        Font.Name = 'MS Shell Dlg'
+        Font.Name = 'Sans'
         Font.Pitch = fpVariable
         Font.Style = []
         Font.Weight = 40
@@ -600,10 +599,10 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
             'When connecting to Oracle or MS SQL databases please make sure t' +
             'o have the appropriate rights to access the system tables. In do' +
             'ubt connect as DBA Users: SYSTEM (Oracle) or sa (MS SQL).'
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clGray
           Font.Height = 11
-          Font.Name = 'Microsoft Sans Serif'
+          Font.Name = 'Sans'
           Font.Pitch = fpVariable
           Font.Style = []
           Font.Weight = 40

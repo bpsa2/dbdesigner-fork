@@ -16,7 +16,7 @@ object ImageSelectionForm: TImageSelectionForm
 
   Caption = 'Image Selection Dialog'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 
@@ -280,7 +280,7 @@ object ImageSelectionForm: TImageSelectionForm
 
   end
 
-  object DirectoryTreeView: TDirectoryTreeView
+  object DirectoryTreeView: TShellTreeView
 
     Left = 34
 

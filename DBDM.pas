@@ -41,12 +41,13 @@ unit DBDM;
 interface
 
 uses
-  SysUtils, Classes, LCLType, DBXpress, FMTBcd, DBClient, Provider,
+  SysUtils, Classes, LCLType, DBXpress, DBClient, Provider,
   DB, SQLDB, SqlExpr, IniFiles, Forms, Controls, Qt, Dialogs, Contnrs;
 
 type
   // Class storing a Database-Connection
   TDBConn = class(TPersistent)
+  public
     constructor Create;
     destructor Destroy; override;
 
@@ -64,6 +65,7 @@ type
 
   // Class to store a Database-Hosts
   TDBHost = class(TPersistent)
+  public
     constructor Create;
     destructor Destroy;  override;
   public

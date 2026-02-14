@@ -2,12 +2,11 @@ object EditorStringForm: TEditorStringForm
   Left = 262
   Top = 311
   ActiveControl = ValueEd
-  AutoScroll = False
-  BorderStyle = fbsToolWindow
+  BorderStyle = bsToolWindow
   Caption = 'EditorStringForm'
   ClientHeight = 61
   ClientWidth = 407
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poMainFormCenter

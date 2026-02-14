@@ -1090,9 +1090,9 @@ begin
   result := FloatToStr(Trunc(Value * 100 + 0.5) / 100);
   // Convert ','(Comma) to '.'(period)
   // -- for the area whose decimal parametor is ','
-  if DecimalSeparator <> '.' then
+  if DefaultFormatSettings.DecimalSeparator <> '.' then
   begin
-    i := Pos(DecimalSeparator, result);
+    i := Pos(DefaultFormatSettings.DecimalSeparator, result);
     if i > 0 then
       result[i] := '.';
   end;

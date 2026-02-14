@@ -4,9 +4,8 @@ object DialogBugsForm: TDialogBugsForm
 
   Top = 146
 
-  AutoScroll = False
 
-  BorderStyle = fbsNone
+  BorderStyle = bsNone
 
   Caption = 'Contact'
 
@@ -14,7 +13,7 @@ object DialogBugsForm: TDialogBugsForm
 
   ClientWidth = 395
 
-  Color = clBackground
+  Color = clBtnFace
 
   FormStyle = fsStayOnTop
 
@@ -24,9 +23,7 @@ object DialogBugsForm: TDialogBugsForm
 
   PixelsPerInch = 96
 
-  TextHeight = 13
 
-  TextWidth = 6
 
   object BugBg: TImage
 

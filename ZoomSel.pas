@@ -95,13 +95,13 @@ end;
 procedure TZoomSelForm.ZoomLBoxDblClick(Sender: TObject);
 var oldDecSep: char;
 begin
-  oldDecSep:=DecimalSeparator;
-  DecimalSeparator:=',';
+  oldDecSep:=DefaultFormatSettings.DecimalSeparator;
+  DefaultFormatSettings.DecimalSeparator:=',';
   try
     ZoomFac:=StrToFloat(Copy(ZoomLBox.Items[ZoomLBox.ItemIndex], 1,
       Length(ZoomLBox.Items[ZoomLBox.ItemIndex])-2));
   finally
-    DecimalSeparator:=oldDecSep;
+    DefaultFormatSettings.DecimalSeparator:=oldDecSep;
   end;
 
   ModalResult:=mrOk;

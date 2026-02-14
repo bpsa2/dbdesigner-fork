@@ -16,7 +16,7 @@ object DialogPopupSettingsForm: TDialogPopupSettingsForm
 
   Caption = 'DialogPopupSettingsForm'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 
@@ -24,9 +24,7 @@ object DialogPopupSettingsForm: TDialogPopupSettingsForm
 
   PixelsPerInch = 96
 
-  TextHeight = 13
 
-  TextWidth = 6
 
   object OKBtn: TSpeedButton
 

@@ -2,12 +2,11 @@ object EditorRegionForm: TEditorRegionForm
   Left = 569
   Top = 331
   ActiveControl = RegionNameEd
-  AutoScroll = False
-  BorderStyle = fbsToolWindow
+  BorderStyle = bsToolWindow
   Caption = 'Region Editor'
   ClientHeight = 327
   ClientWidth = 370
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poDefault

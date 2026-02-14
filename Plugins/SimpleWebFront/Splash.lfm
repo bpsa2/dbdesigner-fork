@@ -4,9 +4,8 @@ object SplashForm: TSplashForm
 
   Top = 235
 
-  AutoScroll = False
 
-  BorderStyle = fbsNone
+  BorderStyle = bsNone
 
   Caption = 'DB Designer 4'
 
@@ -14,7 +13,7 @@ object SplashForm: TSplashForm
 
   ClientWidth = 509
 
-  Color = clBackground
+  Color = clBtnFace
 
   FormStyle = fsStayOnTop
 
@@ -60,13 +59,13 @@ object SplashForm: TSplashForm
 
       'ux KDE/Gnome.'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
     Font.Height = 9
 
-    Font.Name = 'Microsoft Sans Serif'
+    Font.Name = 'Sans'
 
     Font.Pitch = fpVariable
 
@@ -102,13 +101,13 @@ object SplashForm: TSplashForm
 
       ' under the terms of the GNU GPL.'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
     Font.Height = 9
 
-    Font.Name = 'Microsoft Sans Serif'
+    Font.Name = 'Sans'
 
     Font.Pitch = fpVariable
 
@@ -162,13 +161,13 @@ object SplashForm: TSplashForm
 
     Caption = 'Graphics and support programming: Michael Zinner'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
     Font.Height = 9
 
-    Font.Name = 'Microsoft Sans Serif'
+    Font.Name = 'Sans'
 
     Font.Pitch = fpVariable
 
@@ -206,13 +205,13 @@ object SplashForm: TSplashForm
 
       'University of Technology.'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
     Font.Height = 9
 
-    Font.Name = 'Microsoft Sans Serif'
+    Font.Name = 'Sans'
 
     Font.Pitch = fpVariable
 

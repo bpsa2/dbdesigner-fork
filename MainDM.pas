@@ -56,7 +56,7 @@ uses
   Windows, Messages,
   ActiveX, ShellAPI, ShlObj, // for SHGetSpecialFolderLocation() und SHGetPathFromIDList()
   {$ENDIF}
-  SysUtils, Classes, DBXpress, DB, SqlExpr, FMTBcd, Provider, DBClient,
+  SysUtils, Classes, DBXpress, DB, SqlExpr, Provider, DBClient,
   DBLocal, Dialogs, ComCtrls, IniFiles, Forms, Qt,
   Buttons, Controls, Menus,
   {$IFDEF USE_IXMLDBMODELType}
@@ -184,7 +184,7 @@ type
     {$ENDIF}
 
     //Save Bitmap als PNG, JPG or BMP
-    procedure SaveBitmap(Handle: QPixmapH; FileName: string; FileType: string; JPGQuality: integer = 75);
+    procedure SaveBitmap(Handle: {$IFDEF FPC}HBITMAP{$ELSE}QPixmapH{$ENDIF}; FileName: string; FileType: string; JPGQuality: integer = 75);
 
     function GetFileSize(fname: string): string;
     function GetFileDate(fname: string): TDateTime;
@@ -388,12 +388,40 @@ end;
 
 procedure TDMMain.LoadACursor(crNumber: integer; fname, fname_mask: string; XSpot, YSpot: integer);
 {$IFDEF FPC}
+var
+  CurBmp, MaskBmp: TBitmap;
+  CurImg: TCursorImage;
 begin
-  // LCL cursor loading - simplified from Qt API
   if not FileExists(fname) then
     raise EInOutError.Create(GetTranslatedMessage('File %s does not exist.', 24, fname));
-  // TODO: Implement custom cursor loading for LCL
-  // Custom cursor loading from bitmap files not yet implemented
+  if not FileExists(fname_mask) then
+    raise EInOutError.Create(GetTranslatedMessage('File %s does not exist.', 24, fname_mask));
+  
+  CurBmp := TBitmap.Create;
+  MaskBmp := TBitmap.Create;
+  try
+    CurBmp.LoadFromFile(fname);
+    MaskBmp.LoadFromFile(fname_mask);
+    
+    // Create a cursor image from the bitmap
+    CurImg := TCursorImage.Create;
+    try
+      CurImg.Width := CurBmp.Width;
+      CurImg.Height := CurBmp.Height;
+      CurImg.HotSpot := Point(XSpot, YSpot);
+      CurImg.Canvas.Draw(0, 0, CurBmp);
+      // Apply mask
+      CurImg.Canvas.CopyMode := cmSrcAnd;
+      CurImg.Canvas.Draw(0, 0, MaskBmp);
+      
+      Screen.Cursors[crNumber] := CurImg.ReleaseHandle;
+    finally
+      CurImg.Free;
+    end;
+  finally
+    CurBmp.Free;
+    MaskBmp.Free;
+  end;
 end;
 {$ELSE}
 var BMap, BMask: QBitMapH;
@@ -751,7 +779,7 @@ begin
   FCmdThread := TCmdExecThread.Create;
   //FCmdThread.OnComplete := InternalComplete;
   FCmdThread.Command := command;
-  FCmdThread.Resume;
+  FCmdThread.Start;
 
   //Wenn erwünscht, warten bis Programm beendet wird.
   if(wait4proz=1)then
@@ -1506,16 +1534,46 @@ begin
 end;
 {$ENDIF}
 
-procedure TDMMain.SaveBitmap(Handle: QPixmapH; FileName: string; FileType: string; JPGQuality: integer = 75);
+procedure TDMMain.SaveBitmap(Handle: {$IFDEF FPC}HBITMAP{$ELSE}QPixmapH{$ENDIF}; FileName: string; FileType: string; JPGQuality: integer = 75);
 {$IFDEF FPC}
 var
-  Pic: TPicture;
+  Bmp: TBitmap;
+  Png: TPortableNetworkGraphic;
+  Jpg: TJPEGImage;
 begin
-  // LCL replacement - Handle is unused, caller should pass bitmap directly
-  // This is a stub - actual implementation will need rework
   if(Copy(FileType, 1, 1)='.')then
     FileType:=Copy(FileType, 2, Length(FileType));
-  // TODO: Implement LCL bitmap saving
+  
+  Bmp := TBitmap.Create;
+  try
+    Bmp.Handle := Handle;
+    if(Uppercase(FileType)='PNG')then
+    begin
+      Png := TPortableNetworkGraphic.Create;
+      try
+        Png.Assign(Bmp);
+        Png.SaveToFile(FileName);
+      finally
+        Png.Free;
+      end;
+    end
+    else if(Uppercase(FileType)='JPEG')or(Uppercase(FileType)='JPG')then
+    begin
+      Jpg := TJPEGImage.Create;
+      try
+        Jpg.Assign(Bmp);
+        Jpg.CompressionQuality := JPGQuality;
+        Jpg.SaveToFile(FileName);
+      finally
+        Jpg.Free;
+      end;
+    end
+    else
+      Bmp.SaveToFile(FileName);
+  finally
+    Bmp.Handle := 0; // Don't free the handle - caller owns it
+    Bmp.Free;
+  end;
 end;
 {$ELSE}
 var lWideStr: WideString;
@@ -1757,6 +1815,7 @@ var z1, z2: integer;
   theBuffer: Array [0..1024] of Char;
   Bytes2Write, BytesWritten: integer;
 begin
+  Result := '';
   BytesWritten:=0;
   Bytes2Write:=0;
   while(BytesWritten*2<Length(XMLData))do
@@ -1891,7 +1950,11 @@ end;
 function sendCLXEvent(receiver: QObjectH; event: QEventH): Boolean;
 begin
   {$IFDEF FPC}
-  Result := False; // TODO: Implement LCL equivalent
+  try
+    Result := QApplication_sendEvent(receiver, event);
+  finally
+    QEvent_destroy(event);
+  end;
   {$ELSE}
   try
     Result := QApplication_sendEvent(receiver, event);

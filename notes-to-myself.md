@@ -1,39 +1,89 @@
-
 # Notes to Myself — DBDesigner Fork Lazarus Port
 
-## Project Overview
-Porting DBDesigner Fork from Delphi 7 / Kylix 3 (CLX) to Free Pascal (FPC) and Lazarus IDE (LCL).
-Total: 229 tasks across 6 phases.
+## Current Status: ✅ All 5 Projects Compile and Launch Successfully
 
-## Key Files
-- `port-to-lazarus.md` — Main reference guide
-- `port-to-lazarus-task-list.md` — Checklist of 229 tasks
+### Build Results (Clean Build)
+| Project | Lines | Time | Binary |
+|---------|-------|------|--------|
+| Main App | 56,608 | 4.4s | bin/DBDesignerFork |
+| Demo Plugin | 21,793 | 2.3s | bin/DBDplugin_Demo |
+| HTMLReport Plugin | 22,258 | 2.3s | bin/DBDplugin_HTMLReport |
+| DataImporter Plugin | 8,836 | 2.1s | bin/DBDplugin_DataImporter |
+| SimpleWebFront Plugin | 40,096 | 3.0s | bin/DBDplugin_SimpleWebFront |
+| **Total** | **149,591** | **~14s** | |
 
-## Environment
-- FPC 3.2.2+dfsg-32
-- lazbuild available at /usr/bin/lazbuild
-- 47 .pas files in project root
+### Compiler Warnings: Only 2
+- `EmbeddedPDF/EmbeddedPdfImages.pas` lines 202, 211: ScanLine portability (expected, harmless)
 
-## Progress Log
+### Runtime Verification
+- All 5 binaries launch under `xvfb-run` without crashing (exit 124 = killed by timeout = stayed alive)
+- XML model loading verified (14 tables from order.xml via TestModelLoad)
 
-### Phase 0 — Project Setup & Scaffolding
-- [ ] Started Phase 0
-- [ ] Created DBDesignerFork.lpr
-- [ ] Created CLX shim units (12 files in clx_shims/)
-- [ ] Updated DBDesigner4.inc
-- [ ] Converted .xfm → .lfm
-- [ ] Added {$mode delphi} to all .pas files
-- [ ] Created .lpi project file
-- [ ] First compilation attempt
+### Database Shim Layer — Verified with SQLite
+- `DriverName="SQLite"` → `ConnectorType="SQLite3"` mapping ✅
+- `TSQLConnection.Open` with Params extraction ✅
+- `ExecuteDirect` with auto-commit (CREATE TABLE, INSERT) ✅
+- `TSQLDataSet.SQLConnection` property bridging ✅
+- `TSQLDataSet` query execution (SELECT with field access) ✅
+- `SetSchemaInfo(stTables)` returns correct table names ✅
+- `SetSchemaInfo(stColumns)` returns column name, position, type, typename, nullability ✅
+- `SetSchemaInfo(stIndexes)` returns index name, column name, uniqueness ✅
+- Requires `libsqlite3.so` symlink in `LD_LIBRARY_PATH`
 
-## Key Decisions
-- Using shim layer approach: CLX unit names → LCL equivalents
-- Keeping bundled RegExpr.pas (Option A)
-- Will disable USE_SYNEDIT and USE_IXMLDBMODELType initially to reduce scope
-- Will disable USE_QTheming (Windows-only, not needed)
+### Architecture: Shim Layer (`clx_shims/`)
+31 compatibility units mapping CLX/Delphi APIs to LCL/SQLDB:
+- **CLX→LCL**: QForms→Forms, QControls→Controls, QGraphics→Graphics, etc.
+- **Qt shim**: Maps Qt types/constants to LCL equivalents
+- **DB shims**: sqlexpr.pas (TSQLConnection, TSQLDataSet), dbclient.pas (TClientDataSet→TBufDataset), provider.pas (TDataSetProvider)
+- **XML shims**: xmlintf.pas, xmldoc.pas, xmldom.pas (wrap laz2_DOM)
 
-## Known Issues
-- Qt unit has NO shim equivalent — needs manual replacement
-- MIDASLIB is Windows/Delphi only — needs removal
-- QTheming is Windows/Delphi only — needs removal
-- EmbeddedPdfImages.pas uses Qt for image conversion
+### Key Build Commands
+```bash
+# Main app
+cd /workspaces/dbdesigner-fork && lazbuild DBDesignerFork.lpi
+
+# All plugins
+for p in Demo HTMLReport DataImporter SimpleWebFront; do
+  lazbuild Plugins/$p/DBDplugin_$p.lpi
+done
+
+# Run (needs display)
+xvfb-run -a ./bin/DBDesignerFork
+
+# Run with model
+xvfb-run -a ./bin/DBDesignerFork bin/Examples/order.xml
+```
+
+### Test Programs
+- `TestModelLoad.pas` — Standalone XML parser test (no LCL needed, compiles with fpc directly)
+- `TestSQLite.pas` — Direct SQLDB SQLite3 connectivity test
+- `TestSQLExprShim.pas` — Tests our sqlexpr.pas shim with SQLite
+- `TestSQLExport.pas` — SQL export test (needs full app infrastructure, hangs standalone)
+
+### Known Runtime Risks
+1. Some stubs are no-ops: SaveBitmap (QPixMap_save), custom cursor loading
+2. TPanel.Bitmap usage commented out in EditorQueryDragTarget.pas
+3. TTreeNode.SubItems via class helper (global dictionary) — untested at runtime
+4. Qt event dispatch (QApplication_sendEventAndDelete) is a no-op
+5. MDI changed to fsNormal — window management differs from original
+
+### Task Progress: ~203/230 done
+
+### Remaining Work
+- **Functional UI testing** (requires real display or VNC)
+- **Database connectivity** with MySQL/PostgreSQL (requires DB server)
+- **PDF export** testing
+- **SQL export** verification (works through UI menu)
+- **Code cleanup** (optional): replace Q* shims with direct LCL unit names
+- **Cross-platform** testing (Windows, macOS)
+
+### Latest Commits
+```
+ab48590 Add SQL export test program
+313c1cf Merge branch 'main'
+40e0793 Add Lessons Learned section to port-to-lazarus.md
+22782f0 Archive unused Delphi project files
+74fdb3c Verify full schema info works with SQLite
+f52b469 Fix SetSchemaInfo test
+1408ab9 Add SQLite and SQLExpr shim integration tests
+```

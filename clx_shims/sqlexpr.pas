@@ -1,3 +1,4 @@
+
 unit SqlExpr;
 {$mode delphi}
 interface
@@ -21,21 +22,35 @@ type
     FVendorLib: string;
     FTableScope: TTableScopes;
     FActiveStatements: Integer;
+    procedure SetDriverNameEx(const Value: string);
+    procedure UpdateConnectorType;
+    procedure ApplyParamsToConnection;
   public
+    procedure Open;
+    procedure Close; reintroduce;
+    procedure ExecuteDirect(const ASQL: string); reintroduce;
     property ActiveStatements: Integer read FActiveStatements;
   published
-    property DriverName: string read FDriverName write FDriverName;
+    property DriverName: string read FDriverName write SetDriverNameEx;
     property GetDriverFunc: string read FGetDriverFunc write FGetDriverFunc;
     property LibraryName: string read FLibraryName write FLibraryName;
     property VendorLib: string read FVendorLib write FVendorLib;
     property TableScope: TTableScopes read FTableScope write FTableScope;
   end;
 
-  // Re-export TSQLQuery with dbExpress extensions
+  // Re-export TSQLQuery
+  TSQLQuery = SQLDB.TSQLQuery;
+
   TSQLDataSet = class(SQLDB.TSQLQuery)
+  private
+    function GetSQLConnection: TSQLConnection;
+    procedure SetSQLConnection(Value: TSQLConnection);
   public
-    procedure SetSchemaInfo(SchemaType: Integer; const SchemaObjectName, SchemaPattern: string);
+    procedure SetSchemaInfo(SchemaType: Integer; const SchemaObjectName, SchemaPattern: string); reintroduce;
     function ExecSQL(ExecDirect: Boolean): Integer; overload;
+    function GetQuoteChar: string;
+  published
+    property SQLConnection: TSQLConnection read GetSQLConnection write SetSQLConnection;
   end;
 
   TSQLMonitor = class(TComponent)
@@ -56,10 +71,259 @@ type
 
 implementation
 
-procedure TSQLDataSet.SetSchemaInfo(SchemaType: Integer; const SchemaObjectName, SchemaPattern: string);
+{ TSQLConnection }
+
+procedure TSQLConnection.SetDriverNameEx(const Value: string);
 begin
-  // No-op stub - dbExpress schema info not directly applicable to SQLDB
-  // The caller typically sets SQL.Text after this call anyway
+  FDriverName := Value;
+  UpdateConnectorType;
+end;
+
+procedure TSQLConnection.UpdateConnectorType;
+var
+  LowerDriver: string;
+begin
+  LowerDriver := LowerCase(FDriverName);
+  if Pos('mysql', LowerDriver) > 0 then
+    ConnectorType := 'MySQL 5.7'
+  else if Pos('sqlite', LowerDriver) > 0 then
+    ConnectorType := 'SQLite3'
+  else if Pos('oracle', LowerDriver) > 0 then
+    ConnectorType := 'Oracle'
+  else if (Pos('mssql', LowerDriver) > 0) or (Pos('microsoft', LowerDriver) > 0) then
+    ConnectorType := 'MSSQLServer'
+  else if Pos('interbase', LowerDriver) > 0 then
+    ConnectorType := 'Firebird'
+  else if Pos('firebird', LowerDriver) > 0 then
+    ConnectorType := 'Firebird'
+  else if (Pos('odbc', LowerDriver) > 0) or (Pos('openodbc', LowerDriver) > 0) then
+    ConnectorType := 'ODBC'
+  else if Pos('postgre', LowerDriver) > 0 then
+    ConnectorType := 'PostgreSQL';
+end;
+
+procedure TSQLConnection.ApplyParamsToConnection;
+var
+  i: Integer;
+  ParamName, ParamValue: string;
+begin
+  // Map Delphi dbExpress-style Params to SQLDB connection properties
+  for i := 0 to Params.Count - 1 do
+  begin
+    ParamName := Params.Names[i];
+    ParamValue := Params.ValueFromIndex[i];
+
+    if SameText(ParamName, 'HostName') then
+      HostName := ParamValue
+    else if SameText(ParamName, 'Database') or SameText(ParamName, 'DataBase') then
+      DatabaseName := ParamValue
+    else if SameText(ParamName, 'User_Name') or SameText(ParamName, 'UserName') then
+      UserName := ParamValue
+    else if SameText(ParamName, 'Password') then
+      Password := ParamValue
+    else if SameText(ParamName, 'Port') then
+    begin
+      // Some databases need port in params
+      if ParamValue <> '' then
+        Params.Values['Port'] := ParamValue;
+    end;
+    // Other params (BlobSize, LocaleCode, ErrorResourceFile) are ignored
+    // as they don't apply to SQLDB
+  end;
+end;
+
+procedure TSQLConnection.Open;
+begin
+  // Ensure ConnectorType is set before connecting
+  if ConnectorType = '' then
+    UpdateConnectorType;
+
+  // Map Params to SQLDB connection properties
+  ApplyParamsToConnection;
+
+  // Ensure a transaction is available (SQLDB requires one)
+  if Transaction = nil then
+  begin
+    Transaction := TSQLTransaction.Create(Self);
+    Transaction.DataBase := Self;
+  end;
+
+  try
+    inherited;
+  except
+    on E: Exception do
+    begin
+      // Re-raise with more context
+      raise;
+    end;
+  end;
+end;
+
+procedure TSQLConnection.Close;
+begin
+  // In SQLDB, closing ends the transaction too
+  if (Transaction <> nil) and Transaction.Active then
+    Transaction.Rollback;
+  Connected := False;
+end;
+
+procedure TSQLConnection.ExecuteDirect(const ASQL: string);
+begin
+  // Ensure we have an active transaction
+  if (Transaction <> nil) and (not Transaction.Active) then
+    Transaction.StartTransaction;
+  inherited ExecuteDirect(ASQL);
+  // Auto-commit after DML (Delphi dbExpress auto-commits)
+  if (Transaction <> nil) and Transaction.Active then
+    Transaction.Commit;
+end;
+
+{ TSQLDataSet }
+
+function TSQLDataSet.GetSQLConnection: TSQLConnection;
+begin
+  if Database is TSQLConnection then
+    Result := TSQLConnection(Database)
+  else
+    Result := nil;
+end;
+
+procedure TSQLDataSet.SetSQLConnection(Value: TSQLConnection);
+begin
+  Database := Value;
+end;
+
+procedure TSQLDataSet.SetSchemaInfo(SchemaType: Integer; const SchemaObjectName, SchemaPattern: string);
+var
+  Conn: TSQLConnection;
+  LowerDriver, QuotedName: string;
+begin
+  Conn := GetSQLConnection;
+  if Conn <> nil then
+    LowerDriver := LowerCase(Conn.FDriverName)
+  else
+    LowerDriver := '';
+
+  if SchemaType = stTables then
+  begin
+    if Pos('mysql', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'TABLE_NAME, TABLE_TYPE FROM INFORMATION_SCHEMA.TABLES ' +
+                  'WHERE TABLE_SCHEMA = DATABASE() ORDER BY TABLE_NAME'
+    else if Pos('postgre', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, schemaname AS SCHEMA_NAME, ' +
+                  'tablename AS TABLE_NAME, ''TABLE'' AS TABLE_TYPE ' +
+                  'FROM pg_tables WHERE schemaname NOT IN (''pg_catalog'', ''information_schema'') ' +
+                  'ORDER BY tablename'
+    else if Pos('sqlite', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'name AS TABLE_NAME, type AS TABLE_TYPE FROM sqlite_master ' +
+                  'WHERE type=''table'' ORDER BY name'
+    else
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'TABLE_NAME, TABLE_TYPE FROM INFORMATION_SCHEMA.TABLES ORDER BY TABLE_NAME';
+  end
+  else if SchemaType = stColumns then
+  begin
+    // Delphi dbExpress stColumns returns:
+    // 0:RECNO 1:CATALOG_NAME 2:SCHEMA_NAME 3:TABLE_NAME 4:COLUMN_NAME
+    // 5:COLUMN_POSITION 6:COLUMN_TYPE 7:COLUMN_DATATYPE 8:COLUMN_TYPENAME
+    // 9:COLUMN_SUBTYPE 10:COLUMN_LENGTH 11:COLUMN_PRECISION 12:COLUMN_SCALE 13:COLUMN_NULLABLE
+    QuotedName := StringReplace(SchemaObjectName, '''', '''''', [rfReplaceAll]);
+    if Pos('mysql', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION AS COLUMN_POSITION, ' +
+                  '0 AS COLUMN_TYPE, 0 AS COLUMN_DATATYPE, DATA_TYPE AS COLUMN_TYPENAME, ' +
+                  'NULL AS COLUMN_SUBTYPE, CHARACTER_MAXIMUM_LENGTH AS COLUMN_LENGTH, ' +
+                  'NUMERIC_PRECISION AS COLUMN_PRECISION, NUMERIC_SCALE AS COLUMN_SCALE, ' +
+                  'CASE IS_NULLABLE WHEN ''YES'' THEN 1 ELSE 0 END AS COLUMN_NULLABLE ' +
+                  'FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=''' + QuotedName + ''' ' +
+                  'AND TABLE_SCHEMA = DATABASE() ORDER BY ORDINAL_POSITION'
+    else if Pos('postgre', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'table_name AS TABLE_NAME, column_name AS COLUMN_NAME, ' +
+                  'ordinal_position AS COLUMN_POSITION, 0 AS COLUMN_TYPE, 0 AS COLUMN_DATATYPE, ' +
+                  'data_type AS COLUMN_TYPENAME, NULL AS COLUMN_SUBTYPE, ' +
+                  'character_maximum_length AS COLUMN_LENGTH, ' +
+                  'numeric_precision AS COLUMN_PRECISION, numeric_scale AS COLUMN_SCALE, ' +
+                  'CASE is_nullable WHEN ''YES'' THEN 1 ELSE 0 END AS COLUMN_NULLABLE ' +
+                  'FROM information_schema.columns WHERE table_name=''' + QuotedName + ''' ' +
+                  'ORDER BY ordinal_position'
+    else if Pos('sqlite', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  '''' + QuotedName + ''' AS TABLE_NAME, name AS COLUMN_NAME, ' +
+                  'cid AS COLUMN_POSITION, 0 AS COLUMN_TYPE, 0 AS COLUMN_DATATYPE, ' +
+                  'type AS COLUMN_TYPENAME, NULL AS COLUMN_SUBTYPE, ' +
+                  'NULL AS COLUMN_LENGTH, NULL AS COLUMN_PRECISION, NULL AS COLUMN_SCALE, ' +
+                  'CASE "notnull" WHEN 1 THEN 0 ELSE 1 END AS COLUMN_NULLABLE ' +
+                  'FROM pragma_table_info(''' + QuotedName + ''')'
+    else
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION AS COLUMN_POSITION, ' +
+                  '0 AS COLUMN_TYPE, 0 AS COLUMN_DATATYPE, DATA_TYPE AS COLUMN_TYPENAME, ' +
+                  'NULL AS COLUMN_SUBTYPE, CHARACTER_MAXIMUM_LENGTH AS COLUMN_LENGTH, ' +
+                  'NUMERIC_PRECISION AS COLUMN_PRECISION, NUMERIC_SCALE AS COLUMN_SCALE, ' +
+                  'CASE IS_NULLABLE WHEN ''YES'' THEN 1 ELSE 0 END AS COLUMN_NULLABLE ' +
+                  'FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=''' + QuotedName + ''' ' +
+                  'ORDER BY ORDINAL_POSITION';
+  end
+  else if SchemaType = stIndexes then
+  begin
+    // Delphi dbExpress stIndexes returns:
+    // 0:RECNO 1:CATALOG_NAME 2:SCHEMA_NAME 3:TABLE_NAME 4:INDEX_NAME
+    // 5:COLUMN_NAME 6:COLUMN_POSITION 7:PKEY_NAME 8:INDEX_TYPE 9:SORT_ORDER 10:FILTER
+    QuotedName := StringReplace(SchemaObjectName, '''', '''''', [rfReplaceAll]);
+    if Pos('mysql', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'TABLE_NAME, INDEX_NAME, COLUMN_NAME, SEQ_IN_INDEX AS COLUMN_POSITION, ' +
+                  'CASE NON_UNIQUE WHEN 0 THEN INDEX_NAME ELSE NULL END AS PKEY_NAME, ' +
+                  'INDEX_TYPE, COLLATION AS SORT_ORDER, NULL AS FILTER ' +
+                  'FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_NAME=''' + QuotedName + ''' ' +
+                  'AND TABLE_SCHEMA = DATABASE() ORDER BY INDEX_NAME, SEQ_IN_INDEX'
+    else if Pos('postgre', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  't.relname AS TABLE_NAME, i.relname AS INDEX_NAME, ' +
+                  'a.attname AS COLUMN_NAME, a.attnum AS COLUMN_POSITION, ' +
+                  'CASE WHEN ix.indisprimary THEN i.relname ELSE NULL END AS PKEY_NAME, ' +
+                  'CASE WHEN ix.indisunique THEN ''UNIQUE'' ELSE ''INDEX'' END AS INDEX_TYPE, ' +
+                  '''ASC'' AS SORT_ORDER, NULL AS FILTER ' +
+                  'FROM pg_class t JOIN pg_index ix ON t.oid = ix.indrelid ' +
+                  'JOIN pg_class i ON i.oid = ix.indexrelid ' +
+                  'JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = ANY(ix.indkey) ' +
+                  'WHERE t.relname = ''' + QuotedName + ''' ' +
+                  'ORDER BY i.relname, a.attnum'
+    else if Pos('sqlite', LowerDriver) > 0 then
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  '''' + QuotedName + ''' AS TABLE_NAME, il.name AS INDEX_NAME, ' +
+                  'ii.name AS COLUMN_NAME, ii.seqno AS COLUMN_POSITION, ' +
+                  'NULL AS PKEY_NAME, ' +
+                  'CASE il."unique" WHEN 1 THEN ''UNIQUE'' ELSE ''INDEX'' END AS INDEX_TYPE, ' +
+                  '''ASC'' AS SORT_ORDER, NULL AS FILTER ' +
+                  'FROM pragma_index_list(''' + QuotedName + ''') il ' +
+                  'JOIN pragma_index_info(il.name) ii ORDER BY il.name, ii.seqno'
+    else
+      SQL.Text := 'SELECT NULL AS RECNO, NULL AS CATALOG_NAME, NULL AS SCHEMA_NAME, ' +
+                  'TABLE_NAME, INDEX_NAME, COLUMN_NAME, ORDINAL_POSITION AS COLUMN_POSITION, ' +
+                  'NULL AS PKEY_NAME, NULL AS INDEX_TYPE, NULL AS SORT_ORDER, NULL AS FILTER ' +
+                  'FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_NAME=''' + QuotedName + ''' ' +
+                  'ORDER BY INDEX_NAME, ORDINAL_POSITION';
+  end;
+  // For stNoSchema, the caller sets SQL.Text directly - no action needed
+end;
+
+function TSQLDataSet.GetQuoteChar: string;
+var
+  LowerDriver: string;
+  Conn: TSQLConnection;
+begin
+  Result := '"';
+  Conn := GetSQLConnection;
+  if Conn <> nil then
+  begin
+    LowerDriver := LowerCase(Conn.FDriverName);
+    if Pos('mysql', LowerDriver) > 0 then
+      Result := '`';
+  end;
 end;
 
 function TSQLDataSet.ExecSQL(ExecDirect: Boolean): Integer;
@@ -67,6 +331,8 @@ begin
   inherited ExecSQL;
   Result := RowsAffected;
 end;
+
+{ TSQLMonitor }
 
 constructor TSQLMonitor.Create(AOwner: TComponent);
 begin
@@ -79,5 +345,10 @@ begin
   FTraceList.Free;
   inherited;
 end;
+
+initialization
+  RegisterClass(TSQLConnection);
+  RegisterClass(TSQLDataSet);
+  RegisterClass(TSQLMonitor);
 
 end.

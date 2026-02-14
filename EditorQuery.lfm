@@ -2,12 +2,11 @@ object EditorQueryForm: TEditorQueryForm
   Left = 260
   Top = 277
   ActiveControl = DBGrid
-  AutoScroll = False
-  BorderStyle = fbsSizeToolWin
+  BorderStyle = bsSizeToolWin
   Caption = 'Query Editor'
   ClientHeight = 400
   ClientWidth = 700
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MinHeight = 400
   Constraints.MinWidth = 700
   KeyPreview = True
@@ -111,7 +110,7 @@ object EditorQueryForm: TEditorQueryForm
       Top = 32
       Width = 285
       Height = 21
-      Color = clBackground
+      Color = clBtnFace
       ReadOnly = True
       TabOrder = 2
       OnDblClick = GetDBConnSBtnClick
@@ -1028,7 +1027,7 @@ object EditorQueryForm: TEditorQueryForm
           Width = 171
           Height = 301
           Align = alClient
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 11
           Font.Name = 'Verdana'
@@ -1073,7 +1072,7 @@ object EditorQueryForm: TEditorQueryForm
           DefaultDrawing = False
           Font.Color = clBlack
           Font.Height = 11
-          Font.Name = 'MS Shell Dlg'
+          Font.Name = 'Sans'
           Font.Pitch = fpVariable
           Font.Style = []
           Font.Weight = 40
@@ -1081,10 +1080,10 @@ object EditorQueryForm: TEditorQueryForm
           ParentFont = False
           PopupMenu = DBGridPopupMenu
           TabOrder = 0
-          TitleFont.CharSet = fcsLatin1
+          TitleFont.CharSet = 0
           TitleFont.Color = clBlack
           TitleFont.Height = 9
-          TitleFont.Name = 'Microsoft Sans Serif'
+          TitleFont.Name = 'Sans'
           TitleFont.Pitch = fpVariable
           TitleFont.Style = []
           TitleFont.Weight = 40
@@ -1697,11 +1696,11 @@ object EditorQueryForm: TEditorQueryForm
           Width = 136
           Height = 59
           Align = alClient
-          Color = clBackground
-          Font.CharSet = fcsLatin1
+          Color = clBtnFace
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 11
-          Font.Name = 'Tahoma'
+          Font.Name = 'Sans'
           Font.Pitch = fpVariable
           Font.Style = []
           Font.Weight = 40
@@ -1783,11 +1782,11 @@ object EditorQueryForm: TEditorQueryForm
             Width = 38
             Height = 252
             Align = alClient
-            Color = clBackground
-            Font.CharSet = fcsLatin1
+            Color = clBtnFace
+            Font.CharSet = 0
             Font.Color = clBlack
             Font.Height = 11
-            Font.Name = 'Courier New'
+            Font.Name = 'Monospace'
             Font.Pitch = fpVariable
             Font.Style = []
             Font.Weight = 40
@@ -1800,11 +1799,11 @@ object EditorQueryForm: TEditorQueryForm
             Width = 131
             Height = 252
             Align = alLeft
-            Color = clBackground
-            Font.CharSet = fcsLatin1
+            Color = clBtnFace
+            Font.CharSet = 0
             Font.Color = clBlack
             Font.Height = 11
-            Font.Name = 'Courier New'
+            Font.Name = 'Monospace'
             Font.Pitch = fpVariable
             Font.Style = []
             Font.Weight = 40
@@ -2028,7 +2027,7 @@ object EditorQueryForm: TEditorQueryForm
       end
     end
   end
-  object OutputQry: TSQLQuery
+  object OutputQry: TSQLDataSet
     ParamCheck = False
     Params = <>
     Left = 232
@@ -2036,15 +2035,10 @@ object EditorQueryForm: TEditorQueryForm
   end
   object OutputDataSetProvider: TDataSetProvider
     DataSet = OutputQry
-    Options = [poRetainServerOrder]
-    OnUpdateError = OutputDataSetProviderUpdateError
     Left = 262
     Top = 292
   end
   object OutputClientDataSet: TClientDataSet
-    Aggregates = <>
-    Params = <>
-    ProviderName = 'OutputDataSetProvider'
     AfterOpen = OutputClientDataSetAfterOpen
     Left = 292
     Top = 292

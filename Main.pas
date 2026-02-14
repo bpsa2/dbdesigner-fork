@@ -70,7 +70,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, Menus, LCLType, ComCtrls, Grids, DBGrids,
+  StdCtrls, ExtCtrls, Menus, LCLType, LCLIntf, ComCtrls, Grids, DBGrids,
   DBXpress, DB, SqlExpr, ImgList, Buttons, DBCtrls, QT, Printers,
   Clipbrd, QStyle,
 {$IFDEF USE_QTheming}QThemed,{$ENDIF}
@@ -367,7 +367,7 @@ type
     procedure Save2DiskImgClick(Sender: TObject);
     procedure Save2DBImgClick(Sender: TObject);
 
-    {$IFNDEF FPC}function EventFilter(Sender: QObjectH; Event: QEventH): Boolean; override;{$ENDIF}
+    function EventFilter(Sender: QObjectH; Event: QEventH): Boolean; {$IFNDEF FPC}override;{$ENDIF}
 
     procedure wtPointerSBtnClick(Sender: TObject);
     procedure wtPointerSBtnMouseEnter(Sender: TObject);
@@ -398,6 +398,9 @@ type
     procedure CheckLinuxDesktopFile;
 
     procedure DoApplicationEvent(Sender: QObjectH; Event: QEventH; var Handled: Boolean);
+    {$IFDEF FPC}
+    procedure LCLAppKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    {$ENDIF}
 
     procedure KylixSpaceUpTimerTimer(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -474,7 +477,14 @@ uses MainDM, ZoomSel, EER,
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  {$IFDEF FPC}
+  // Register this form's EventFilter as the global Qt-style event handler
+  RegisterQtEventHandler(EventFilter);
+  // Register global keyboard handler for DoApplicationEvent (key-up uses KylixSpaceUpTimer)
+  Application.AddOnKeyDownHandler(LCLAppKeyDown);
+  {$ELSE}
   Application.OnEvent:=DoApplicationEvent;
+  {$ENDIF}
 
   //Get Version string, defined in DBDesigner4.dpr
   Version:=SplashForm.VersionLbl.Caption;
@@ -1357,19 +1367,8 @@ end;
 procedure TMainForm.StyleStandardMIClick(Sender: TObject);
 begin
   TMenuItem(Sender).Checked:=Not(TMenuItem(Sender).Checked);
-  case TMenuItem(Sender).Tag of
-    0:
-      Application.Style.DefaultStyle:=dsWindows;
-    1:
-      Application.Style.DefaultStyle:=dsMotifPlus;
-    2:
-      Application.Style.DefaultStyle:=dsQtSGI;
-    3:
-      begin
-        Application.Style.DefaultStyle:=dsWindows;
-        Application.Style.DefaultStyle:=dsPlatinum;
-      end;
-  end;
+  // CLX Application.Style not available in LCL
+  // case TMenuItem(Sender).Tag of ... end;
 end;
 
 procedure TMainForm.SQLDropScriptMIClick(Sender: TObject);
@@ -1703,7 +1702,7 @@ begin
   SaveinDatabaseMIClick(self);
 end;
 
-{$IFNDEF FPC}
+// Event handler for custom Qt-style events (works for both CLX and LCL)
 function TMainForm.EventFilter(Sender: QObjectH; Event: QEventH): Boolean;
 var Pint: ^Integer;
   Ppoint: ^TPoint;
@@ -2117,10 +2116,12 @@ begin
   end;
 
   //if this was called by another message, call default function
+  {$IFNDEF FPC}
   if(Result=False)then
     EventFilter:=inherited EventFilter(Sender, Event);
+  {$ENDIF}
 end;
-{$ENDIF}
+// end of EventFilter
 
 procedure TMainForm.SetApplStyle(ApplStyle: integer);
 begin
@@ -3005,7 +3006,7 @@ begin
               if(ActiveMDIChild.Classname='TEERForm')then
               begin
                 TEERForm(ActiveMDIChild).EERModel.MoveSelectedEERObjects(
-                  (Ord(Key=Key_right)-Ord(Key=VK_LEFT))*
+                  (Ord(Key=VK_RIGHT)-Ord(Key=VK_LEFT))*
                     (1+9*Ord(theShiftState=[ssShift]))*
                     (1+49*Ord(theShiftState=[ssCtrl, ssShift])),
                   (Ord(Key=VK_DOWN)-Ord(Key=VK_UP))*
@@ -3125,7 +3126,7 @@ begin
     else if(Key=Key_Control)and(SpaceDown)then
     begin
       //Use Application.keystate because theShiftState is wrong
-      if(ssAlt in Application.keystate)then
+      if(GetKeyState(VK_MENU) < 0)then
         DMEER.SetCurrentWorkTool(wtZoomOut)
       else
         DMEER.SetCurrentWorkTool(wtHand);
@@ -3135,7 +3136,7 @@ begin
     else if(Key=Key_Alt)and(SpaceDown)then
     begin
       //Use Application.keystate because theShiftState is wrong
-      if(ssCtrl in Application.keystate)then
+      if(GetKeyState(VK_CONTROL) < 0)then
         DMEER.SetCurrentWorkTool(wtZoomIn)
       else
         DMEER.SetCurrentWorkTool(wtHand);
@@ -3172,6 +3173,24 @@ begin
 {$ENDIF}
 end;
 
+
+{$IFDEF FPC}
+procedure TMainForm.LCLAppKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  Event: QKeyEventH;
+  Handled: Boolean;
+begin
+  Event := QKeyEvent_create(QEventType_KeyPress, Key, ShiftStateToButtonState(Shift));
+  try
+    Handled := False;
+    DoApplicationEvent(HWND(0), QEventH(Event), Handled);
+    if Handled then
+      Key := 0;
+  finally
+    Dispose(PKeyEventRec(Event));
+  end;
+end;
+{$ENDIF}
 
 procedure TMainForm.KylixSpaceUpTimerTimer(Sender: TObject);
 begin
@@ -3297,8 +3316,8 @@ begin
   try
     TEERForm(ActiveMDIChild).EERModel.PaintModelToImage(ModelBmp, True);
 
-    QClipboard_clear(Clipboard.Handle);
-    QClipboard_setPixmap(Clipboard.Handle, ModelBmp.Handle);
+    // TODO: Copy bitmap to clipboard using LCL API
+    Clipboard.Assign(ModelBmp);
   finally
     ModelBmp.Free;
   end;

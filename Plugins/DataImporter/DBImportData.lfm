@@ -2,11 +2,10 @@ object DBImportDataForm: TDBImportDataForm
   Left = 290
   Top = 255
   ActiveControl = PresetLU
-  AutoScroll = False
   Caption = 'Data Import'
   ClientHeight = 563
   ClientWidth = 911
-  Color = clBackground
+  Color = clBtnFace
   Icon.Data = {
     0000010003002020100000000000E8020000360000002020000001000800A808
     00001E0300002020000001001800A80C0000C60B000028000000200000004000
@@ -558,10 +557,10 @@ object DBImportDataForm: TDBImportDataForm
         Height = 11
         Alignment = taRightJustify
         Caption = '(Left mouse button to select field width, right button to set)'
-        Font.CharSet = fcsLatin1
+        Font.CharSet = 0
         Font.Color = clGray
         Font.Height = 9
-        Font.Name = 'Tahoma'
+        Font.Name = 'Sans'
         Font.Pitch = fpVariable
         Font.Style = []
         Font.Weight = 40
@@ -636,7 +635,7 @@ object DBImportDataForm: TDBImportDataForm
         FixedCols = 0
         RowCount = 7
         FixedRows = 0
-        Font.CharSet = fcsLatin1
+        Font.CharSet = 0
         Font.Color = clText
         Font.Height = 12
         Font.Name = 'Lucida Console'
@@ -916,10 +915,10 @@ object DBImportDataForm: TDBImportDataForm
       Width = 122
       Height = 12
       Caption = 'Not connected to a Database.'
-      Font.CharSet = fcsLatin1
+      Font.CharSet = 0
       Font.Color = clBlack
       Font.Height = 9
-      Font.Name = 'Microsoft Sans Serif'
+      Font.Name = 'Sans'
       Font.Pitch = fpVariable
       Font.Style = []
       Font.Weight = 40
@@ -1118,9 +1117,8 @@ object DBImportDataForm: TDBImportDataForm
     Top = 222
   end
   object SourceSQLDataSet: TSQLDataSet
-    MaxBlobSize = -1
     Params = <>
-    SQLConnection = SourceSQLConn
+    Database = SourceSQLConn
     Left = 138
     Top = 222
   end

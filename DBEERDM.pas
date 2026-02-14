@@ -2160,9 +2160,9 @@ begin
                 else
                 begin
                   //Ignore 0 = 0.00
-                  oldDecSep:=DecimalSeparator;
+                  oldDecSep:=DefaultFormatSettings.DecimalSeparator;
                   try
-                    DecimalSeparator:='.';
+                    DefaultFormatSettings.DecimalSeparator:='.';
                     try
                       if(StrToFloat(theColumn.DefaultValue)<>
                         StrToFloat(DMDB.SchemaSQLQuery.Fields[4].AsString))then
@@ -2172,7 +2172,7 @@ begin
                       ColumnChanged:=True;
                     end;
                   finally
-                    DecimalSeparator:=oldDecSep;
+                    DefaultFormatSettings.DecimalSeparator:=oldDecSep;
                   end;
                 end;
               end;
@@ -2862,15 +2862,15 @@ begin
                     StrToFloat(s))then
                     s2:=s;
                 except
-                  oldDezSep:=DecimalSeparator;
+                  oldDezSep:=DefaultFormatSettings.DecimalSeparator;
                   try
-                    DecimalSeparator:=',';
+                    DefaultFormatSettings.DecimalSeparator:=',';
                     try
                       if(DMDB.SchemaSQLQuery.FieldByName(TEERColumn(theTable.Columns[k]).ColName).AsFloat=
                         StrToFloat(s))then
                         s2:=s;
                     except
-                      DecimalSeparator:='.';
+                      DefaultFormatSettings.DecimalSeparator:='.';
                       try
                         if(FloatToStr(DMDB.SchemaSQLQuery.FieldByName(TEERColumn(theTable.Columns[k]).ColName).AsFloat)=
                           FloatToStr(StrToFloat(s)))then
@@ -2879,7 +2879,7 @@ begin
                       end;
                     end;
                   finally
-                    DecimalSeparator:=oldDezSep;
+                    DefaultFormatSettings.DecimalSeparator:=oldDezSep;
                   end;
                 end;
               end;

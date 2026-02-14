@@ -2,12 +2,11 @@ object DBConnEditorForm: TDBConnEditorForm
   Left = 319
   Top = 220
   ActiveControl = DBConnEd
-  AutoScroll = False
-  BorderStyle = fbsToolWindow
+  BorderStyle = bsToolWindow
   Caption = 'Database Connection Editor'
   ClientHeight = 452
   ClientWidth = 486
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poDefault
@@ -133,7 +132,7 @@ object DBConnEditorForm: TDBConnEditorForm
         Height = 21
         Font.Color = clBlack
         Font.Height = 11
-        Font.Name = 'MS Shell Dlg'
+        Font.Name = 'Sans'
         Font.Pitch = fpVariable
         Font.Style = [fsBold]
         ParentFont = False

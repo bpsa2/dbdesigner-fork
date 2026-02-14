@@ -22,9 +22,8 @@ object DMMain: TDMMain
     Top = 18
   end
   object SchemaSQLDataSet: TSQLDataSet
-    MaxBlobSize = -1
     Params = <>
-    SQLConnection = SQLConn
+    Database = SQLConn
     Left = 136
     Top = 18
   end

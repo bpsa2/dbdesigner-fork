@@ -99,6 +99,7 @@ type
 
   //-----------------------------------------------
   TEERPluginData  = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
   public
@@ -131,6 +132,7 @@ type
   // Declaration of the MAIN-Class
 
   TEERModel = class(TPanel)
+  public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
@@ -266,9 +268,9 @@ type
   protected
     //Handle to Mouse Events
     procedure DoMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+      Shift: TShiftState; X, Y: Integer); reintroduce;
     procedure DoMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure DoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure DoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer); reintroduce;
 
     procedure MouseEnter; override;
     procedure MouseLeave; override;
@@ -517,9 +519,9 @@ type
 
     //Define Mouse Actions procedures as abstract, so they have to be overwritten
     procedure DoMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer); virtual;
+      Shift: TShiftState; X, Y: Integer); virtual; reintroduce;
     procedure DoMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer); virtual;
-    procedure DoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer); virtual;
+    procedure DoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer); reintroduce; virtual;
 
     procedure DoMouseEnter(Sender: TObject);
     procedure DoMouseLeave(Sender: TObject);
@@ -574,6 +576,7 @@ type
   // Declaration of the EER Table Object
 
   TEERTable = class(TEERObj)
+  public
     constructor Create(AOwner: TComponent; TheName: string; FontName: string; theTableType: integer; theTablePrefix: integer; thePopupMenu: TPopupMenu); reintroduce; overload;
     destructor Destroy; override;
 
@@ -748,6 +751,7 @@ type
   // Declaration of the EER Rel Object
 
   TEERRel = class(TEERObj)
+  public
     constructor Create(AOwner: TComponent; TheName: string); reintroduce; overload;
     destructor Destroy; override;
 
@@ -836,6 +840,7 @@ type
   // Declaration of the EER Note Object
 
   TEERNote = class(TEERObj)
+  public
     constructor Create(AOwner: TComponent; TheName: string); reintroduce; overload;
     destructor Destroy; override;
 
@@ -873,6 +878,7 @@ type
   // Declaration of the EER Image Object
 
   TEERImage = class(TEERObj)
+  public
     constructor Create(AOwner: TComponent; TheName: string); reintroduce; overload;
     destructor Destroy; override;
 
@@ -919,6 +925,7 @@ type
   // Declaration of the EER Region Object
 
   TEERRegion = class(TEERObj)
+  public
     constructor Create(AOwner: TComponent; TheName: string); reintroduce; overload;
     destructor Destroy; override;
 
@@ -971,6 +978,7 @@ type
   // Declaration of the EER Stored Proc Object
 
   TEERStoredProc = class(TEERObj)
+  public
     constructor Create(AOwner: TComponent; TheName: string); reintroduce; overload;
     destructor Destroy; override;
   protected
@@ -981,6 +989,7 @@ type
   end;
 
   TEERDatatypeGroup = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
   public
@@ -991,6 +1000,7 @@ type
   end;
 
   TEERDatatype = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
 
@@ -1020,6 +1030,7 @@ type
 
   //-----------------------------------------------
   TEERColumn = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
 
@@ -1050,6 +1061,7 @@ type
 
   //-----------------------------------------------
   TEERIndex = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
 
@@ -1069,6 +1081,7 @@ type
 
   //-----------------------------------------------
   TEERActionLog = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
   public
@@ -1082,6 +1095,7 @@ type
 
   //-----------------------------------------------
   TEERActionSubLog = class(TPersistent)
+  public
     constructor Create(AOwner: TComponent); overload;
     destructor Destroy; override;
   public
@@ -3121,6 +3135,7 @@ begin
           ypos:=0;
 
         //Get selected Pages
+        s := '';
         for i:=0 to 200 do
           if(SelectedPages[i]=True)then
             s:=s+IntToStr(i)+';';
@@ -3130,9 +3145,9 @@ begin
           ModelName:=Copy(ExtractFileName(ModelFilename),
             1, Length(ExtractFileName(ModelFilename))-Length(ExtractFileExt(ModelFilename)));
 
-        DecSep:=DecimalSeparator;
+        DecSep:=DefaultFormatSettings.DecimalSeparator;
         try
-          DecimalSeparator:='.';
+          DefaultFormatSettings.DecimalSeparator:='.';
 
           WriteLn(theFile, '<GLOBALSETTINGS '+
             'ModelName="'+DMMain.EncodeText4XML(ModelName)+'" '+
@@ -3173,7 +3188,7 @@ begin
             'CanvasHeight="'+IntToStr(EERModel_Height)+'" '+
             '/>');
         finally
-          DecimalSeparator:=DecSep;
+          DefaultFormatSettings.DecimalSeparator:=DecSep;
         end;
 
 
@@ -3247,9 +3262,9 @@ begin
         WriteLn(theFile, '</REGIONCOLORS>');
 
         //Reserved Words
-        DecSep:=DecimalSeparator;
+        DecSep:=DefaultFormatSettings.DecimalSeparator;
         try
-          DecimalSeparator:='.';
+          DefaultFormatSettings.DecimalSeparator:='.';
 
           WriteLn(theFile, '<POSITIONMARKERS>');
           for i:=0 to PosMarkers.Count-1 do
@@ -3257,7 +3272,7 @@ begin
               'X="'+IntToStr(TPosMarker(PosMarkers.Items[i]).X)+'" Y="'+IntToStr(TPosMarker(PosMarkers.Items[i]).Y)+'" />');
           WriteLn(theFile, '</POSITIONMARKERS>');
         finally
-          DecimalSeparator:=DecSep;
+          DefaultFormatSettings.DecimalSeparator:=DecSep;
         end;
 
 
@@ -3841,9 +3856,9 @@ var Parser: TXmlParser;
   end;
 
 begin
-  DecSep:=DecimalSeparator;
+  DecSep:=DefaultFormatSettings.DecimalSeparator;
   try
-    DecimalSeparator:='.';
+    DefaultFormatSettings.DecimalSeparator:='.';
 
     DisableModelRefresh:=True;
     try
@@ -4274,7 +4289,7 @@ begin
         Parser.Free;
       end;
     finally
-      DecimalSeparator:=DecSep;
+      DefaultFormatSettings.DecimalSeparator:=DecSep;
     end;
     
 
@@ -4391,9 +4406,9 @@ begin
     begin
       ModelFilename:=fname;
 
-      DecSep:=DecimalSeparator;
+      DecSep:=DefaultFormatSettings.DecimalSeparator;
       try
-        DecimalSeparator:='.';
+        DefaultFormatSettings.DecimalSeparator:='.';
 
         //----------------------------------------------------
         //Read Settings
@@ -4547,7 +4562,7 @@ begin
           EERModel_Height:=2842;
         end;
       finally
-        DecimalSeparator:=DecSep;
+        DefaultFormatSettings.DecimalSeparator:=DecSep;
       end;
 
       //----------------------------------------------------
@@ -4693,9 +4708,9 @@ begin
 
       //Read Position Markers
       try
-        DecSep:=DecimalSeparator;
+        DecSep:=DefaultFormatSettings.DecimalSeparator;
         try
-          DecimalSeparator:='.';
+          DefaultFormatSettings.DecimalSeparator:='.';
 
           try
             for i:=0 to theDoc.SETTINGS.POSITIONMARKERS.Count-1 do
@@ -4713,7 +4728,7 @@ begin
           except
           end;
         finally
-          DecimalSeparator:=DecSep;
+          DefaultFormatSettings.DecimalSeparator:=DecSep;
         end;
       except
         on x: Exception do
@@ -12053,6 +12068,7 @@ end;
 function TEERRel.GetXML: string;
 var s: string;
 begin
+  s := '';
   s:=s+'<RELATION '+
     'ID="'+IntToStr(Obj_id)+'" '+
     'RelationName="'+DMMain.EncodeText4XML(ObjName)+'" '+
@@ -12391,6 +12407,7 @@ end;
 function TEERNote.GetXML: string;
 var s: string;
 begin
+  s := '';
   s:=s+'<NOTE '+
     'ID="'+IntToStr(Obj_id)+'" '+
     'NoteName="'+DMMain.EncodeText4XML(ObjName)+'" '+
@@ -13554,6 +13571,7 @@ function TEERImage.GetXML: string;
 var s: string;
   theImgFile: TMemoryStream;
 begin
+  s := '';
   s:=s+'<IMAGE '+
     'ID="'+IntToStr(Obj_id)+'" '+
     'ImageName="'+DMMain.EncodeText4XML(ObjName)+'" '+

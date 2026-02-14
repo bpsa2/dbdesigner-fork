@@ -587,7 +587,7 @@ type
     FOpened: boolean;
     FCount: integer;
     FReference: TObject;
-  protected
+  public
     constructor CreateEntry(AParent: TPdfOutlineEntry); virtual;
     procedure Save; virtual;
   public
@@ -606,7 +606,7 @@ type
   end;
 
   TPdfOutlineRoot = class(TPdfOutlineEntry)
-  protected
+  public
     constructor CreateRoot(ADoc: TPdfDoc); virtual;
   public
     procedure Save; override;

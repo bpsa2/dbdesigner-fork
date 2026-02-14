@@ -2,12 +2,11 @@ object DBConnLoginForm: TDBConnLoginForm
   Left = 385
   Top = 305
   ActiveControl = UsernameEd
-  AutoScroll = False
-  BorderStyle = fbsToolWindow
+  BorderStyle = bsToolWindow
   Caption = 'Database Login'
   ClientHeight = 132
   ClientWidth = 353
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poMainFormCenter
   Scaled = False

@@ -41,7 +41,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Variants, LCLType, Graphics, Controls, Forms, 
-  Dialogs, StdCtrls, ExtCtrls, Main, EERModel;
+  Dialogs, StdCtrls, ExtCtrls, Main, EERModel, PanelBitmap;
 
 type
   TEditorQueryDragTargetForm = class(TForm)

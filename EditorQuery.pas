@@ -41,9 +41,9 @@ interface
 
 uses
   SysUtils, Types, Classes, Variants, LCLType, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, FMTBcd, DB, DBClient, Provider, SqlExpr, Buttons,
+  Dialogs, StdCtrls, DB, DBClient, Provider, SqlExpr, Buttons,
   ExtCtrls, DBCtrls, Grids, DBGrids, ComCtrls, EERModel, IniFiles,
-  Menus, Clipbrd, {$IFDEF USE_SYNEDIT}SynEdit, SynHighlighterSQL, {$ENDIF}
+  Menus, Clipbrd, {$IFDEF USE_SYNEDIT}SynEdit, SynEditTypes, SynHighlighterSQL, {$ENDIF}
   {$IFDEF MSWINDOWS}Windows, ShellAPI, {$ENDIF}
   Qt, ImgList, EmbeddedPdfDB;
 
@@ -52,7 +52,7 @@ type
     TopPnl: TPanel;
     BottomPnl: TPanel;
     TableLbl: TLabel;
-    OutputQry: TSQLQuery;
+    OutputQry: TSQLDataSet;
     OutputDataSetProvider: TDataSetProvider;
     OutputClientDataSet: TClientDataSet;
     OutputDataSrc: TDataSource;
@@ -225,7 +225,7 @@ type
     procedure StoredSQLEditBtnClick(Sender: TObject);
     procedure StoredSQLExecuteBtnClick(Sender: TObject);
     procedure StoredSQLTreeViewEdited(Sender: TObject; Node: TTreeNode;
-      var S: WideString);
+      var S: string);
     procedure StoredSQLTreeViewEditing(Sender: TObject; Node: TTreeNode;
       var AllowEdit: Boolean);
     procedure DeleteSQLCommandMIShow(Sender: TObject);
@@ -373,8 +373,8 @@ begin
   theHintPauseTmr.Enabled:=False;
   theHintPauseTmr.OnTimer:=DoHintPauseTmr;
 
-  StoredSQLTreeView.Columns[0].Caption:=
-    DMMain.GetTranslatedMessage('Stored SQL Commands', 84);
+  // StoredSQLTreeView header caption (Columns not available in LCL TTreeView)
+  // DMMain.GetTranslatedMessage('Stored SQL Commands', 84);
 
 {$IFDEF LINUX}
   DBGrid.Options:=DBGrid.Options + [dgAlwaysShowEditor];
@@ -401,8 +401,7 @@ begin
     eoEnhanceHomeKey, eoGroupUndo,
     eoShowScrollHint, eoScrollHintFollows,
     eoSmartTabs, eoTabsToSpaces,
-    eoSmartTabDelete, eoHideShowScrollbars,
-    eoTabsToSpaces{, eoHighlightCurrentLine}];
+    eoSmartTabDelete, eoHideShowScrollbars];
 
   SQLSynEdit.OnMouseMove:=SQLMemoMouseMove;
   SQLSynEdit.OnDragDrop:=SQLMemoDragDrop;
@@ -1232,7 +1231,7 @@ begin
     TMenuItem(Sender).Enabled:=SQLSynEdit.CanRedo
   else
 {$ENDIF}
-    TMenuItem(Sender).Enabled:=SQLMemo.CanRedo;
+    TMenuItem(Sender).Enabled:=False; // LCL TMemo has no CanRedo
 end;
 
 procedure TEditorQueryForm.UndoMIClick(Sender: TObject);
@@ -1252,7 +1251,7 @@ begin
     SQLSynEdit.Redo
   else
 {$ENDIF}
-    SQLMemo.Redo;
+    ; // SQLMemo.Redo not available in LCL TMemo
 end;
 
 procedure TEditorQueryForm.CopyMIClick(Sender: TObject);
@@ -1519,7 +1518,7 @@ begin
 end;
 
 procedure TEditorQueryForm.StoredSQLTreeViewEdited(Sender: TObject;
-  Node: TTreeNode; var S: WideString);
+  Node: TTreeNode; var S: string);
 var itemname: string;
   folderanz: integer;
   i: integer;
@@ -1562,7 +1561,7 @@ end;
 procedure TEditorQueryForm.StoredSQLTreeViewEditing(Sender: TObject;
   Node: TTreeNode; var AllowEdit: Boolean);
 var s: string;
-  s1: Widestring;
+  s1: string;
 begin
   AllowEdit:=False;
 
@@ -1599,7 +1598,7 @@ begin
   if(TForm(Application.MainForm).ActiveMDIChild=nil)then
     Exit;
 
-  if(StoredSQLTreeView.EditingItem=nil)then
+  if(not StoredSQLTreeView.IsEditing)then
   begin
     i:=0;
     while(i<StoredSQLTreeView.Items.Count)do
@@ -1934,7 +1933,7 @@ begin
   begin
     if(SQLSynEdit.Visible)then
       SQLSynEdit.SetFocus;
-    SQLSynEdit.SelLength:=0;
+    begin SQLSynEdit.BlockBegin := SQLSynEdit.CaretXY; SQLSynEdit.BlockEnd := SQLSynEdit.CaretXY; end;
     if(SetStart>0)then
       SQLSynEdit.SelStart:=SetStart
     else
@@ -2127,7 +2126,7 @@ begin
 
     if(SetStart=0)then
       SetStart:=Length(SQLStr);
-    SQLSynEdit.SelLength:=0;
+    begin SQLSynEdit.BlockBegin := SQLSynEdit.CaretXY; SQLSynEdit.BlockEnd := SQLSynEdit.CaretXY; end;
     SQLSynEdit.SelStart:=SetStart;
   end
   else
@@ -2832,7 +2831,7 @@ procedure TEditorQueryForm.StoredSQLTreeViewItemEnter(Sender: TObject;
   Node: TTreeNode);
 var R: TRect;
 begin
-  if(StoredSQLTreeView.EditingItem=nil)then
+  if(not StoredSQLTreeView.IsEditing)then
     if(Assigned(Node))then
     begin
       if(Assigned(Node.Data))then
@@ -2922,16 +2921,16 @@ end;
 
 procedure TEditorQueryForm.StoredSQLPopupMenuPopup(Sender: TObject);
 begin
-  if(StoredSQLTreeView.EditingItem<>nil)then
+  if(StoredSQLTreeView.IsEditing)then
     raise EAbort.Create('');
 end;
 
 procedure TEditorQueryForm.StoredSQLSplitterMoved(Sender: TObject);
 begin
   if(StoredSQLTreeView.Width<140)then
-    StoredSQLTreeView.Columns[0].Width:=140
+    StoredSQLTreeView.Width:=140
   else
-    StoredSQLTreeView.Columns[0].Width:=StoredSQLTreeView.Width-4;
+    // StoredSQLTreeView column width auto-adjusts in LCL;
 
   {if(QScrollView_visibleWidth(StoredSQLTreeView.Handle)+4<>StoredSQLTreeView.Width)then
     ShowMessage(IntToStr(QScrollView_visibleWidth(StoredSQLTreeView.Handle))+', '+IntToStr(StoredSQLTreeView.Width));}

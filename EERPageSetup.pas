@@ -42,7 +42,7 @@ interface
 uses
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, Printers, ExtCtrls, Buttons, EERModel, ComCtrls,
-  Math, Qt;
+  Math, Spin, Qt;
 
 type
   TEERPageSetupForm = class(TForm)
@@ -103,6 +103,12 @@ type
     procedure SetPrinterValues;
     procedure PortraitRBtnClick(Sender: TObject);
     procedure StartPrintBtnClick(Sender: TObject);
+  public
+    procedure HideEdits;
+    procedure ShowEdits;
+  private
+    FCurrentPageSize: TPageSize;
+    function GetPrinterMargins: TSize;
     procedure PaintBoxPaint(Sender: TObject);
     procedure PaintBoxMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -112,8 +118,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure VPagesSpinEditChanged(Sender: TObject; NewValue: Integer);
 
-    procedure HideEdits;
-    procedure ShowEdits;
+
 
     procedure SetModelSelPages;
     procedure StoreSelPagesInModel;
@@ -184,7 +189,7 @@ begin
 end;
 
 procedure TEERPageSetupForm.SetModel(theModel: TEERModel);
-var PrinterName: WideString;
+var PrinterName: string;
 begin
   EERModel:=theModel;
 
@@ -209,7 +214,7 @@ begin
   begin
     //!!! This isn't working at the moment
     PrinterName:=EERModel.ModelPrinter;
-    QPrinter_setPrinterName(QPrinterH(Printer.Handle), PWideString(@PrinterName));
+    // QPrinter_setPrinterName not available in LCL
 
     Printer.SetPrinter(EERModel.ModelPrinter);
   end;
@@ -232,7 +237,7 @@ begin
 
   //Set Printer Orientation
   Printer.Orientation:=EERModel.PageOrientation;
-  Printer.PrintAdapter.PageSize:=GetPageSizeNr(EERModel.PageFormat);
+  FCurrentPageSize:=GetPageSizeNr(EERModel.PageFormat);
 
   SetPrinterValues;
 
@@ -280,7 +285,8 @@ end;
 
 procedure TEERPageSetupForm.PropertiesBtnClick(Sender: TObject);
 begin
-  if(Printer.PrintAdapter.ExecuteSetup)then
+  // TODO: Implement printer setup dialog for LCL
+  if True then
     SetPrinterValues;
 end;
 
@@ -296,7 +302,7 @@ begin
   //PrinterCBox.ItemIndex:=PrinterCBox.Items.IndexOf(Printer.OutputDevice);
 
   PageSizeCBox.ItemIndex:=PageSizeCBox.Items.IndexOf(
-    GetPageSizeStr(Printer.PrintAdapter.PageSize));
+    GetPageSizeStr(FCurrentPageSize));
 
   case Printer.Orientation of
     poPortrait:
@@ -324,20 +330,18 @@ begin
 end;
 
 procedure TEERPageSetupForm.ResizeEERModelPages;
-var PrinterName: WideString;
 begin
   //Calculate Page Settings of the EERModel
   //from EERModel.PageSize.cx Value
-  if(Printer.PageWidth-Printer.Margins.cx*2-1)>
-    (Printer.PageHeight-Printer.Margins.cy*2-1)then
-    EERModel.PageAspectRatio:=(Printer.PageWidth-Printer.Margins.cx*2-1)/
-      (Printer.PageHeight-Printer.Margins.cy*2-1)
+  if(Printer.PageWidth-GetPrinterMargins.cx*2-1)>
+    (Printer.PageHeight-GetPrinterMargins.cy*2-1)then
+    EERModel.PageAspectRatio:=(Printer.PageWidth-GetPrinterMargins.cx*2-1)/
+      (Printer.PageHeight-GetPrinterMargins.cy*2-1)
   else
-    EERModel.PageAspectRatio:=(Printer.PageHeight-Printer.Margins.cy*2-1)/
-      (Printer.PageWidth-Printer.Margins.cx*2-1);
+    EERModel.PageAspectRatio:=(Printer.PageHeight-GetPrinterMargins.cy*2-1)/
+      (Printer.PageWidth-GetPrinterMargins.cx*2-1);
 
-  QPrinter_PrinterName(QPrinterH(Printer.Handle), PWideString(@PrinterName));
-  EERModel.ModelPrinter:=PrinterName;
+  EERModel.ModelPrinter:=Printer.PrinterName;
   EERModel.PageOrientation:=Printer.Orientation;
 
   if(EERModel.PageOrientation=poPortrait)then
@@ -505,10 +509,10 @@ end;
 function TEERPageSetupForm.GetPageSize(s: string): TSize;
 var oldsep: char;
 begin
-  oldsep:=DecimalSeparator;
+  oldsep:=DefaultFormatSettings.DecimalSeparator;
 
   try
-    DecimalSeparator:='.';
+    DefaultFormatSettings.DecimalSeparator:='.';
 
     s:=Copy(s, Pos('(', s)+1, Length(s));
 
@@ -533,14 +537,14 @@ begin
       GetPageSize.cy:=Round(StrToFloat(Trim(Copy(s, 1, Pos(' ', s)-1)))*2.54*10);
     end;
   finally
-    DecimalSeparator:=oldsep;
+    DefaultFormatSettings.DecimalSeparator:=oldsep;
   end;
 end;
 
 procedure TEERPageSetupForm.PageSizeCBoxCloseUp(Sender: TObject);
 begin
   //If another Paper Format is selected
-  Printer.PrintAdapter.PageSize:=GetPageSizeNr(PageSizeCBox.Items[PageSizeCBox.ItemIndex]);
+  FCurrentPageSize:=GetPageSizeNr(PageSizeCBox.Items[PageSizeCBox.ItemIndex]);
 
   SetPrinterValues;
 end;
@@ -585,7 +589,7 @@ begin
 
     firstPage:=True;
 
-    PrintZoomFac:=(PageWidth-Margins.cx*2-1-2)/EERModel.PageSize.cx;
+    PrintZoomFac:=(PageWidth-GetPrinterMargins.cx*2-1-2)/EERModel.PageSize.cx;
 
     BeginDoc;
 
@@ -606,7 +610,7 @@ begin
 
             with Canvas do
             begin
-              SetClipRect(Rect(1, 1, PageWidth-Margins.cx*2-1, PageHeight-Margins.cy*2-1));
+              ClipRect := Rect(1, 1, PageWidth-GetPrinterMargins.cx*2-1, PageHeight-GetPrinterMargins.cy*2-1);
 
               EERModel.PaintModel(Printer.Canvas,
                 PrintZoomFac*100,
@@ -629,19 +633,19 @@ begin
               LineTo(0, CutMarksLength);
 
               //TopRight
-              MoveTo(PageWidth-Margins.cx*2-1-CutMarksLength, 0);
-              LineTo(PageWidth-Margins.cx*2-1, 0);
-              LineTo(PageWidth-Margins.cx*2-1, CutMarksLength);
+              MoveTo(PageWidth-GetPrinterMargins.cx*2-1-CutMarksLength, 0);
+              LineTo(PageWidth-GetPrinterMargins.cx*2-1, 0);
+              LineTo(PageWidth-GetPrinterMargins.cx*2-1, CutMarksLength);
 
               //BottomRight
-              MoveTo(PageWidth-Margins.cx*2-1-CutMarksLength, PageHeight-Margins.cy*2-1);
-              LineTo(PageWidth-Margins.cx*2-1, PageHeight-Margins.cy*2-1);
-              LineTo(PageWidth-Margins.cx*2-1, PageHeight-Margins.cy*2-1-CutMarksLength);
+              MoveTo(PageWidth-GetPrinterMargins.cx*2-1-CutMarksLength, PageHeight-GetPrinterMargins.cy*2-1);
+              LineTo(PageWidth-GetPrinterMargins.cx*2-1, PageHeight-GetPrinterMargins.cy*2-1);
+              LineTo(PageWidth-GetPrinterMargins.cx*2-1, PageHeight-GetPrinterMargins.cy*2-1-CutMarksLength);
 
               //BottomLeft
-              MoveTo(CutMarksLength, PageHeight-Margins.cy*2-1);
-              LineTo(0, PageHeight-Margins.cy*2-1);
-              LineTo(0, PageHeight-Margins.cy*2-1-CutMarksLength);
+              MoveTo(CutMarksLength, PageHeight-GetPrinterMargins.cy*2-1);
+              LineTo(0, PageHeight-GetPrinterMargins.cy*2-1);
+              LineTo(0, PageHeight-GetPrinterMargins.cy*2-1-CutMarksLength);
 
               Font.Height:=12;
               TextOut(Round(4*(XDPI/72)),
@@ -847,6 +851,14 @@ begin
   ShowEdits;
 
   FormShow(self);
+end;
+
+function TEERPageSetupForm.GetPrinterMargins: TSize;
+begin
+  // Approximate margins - LCL Printer doesn't expose Margins directly
+  // Default to ~10mm margins at printer DPI
+  Result.cx := Round(Printer.XDPI * 0.4); // ~10mm
+  Result.cy := Round(Printer.YDPI * 0.4); // ~10mm
 end;
 
 end.

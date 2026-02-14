@@ -13,11 +13,12 @@ DBDesigner Fork provides a full-featured graphical environment for designing and
 
 | Aspect | Details |
 |---|---|
-| **Language** | Delphi / Object Pascal (CLX framework) |
+| **Language** | Object Pascal (Free Pascal / Lazarus LCL) — originally Delphi 7 / CLX |
 | **License** | GNU General Public License v2 (GPLv2) |
 | **Original** | DBDesigner 4 (v4.0.2.92) by fabFORCE |
 | **Fork versions** | Fork 1.0 (Sep 2006) → Fork 1.5 (Oct 2010) |
 | **Original platforms** | Windows (Delphi 7) and Linux (Kylix 3) |
+| **Current platform** | Linux (Lazarus/FPC) — Windows and macOS possible |
 | **Codebase size** | ~175,000 lines of Pascal source code |
 
 ## Features
@@ -93,7 +94,57 @@ The main areas that require attention during the port include:
 
 ### Porting Status
 
-🔧 **Work in progress** — Contributions are welcome!
+✅ **All projects compile successfully under Free Pascal / Lazarus!**
+
+| Project | Lines Compiled | Binary |
+|---------|---------------|--------|
+| Main Application | 56,608 | `bin/DBDesignerFork` |
+| Demo Plugin | 21,793 | `bin/DBDplugin_Demo` |
+| HTMLReport Plugin | 22,258 | `bin/DBDplugin_HTMLReport` |
+| DataImporter Plugin | 8,836 | `bin/DBDplugin_DataImporter` |
+| SimpleWebFront Plugin | 40,096 | `bin/DBDplugin_SimpleWebFront` |
+| **Total** | **~150,000** | |
+
+### Building with Lazarus
+
+**Requirements:**
+- Free Pascal Compiler (FPC) 3.2.2+
+- Lazarus 3.0+ (for `lazbuild` command-line tool)
+- Required Lazarus packages: `LCL`, `SynEdit`
+
+**Build all projects:**
+```bash
+# Main application
+lazbuild DBDesignerFork.lpi
+
+# Plugins
+lazbuild Plugins/Demo/DBDplugin_Demo.lpi
+lazbuild Plugins/HTMLReport/DBDplugin_HTMLReport.lpi
+lazbuild Plugins/DataImporter/DBDplugin_DataImporter.lpi
+lazbuild Plugins/SimpleWebFront/DBDplugin_SimpleWebFront.lpi
+```
+
+All binaries are output to the `bin/` directory.
+
+### Porting Approach
+
+The port uses a **compatibility shim layer** (`clx_shims/` directory) to minimize changes to original source files:
+
+- **CLX → LCL shims**: Units like `QForms.pas`, `QControls.pas` etc. that re-export LCL equivalents
+- **Qt shim** (`qt.pas`): Maps Qt widget types and key constants to LCL equivalents
+- **Database shims** (`sqlexpr.pas`, `dbclient.pas`, `provider.pas`): Wrap FPC's SQLDB behind Delphi DBExpress-compatible interfaces
+- **XML shims** (`xmlintf.pas`, `xmldoc.pas`, `xmldom.pas`): Wrap `laz2_DOM` behind Delphi XML DOM interfaces
+
+See [`port-to-lazarus.md`](port-to-lazarus.md) for the detailed porting guide and [`port-to-lazarus-task-list.md`](port-to-lazarus-task-list.md) for the task checklist (195/229 tasks complete).
+
+### Runtime Testing Status
+
+⚠️ **Runtime testing is still needed.** The application compiles and links but has not yet been tested with a display server. Known areas requiring runtime verification:
+- Application launch and UI rendering
+- Database connectivity (MySQL, PostgreSQL, SQLite)
+- Model loading/saving
+- PDF export
+- Plugin loading
 
 ## License
 

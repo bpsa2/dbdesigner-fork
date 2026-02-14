@@ -92,7 +92,8 @@ uses
 
   EERPlaceModel in 'EERPlaceModel.pas',
   // RegExpr, // using system regexpr
-  GlobalSysFunctions in 'GlobalSysFunctions.pas';
+  GlobalSysFunctions in 'GlobalSysFunctions.pas',
+  UITestRunner in 'UITestRunner.pas';
 
 {$R *.res}
 

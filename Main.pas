@@ -433,6 +433,7 @@ type
     procedure ExportMDBXMLFileMIClick(Sender: TObject);
   private
     { Private declarations }
+    SelfTestTmr: TTimer;
     KeyWasUp: Boolean;
 
     TabHidePalettes: TList;
@@ -448,6 +449,7 @@ type
 
     ActivateDeactivateCounter: integer;
     ApplicationIsDeactivated: Boolean;
+    procedure SelfTestTmrTimer(Sender: TObject);
   public
     { Public declarations }
     Version: string;
@@ -473,7 +475,8 @@ uses MainDM, ZoomSel, EER,
   EERReverseEngineering, EERSynchronisation, EERStoreInDatabase, Splash,
   EERDM, EditorTable, EditorRelation, EditorRegion, EditorNote,
   EditorImage, GUIDM, DBDM, EditorQuery, EditorQueryDragTarget,
-  Tips, EERPlaceModel, DBEERDM, EERExportImportDM;
+  Tips, EERPlaceModel, DBEERDM, EERExportImportDM,
+  UITestRunner;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
@@ -545,6 +548,15 @@ begin
 {$IFNDEF USE_IXMLDBMODELType}
   ImportERwin41XMLModelMI.Enabled:=False;
 {$ENDIF}
+
+  // --selftest: schedule automatic UI test after full initialization
+  if HasSelfTestParam then
+  begin
+    SelfTestTmr := TTimer.Create(Self);
+    SelfTestTmr.Interval := 1000; // 1 second delay for full init
+    SelfTestTmr.Enabled := True;
+    SelfTestTmr.OnTimer := SelfTestTmrTimer;
+  end;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -3481,9 +3493,35 @@ begin
     DMMain.GetTranslatedMessage('', TPaintBox(Sender).Tag));
 end;
 
-procedure TMainForm.Test1Click(Sender: TObject);
+procedure TMainForm.SelfTestTmrTimer(Sender: TObject);
+var
+  FailCount: Integer;
 begin
-  DMDBEER.BuildTableFromCreateStatement(nil, '', MySQL);
+  SelfTestTmr.Enabled := False;  // One-shot
+  WriteLn('=== DBDesigner Fork Self-Test Mode ===');
+  WriteLn('Running UI tests...');
+  WriteLn('');
+  FailCount := RunUITests(Self);
+  WriteLn('');
+  if FailCount = 0 then
+    WriteLn('Self-test PASSED: no failures detected.')
+  else
+    WriteLn('Self-test FINISHED: ' + IntToStr(FailCount) + ' failure(s) detected.');
+  // Exit the application with appropriate code
+  ExitCode := FailCount;
+  Application.Terminate;
+end;
+
+procedure TMainForm.Test1Click(Sender: TObject);
+var
+  FailCount: Integer;
+begin
+  FailCount := RunUITests(Self);
+  if FailCount = 0 then
+    ShowMessage('UI Test complete: ALL PASSED! Results saved to UITestResults.log')
+  else
+    ShowMessage('UI Test complete: ' + IntToStr(FailCount) +
+      ' FAILURE(s) found! Check UITestResults.log for details.');
 end;
 
 procedure TMainForm.ExportMDBXMLFileMIClick(Sender: TObject);

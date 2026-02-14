@@ -3397,8 +3397,8 @@ object MainForm: TMainForm
         OnClick = ReverseEngineeringMIClick
       end
       object Test1: TMenuItem
-        Caption = 'Test'
-        Visible = False
+        Caption = 'Run UI Tests'
+        Visible = True
         OnClick = Test1Click
       end
     end

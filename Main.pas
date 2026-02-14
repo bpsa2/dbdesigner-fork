@@ -367,7 +367,7 @@ type
     procedure Save2DiskImgClick(Sender: TObject);
     procedure Save2DBImgClick(Sender: TObject);
 
-    {$IFNDEF FPC}function EventFilter(Sender: QObjectH; Event: QEventH): Boolean; override;{$ENDIF}
+    function EventFilter(Sender: QObjectH; Event: QEventH): Boolean; {$IFNDEF FPC}override;{$ENDIF}
 
     procedure wtPointerSBtnClick(Sender: TObject);
     procedure wtPointerSBtnMouseEnter(Sender: TObject);
@@ -474,7 +474,12 @@ uses MainDM, ZoomSel, EER,
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  // Application.OnEvent:=DoApplicationEvent; // CLX event hook not available in LCL
+  {$IFDEF FPC}
+  // Register this form's EventFilter as the global Qt-style event handler
+  RegisterQtEventHandler(EventFilter);
+  {$ELSE}
+  Application.OnEvent:=DoApplicationEvent;
+  {$ENDIF}
 
   //Get Version string, defined in DBDesigner4.dpr
   Version:=SplashForm.VersionLbl.Caption;
@@ -1692,7 +1697,7 @@ begin
   SaveinDatabaseMIClick(self);
 end;
 
-{$IFNDEF FPC}
+// Event handler for custom Qt-style events (works for both CLX and LCL)
 function TMainForm.EventFilter(Sender: QObjectH; Event: QEventH): Boolean;
 var Pint: ^Integer;
   Ppoint: ^TPoint;
@@ -2106,10 +2111,12 @@ begin
   end;
 
   //if this was called by another message, call default function
+  {$IFNDEF FPC}
   if(Result=False)then
     EventFilter:=inherited EventFilter(Sender, Event);
+  {$ENDIF}
 end;
-{$ENDIF}
+// end of EventFilter
 
 procedure TMainForm.SetApplStyle(ApplStyle: integer);
 begin

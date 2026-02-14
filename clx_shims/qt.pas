@@ -132,6 +132,13 @@ const
   WidgetFlags_WType_TopLevel = $00000004;
   WidgetFlags_WType_Popup = $00000008;
 
+// Event callback type for LCL dispatch
+type
+  TQtEventCallback = function(Sender: QObjectH; Event: QEventH): Boolean of object;
+
+// Register an event handler to receive dispatched Qt-style events
+procedure RegisterQtEventHandler(Handler: TQtEventCallback);
+
 // Qt function stubs
 function QCustomEvent_create(eventType: Integer; data: Pointer = nil): QCustomEventH;
 function QCustomEvent_data(event: QCustomEventH): Pointer;
@@ -171,6 +178,14 @@ procedure QPrinter_setPrinterName(printer: QPrinterH; const name: WideString);
 function QCursor_create: Pointer;
 
 implementation
+
+var
+  GQtEventHandler: TQtEventCallback = nil;
+
+procedure RegisterQtEventHandler(Handler: TQtEventCallback);
+begin
+  GQtEventHandler := Handler;
+end;
 
 function ButtonStateToShiftState(ButtonState: Integer): TShiftState;
 begin
@@ -222,16 +237,19 @@ end;
 
 procedure QApplication_postEvent(receiver: QObjectH; event: QCustomEventH);
 begin
-  // TODO: implement via LCL message posting
-  // For now, just free the event
+  if Assigned(GQtEventHandler) then
+    GQtEventHandler(receiver, QEventH(event));
+  // Free the event after dispatch
   if event <> nil then
     Dispose(PEventRec(event));
 end;
 
 function QApplication_sendEvent(receiver: QObjectH; event: QEventH): Boolean;
 begin
-  Result := False;
-  // TODO: implement via LCL message sending
+  if Assigned(GQtEventHandler) then
+    Result := GQtEventHandler(0, event)
+  else
+    Result := False;
 end;
 
 procedure QApplication_sendEventAndDelete(receiver: QObjectH; event: QEventH);

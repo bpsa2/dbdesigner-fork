@@ -1950,7 +1950,11 @@ end;
 function sendCLXEvent(receiver: QObjectH; event: QEventH): Boolean;
 begin
   {$IFDEF FPC}
-  Result := False; // TODO: Implement LCL equivalent
+  try
+    Result := QApplication_sendEvent(receiver, event);
+  finally
+    QEvent_destroy(event);
+  end;
   {$ELSE}
   try
     Result := QApplication_sendEvent(receiver, event);

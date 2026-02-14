@@ -81,25 +81,35 @@ end;
 
 procedure TSQLConnection.UpdateConnectorType;
 var
-  LowerDriver: string;
+  LowerDriver, NewType: string;
 begin
   LowerDriver := LowerCase(FDriverName);
+  NewType := '';
   if Pos('mysql', LowerDriver) > 0 then
-    ConnectorType := 'MySQL 5.7'
+    NewType := 'MySQL 5.7'
   else if Pos('sqlite', LowerDriver) > 0 then
-    ConnectorType := 'SQLite3'
+    NewType := 'SQLite3'
   else if Pos('oracle', LowerDriver) > 0 then
-    ConnectorType := 'Oracle'
+    NewType := 'Oracle'
   else if (Pos('mssql', LowerDriver) > 0) or (Pos('microsoft', LowerDriver) > 0) then
-    ConnectorType := 'MSSQLServer'
+    NewType := 'MSSQLServer'
   else if Pos('interbase', LowerDriver) > 0 then
-    ConnectorType := 'Firebird'
+    NewType := 'Firebird'
   else if Pos('firebird', LowerDriver) > 0 then
-    ConnectorType := 'Firebird'
+    NewType := 'Firebird'
   else if (Pos('odbc', LowerDriver) > 0) or (Pos('openodbc', LowerDriver) > 0) then
-    ConnectorType := 'ODBC'
+    NewType := 'ODBC'
   else if Pos('postgre', LowerDriver) > 0 then
-    ConnectorType := 'PostgreSQL';
+    NewType := 'PostgreSQL';
+  if NewType <> '' then
+  begin
+    try
+      ConnectorType := NewType;
+    except
+      // Connector not available (driver unit not linked) - ignore during
+      // form loading. Will raise again at Open time if still missing.
+    end;
+  end;
 end;
 
 procedure TSQLConnection.ApplyParamsToConnection;

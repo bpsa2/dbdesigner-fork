@@ -3,11 +3,10 @@ object PaletteToolsForm: TPaletteToolsForm
   Top = 214
   VertScrollBar.Visible = False
   HorzScrollBar.Visible = False
-  AutoScroll = False
   BorderStyle = bsToolWindow
   ClientHeight = 309
   ClientWidth = 115
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poDefault

@@ -2,13 +2,12 @@ object PaletteNavForm: TPaletteNavForm
   Left = 495
   Top = 283
   ActiveControl = ZoomTrackBar
-  AutoScroll = False
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSizeToolWin
   Caption = 'Navigator & Info'
   ClientHeight = 174
   ClientWidth = 221
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MaxWidth = 221
   Constraints.MinWidth = 221
   FormStyle = fsStayOnTop
@@ -125,7 +124,7 @@ object PaletteNavForm: TPaletteNavForm
           Alignment = taCenter
           AutoSize = False
           Caption = '100%'
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -142,7 +141,7 @@ object PaletteNavForm: TPaletteNavForm
           Top = 1
           Width = 39
           Height = 20
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -210,7 +209,7 @@ object PaletteNavForm: TPaletteNavForm
           Width = 37
           Height = 20
           Enabled = False
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -228,7 +227,7 @@ object PaletteNavForm: TPaletteNavForm
           Width = 37
           Height = 20
           Enabled = False
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -246,7 +245,7 @@ object PaletteNavForm: TPaletteNavForm
           Width = 145
           Height = 20
           Enabled = False
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -280,7 +279,7 @@ object PaletteNavForm: TPaletteNavForm
           Width = 37
           Height = 20
           Enabled = False
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -306,7 +305,7 @@ object PaletteNavForm: TPaletteNavForm
           Width = 37
           Height = 20
           Enabled = False
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'
@@ -332,7 +331,7 @@ object PaletteNavForm: TPaletteNavForm
           Width = 145
           Height = 20
           Enabled = False
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 9
           Font.Name = 'Microsoft Sans Serif'

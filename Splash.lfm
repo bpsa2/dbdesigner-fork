@@ -1,12 +1,11 @@
 object SplashForm: TSplashForm
   Left = 310
   Top = 257
-  AutoScroll = False
   BorderStyle = bsNone
   Caption = 'DB Designer Fork'
   ClientHeight = 358
   ClientWidth = 700
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poMainFormCenter
   Scaled = False
@@ -26,7 +25,7 @@ object SplashForm: TSplashForm
     Caption = 
       'Fabulous Force Database Designer 4  for Windows 2k/XP and Linux ' +
       'KDE/Gnome.'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'
@@ -58,7 +57,7 @@ object SplashForm: TSplashForm
     Caption = 
       'Distribution includes Edward Benson'#39's LGPL DBExpress driver 2.0.' +
       '7 for ODBC,'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'
@@ -80,7 +79,7 @@ object SplashForm: TSplashForm
     Caption = 
       'Copyright (C) 2003 by Michael G. Zinner. This software is distri' +
       'buted under the'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'
@@ -100,7 +99,7 @@ object SplashForm: TSplashForm
     Height = 12
     AutoSize = False
     Caption = 'Taxacher, Georg Richter, Jens Oberender.'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'
@@ -122,7 +121,7 @@ object SplashForm: TSplashForm
     Caption = 
       'terms of the GNU GPL. Special thanks to Katharina Peter, Ulrich ' +
       'Bayer, Johannes'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'
@@ -144,7 +143,7 @@ object SplashForm: TSplashForm
     Caption = 
       'the SQLite Engine, Marco Wobben'#39's DBExpress driver 2.3.4 for SQL' +
       'ite and'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'
@@ -164,7 +163,7 @@ object SplashForm: TSplashForm
     Height = 12
     AutoSize = False
     Caption = 'Stefan Heymann'#39's XML Parser.'
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 9
     Font.Name = 'Microsoft Sans Serif'

@@ -18,7 +18,7 @@ object MainForm: TMainForm
 
   Caption = 'Simple Web Front Plugin | '
 
-  Color = clBackground
+  Color = clBtnFace
 
   Menu = MainMenu1
 
@@ -450,7 +450,7 @@ object MainForm: TMainForm
 
     Height = 23
 
-    Brush.Color = clBackground
+    Brush.Color = clBtnFace
 
     Brush.Style = bsClear
 
@@ -1058,7 +1058,7 @@ object MainForm: TMainForm
 
         Caption = 'View Information'
 
-        Color = clBackground
+        Color = clBtnFace
 
         ParentColor = False
 

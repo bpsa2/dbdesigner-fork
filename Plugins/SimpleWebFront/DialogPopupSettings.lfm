@@ -16,7 +16,7 @@ object DialogPopupSettingsForm: TDialogPopupSettingsForm
 
   Caption = 'DialogPopupSettingsForm'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 

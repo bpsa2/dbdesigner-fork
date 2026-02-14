@@ -6,7 +6,7 @@ object EditorTableDataForm: TEditorTableDataForm
   VertScrollBar.Range = 95
   ActiveControl = DBConnEd
   Caption = 'Table Data Editor'
-  Color = clBackground
+  Color = clBtnFace
   Position = poMainFormCenter
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
@@ -108,7 +108,7 @@ object EditorTableDataForm: TEditorTableDataForm
       Top = 32
       Width = 285
       Height = 21
-      Color = clBackground
+      Color = clBtnFace
       ReadOnly = True
       TabOrder = 2
       OnDblClick = GetDBConnSBtnClick
@@ -324,8 +324,8 @@ object EditorTableDataForm: TEditorTableDataForm
               Width = 98
               Height = 248
               Align = alClient
-              Color = clBackground
-              Font.CharSet = fcsLatin1
+              Color = clBtnFace
+              Font.CharSet = 0
               Font.Color = clBlack
               Font.Height = 11
               Font.Name = 'Courier New'
@@ -341,8 +341,8 @@ object EditorTableDataForm: TEditorTableDataForm
               Width = 131
               Height = 248
               Align = alLeft
-              Color = clBackground
-              Font.CharSet = fcsLatin1
+              Color = clBtnFace
+              Font.CharSet = 0
               Font.Color = clBlack
               Font.Height = 11
               Font.Name = 'Courier New'
@@ -939,7 +939,7 @@ object EditorTableDataForm: TEditorTableDataForm
           Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
           ParentFont = False
           TabOrder = 0
-          TitleFont.CharSet = fcsLatin1
+          TitleFont.CharSet = 0
           TitleFont.Color = clBlack
           TitleFont.Height = 9
           TitleFont.Name = 'Microsoft Sans Serif'

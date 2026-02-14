@@ -16,7 +16,7 @@ object ImageSelectionForm: TImageSelectionForm
 
   Caption = 'Image Selection Dialog'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 

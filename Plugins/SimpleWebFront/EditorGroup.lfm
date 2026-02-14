@@ -16,7 +16,7 @@ object EditorGroupForm: TEditorGroupForm
 
   Caption = 'Group Editor'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 

@@ -1,7 +1,6 @@
 object MainForm: TMainForm
   Left = 365
   Top = 224
-  AutoScroll = False
   Caption = 'DBDesigner Fork'
   ClientHeight = 377
   ClientWidth = 600
@@ -337,7 +336,7 @@ object MainForm: TMainForm
       Alignment = taCenter
       AutoSize = False
       Caption = '100%'
-      Font.CharSet = fcsLatin1
+      Font.CharSet = 0
       Font.Color = clBlack
       Font.Height = 9
       Font.Name = 'Microsoft Sans Serif'
@@ -357,7 +356,7 @@ object MainForm: TMainForm
       Caption = 
         'Pointer [Q] (Click on a Tables, Note, ... to select this object.' +
         ' Hold Ctrl to select more than one objects.)'
-      Font.CharSet = fcsLatin1
+      Font.CharSet = 0
       Font.Color = clBlack
       Font.Height = 9
       Font.Name = 'Microsoft Sans Serif'
@@ -448,7 +447,7 @@ object MainForm: TMainForm
         Width = 119
         Height = 12
         Caption = 'Not connected to a Database'
-        Font.CharSet = fcsLatin1
+        Font.CharSet = 0
         Font.Color = clBlack
         Font.Height = 9
         Font.Name = 'Microsoft Sans Serif'
@@ -2940,7 +2939,7 @@ object MainForm: TMainForm
           FAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFD
           FBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFA
           FDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFA0000}
-        Font.CharSet = fcsLatin1
+        Font.CharSet = 0
         Font.Color = clGray
         Font.Height = 11
         Font.Name = 'Microsoft Sans Serif'
@@ -3113,7 +3112,7 @@ object MainForm: TMainForm
           FAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFD
           FBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFA
           FDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFA0000}
-        Font.CharSet = fcsLatin1
+        Font.CharSet = 0
         Font.Color = clGray
         Font.Height = 11
         Font.Name = 'Microsoft Sans Serif'
@@ -3296,7 +3295,7 @@ object MainForm: TMainForm
           FAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFD
           FBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFA
           FDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFAFDFBFA0000}
-        Font.CharSet = fcsLatin1
+        Font.CharSet = 0
         Font.Color = clGray
         Font.Height = 11
         Font.Name = 'Microsoft Sans Serif'

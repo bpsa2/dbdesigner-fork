@@ -2,12 +2,11 @@ object EditorNoteForm: TEditorNoteForm
   Left = 509
   Top = 351
   ActiveControl = NoteMemo
-  AutoScroll = False
   BorderStyle = bsToolWindow
   Caption = 'Note Editor'
   ClientHeight = 186
   ClientWidth = 298
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poDefault

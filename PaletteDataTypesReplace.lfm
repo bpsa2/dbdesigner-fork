@@ -2,12 +2,11 @@ object PaletteDataTypesReplaceForm: TPaletteDataTypesReplaceForm
   Left = 442
   Top = 477
   ActiveControl = AllTablesRBtn
-  AutoScroll = False
   BorderStyle = bsDialog
   Caption = 'Replace Datatype'
   ClientHeight = 220
   ClientWidth = 395
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poScreenCenter
   Scaled = False

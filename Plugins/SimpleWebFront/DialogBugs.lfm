@@ -4,7 +4,6 @@ object DialogBugsForm: TDialogBugsForm
 
   Top = 146
 
-  AutoScroll = False
 
   BorderStyle = bsNone
 
@@ -14,7 +13,7 @@ object DialogBugsForm: TDialogBugsForm
 
   ClientWidth = 395
 
-  Color = clBackground
+  Color = clBtnFace
 
   FormStyle = fsStayOnTop
 

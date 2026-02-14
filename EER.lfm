@@ -6,7 +6,7 @@ object EERForm: TEERForm
   VertScrollBar.Range = 33
   HorzScrollBar.Range = 33
   Caption = 'DB Model |'
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsMDIChild
   Icon.Data = {
     0000010001002020100000000000E80200001600000028000000200000004000

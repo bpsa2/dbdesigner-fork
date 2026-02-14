@@ -2,11 +2,10 @@ object MainForm: TMainForm
   Left = 395
   Top = 161
   ActiveControl = TablesCheckListBox
-  AutoScroll = False
   Caption = 'Demo Plugin |'
   ClientHeight = 525
   ClientWidth = 557
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsMDIForm
   Icon.Data = {
     424D360C00000000000036000000280000002000000020000000010018000000
@@ -275,7 +274,7 @@ object MainForm: TMainForm
     Top = 290
     Width = 475
     Height = 197
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
     Font.Color = clBlack
     Font.Height = 11
     Font.Name = 'Courier'

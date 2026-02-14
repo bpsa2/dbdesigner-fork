@@ -16,7 +16,7 @@ object EditorViewForm: TEditorViewForm
 
   Caption = 'View Editor'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 

@@ -2,12 +2,11 @@ object ZoomSelForm: TZoomSelForm
   Left = 563
   Top = 327
   ActiveControl = ZoomLBox
-  AutoScroll = False
   BorderStyle = bsNone
   Caption = 'ZoomSelForm'
   ClientHeight = 229
   ClientWidth = 162
-  Color = clBackground
+  Color = clBtnFace
   KeyPreview = True
   Scaled = False
   OnCreate = FormCreate

@@ -2,12 +2,11 @@ object EERSynchronisationForm: TEERSynchronisationForm
   Left = 452
   Top = 227
   ActiveControl = ChangeDBRBtn
-  AutoScroll = False
   BorderStyle = bsToolWindow
   Caption = 'Database Synchronisation'
   ClientHeight = 518
   ClientWidth = 395
-  Color = clBackground
+  Color = clBtnFace
   KeyPreview = True
   Position = poMainFormCenter
   Scaled = False
@@ -229,7 +228,7 @@ object EERSynchronisationForm: TEERSynchronisationForm
       Width = 122
       Height = 12
       Caption = 'Not connected to a Database.'
-      Font.CharSet = fcsLatin1
+      Font.CharSet = 0
       Font.Color = clBlack
       Font.Height = 9
       Font.Name = 'Microsoft Sans Serif'

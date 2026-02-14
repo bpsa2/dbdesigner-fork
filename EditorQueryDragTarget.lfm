@@ -1,12 +1,11 @@
 object EditorQueryDragTargetForm: TEditorQueryDragTargetForm
   Left = 467
   Top = 332
-  AutoScroll = False
   BorderStyle = bsNone
   Caption = 'Query Drag Target'
   ClientHeight = 195
   ClientWidth = 304
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poDefault
   Scaled = False

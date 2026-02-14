@@ -1,13 +1,12 @@
 object ProgressForm: TProgressForm
   Left = 509
   Top = 436
-  AutoScroll = False
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Progress'
   ClientHeight = 164
   ClientWidth = 352
-  Color = clBackground
+  Color = clBtnFace
   Position = poMainFormCenter
   Scaled = False
   OnCreate = FormCreate

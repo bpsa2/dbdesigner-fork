@@ -2,12 +2,11 @@ object EditorImageForm: TEditorImageForm
   Left = 391
   Top = 274
   ActiveControl = ImagNameEd
-  AutoScroll = False
   BorderStyle = bsToolWindow
   Caption = 'Image Editor'
   ClientHeight = 122
   ClientWidth = 459
-  Color = clBackground
+  Color = clBtnFace
   KeyPreview = True
   Scaled = False
   OnClose = FormClose

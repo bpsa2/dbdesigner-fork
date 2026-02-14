@@ -1,11 +1,10 @@
 object MainForm: TMainForm
   Left = 416
   Top = 272
-  AutoScroll = False
   Caption = 'MainForm'
   ClientHeight = 67
   ClientWidth = 115
-  Color = clBackground
+  Color = clBtnFace
   Icon.Data = {
     0000010003002020100000000000E8020000360000002020000001000800A808
     00001E0300002020000001001800A80C0000C60B000028000000200000004000

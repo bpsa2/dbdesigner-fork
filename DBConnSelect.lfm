@@ -2,12 +2,11 @@ object DBConnSelectForm: TDBConnSelectForm
   Left = 221
   Top = 234
   ActiveControl = PasswdEd
-  AutoScroll = False
   BorderStyle = bsSizeToolWin
   Caption = 'Select Database Connection'
   ClientHeight = 300
   ClientWidth = 746
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MinHeight = 300
   Constraints.MinWidth = 746
   KeyPreview = True

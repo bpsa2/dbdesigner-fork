@@ -2,12 +2,11 @@ object EditorRelationForm: TEditorRelationForm
   Left = 574
   Top = 226
   ActiveControl = RelationNameEd
-  AutoScroll = False
   BorderStyle = bsToolWindow
   Caption = 'Relation Editor'
   ClientHeight = 472
   ClientWidth = 414
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poDefault
@@ -243,7 +242,7 @@ object EditorRelationForm: TEditorRelationForm
       Top = 20
       Width = 109
       Height = 21
-      Color = clBackground
+      Color = clBtnFace
       TabOrder = 0
     end
     object Label2: TLabel
@@ -265,7 +264,7 @@ object EditorRelationForm: TEditorRelationForm
       Top = 20
       Width = 109
       Height = 21
-      Color = clBackground
+      Color = clBtnFace
       TabOrder = 3
     end
   end

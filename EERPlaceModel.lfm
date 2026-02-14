@@ -1,12 +1,11 @@
 object EERPlaceModelForm: TEERPlaceModelForm
   Left = 289
   Top = 226
-  AutoScroll = False
   BorderStyle = bsSizeToolWin
   Caption = 'Place / Link Model'
   ClientHeight = 351
   ClientWidth = 662
-  Color = clBackground
+  Color = clBtnFace
   Menu = PlaceMainMenu
   Position = poMainFormCenter
   OnClose = FormClose
@@ -29,7 +28,7 @@ object EERPlaceModelForm: TEERPlaceModelForm
       Top = 14
       Width = 372
       Height = 23
-      Brush.Color = clBackground
+      Brush.Color = clBtnFace
       Brush.Style = bsClear
     end
     object PageControlTitlePnl: TPanel

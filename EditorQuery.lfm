@@ -2,12 +2,11 @@ object EditorQueryForm: TEditorQueryForm
   Left = 260
   Top = 277
   ActiveControl = DBGrid
-  AutoScroll = False
   BorderStyle = bsSizeToolWin
   Caption = 'Query Editor'
   ClientHeight = 400
   ClientWidth = 700
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MinHeight = 400
   Constraints.MinWidth = 700
   KeyPreview = True
@@ -111,7 +110,7 @@ object EditorQueryForm: TEditorQueryForm
       Top = 32
       Width = 285
       Height = 21
-      Color = clBackground
+      Color = clBtnFace
       ReadOnly = True
       TabOrder = 2
       OnDblClick = GetDBConnSBtnClick
@@ -1028,7 +1027,7 @@ object EditorQueryForm: TEditorQueryForm
           Width = 171
           Height = 301
           Align = alClient
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 11
           Font.Name = 'Verdana'
@@ -1081,7 +1080,7 @@ object EditorQueryForm: TEditorQueryForm
           ParentFont = False
           PopupMenu = DBGridPopupMenu
           TabOrder = 0
-          TitleFont.CharSet = fcsLatin1
+          TitleFont.CharSet = 0
           TitleFont.Color = clBlack
           TitleFont.Height = 9
           TitleFont.Name = 'Microsoft Sans Serif'
@@ -1697,8 +1696,8 @@ object EditorQueryForm: TEditorQueryForm
           Width = 136
           Height = 59
           Align = alClient
-          Color = clBackground
-          Font.CharSet = fcsLatin1
+          Color = clBtnFace
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 11
           Font.Name = 'Tahoma'
@@ -1783,8 +1782,8 @@ object EditorQueryForm: TEditorQueryForm
             Width = 38
             Height = 252
             Align = alClient
-            Color = clBackground
-            Font.CharSet = fcsLatin1
+            Color = clBtnFace
+            Font.CharSet = 0
             Font.Color = clBlack
             Font.Height = 11
             Font.Name = 'Courier New'
@@ -1800,8 +1799,8 @@ object EditorQueryForm: TEditorQueryForm
             Width = 131
             Height = 252
             Align = alLeft
-            Color = clBackground
-            Font.CharSet = fcsLatin1
+            Color = clBtnFace
+            Font.CharSet = 0
             Font.Color = clBlack
             Font.Height = 11
             Font.Name = 'Courier New'

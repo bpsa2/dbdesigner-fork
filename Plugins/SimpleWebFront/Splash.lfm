@@ -4,7 +4,6 @@ object SplashForm: TSplashForm
 
   Top = 235
 
-  AutoScroll = False
 
   BorderStyle = bsNone
 
@@ -14,7 +13,7 @@ object SplashForm: TSplashForm
 
   ClientWidth = 509
 
-  Color = clBackground
+  Color = clBtnFace
 
   FormStyle = fsStayOnTop
 
@@ -60,7 +59,7 @@ object SplashForm: TSplashForm
 
       'ux KDE/Gnome.'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
@@ -102,7 +101,7 @@ object SplashForm: TSplashForm
 
       ' under the terms of the GNU GPL.'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
@@ -162,7 +161,7 @@ object SplashForm: TSplashForm
 
     Caption = 'Graphics and support programming: Michael Zinner'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 
@@ -206,7 +205,7 @@ object SplashForm: TSplashForm
 
       'University of Technology.'
 
-    Font.CharSet = fcsLatin1
+    Font.CharSet = 0
 
     Font.Color = clBlack
 

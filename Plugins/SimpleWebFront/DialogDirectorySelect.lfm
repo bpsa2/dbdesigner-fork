@@ -16,7 +16,7 @@ object DialogDirectorySelectForm: TDialogDirectorySelectForm
 
   Caption = 'OutputDirectory-Select'
 
-  Color = clBackground
+  Color = clBtnFace
 
   Position = poMainFormCenter
 

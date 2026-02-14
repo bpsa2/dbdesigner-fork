@@ -2,12 +2,11 @@ object OptionsModelForm: TOptionsModelForm
   Left = 221
   Top = 225
   ActiveControl = PageControl
-  AutoScroll = False
   BorderStyle = bsToolWindow
   Caption = 'Model Options'
   ClientHeight = 307
   ClientWidth = 743
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poOwnerFormCenter
   Scaled = False
@@ -20,7 +19,7 @@ object OptionsModelForm: TOptionsModelForm
     Top = 14
     Width = 555
     Height = 23
-    Brush.Color = clBackground
+    Brush.Color = clBtnFace
     Brush.Style = bsClear
   end
   object PageControl: TPageControl
@@ -47,7 +46,7 @@ object OptionsModelForm: TOptionsModelForm
         Width = 153
         Height = 13
         Caption = '(Format: Colorname=#RRGGBB)'
-        Color = clBackground
+        Color = clBtnFace
         Font.Color = clGray
         Font.Height = 11
         Font.Name = 'MS Shell Dlg'

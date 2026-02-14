@@ -2,12 +2,11 @@ object EERPageSetupForm: TEERPageSetupForm
   Left = 279
   Top = 141
   ActiveControl = PropertiesBtn
-  AutoScroll = False
   BorderStyle = bsToolWindow
   Caption = 'Page Setup'
   ClientHeight = 565
   ClientWidth = 762
-  Color = clBackground
+  Color = clBtnFace
   Position = poMainFormCenter
   Scaled = False
   OnClose = FormClose

@@ -7,7 +7,7 @@ object PrinterSettingsForm: TPrinterSettingsForm
   HorzScrollBar.Range = 208
   BorderStyle = bsDialog
   Caption = 'Printer Settings'
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poScreenCenter
   OnCreate = FormCreate

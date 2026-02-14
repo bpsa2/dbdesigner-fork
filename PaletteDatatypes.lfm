@@ -2,12 +2,11 @@ object PaletteDataTypesForm: TPaletteDataTypesForm
   Left = 5
   Top = 24
   ActiveControl = PageControl
-  AutoScroll = False
   BorderStyle = bsSizeToolWin
   Caption = 'Datatypes'
   ClientHeight = 229
   ClientWidth = 221
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MaxWidth = 221
   Constraints.MinWidth = 221
   FormStyle = fsStayOnTop
@@ -48,7 +47,7 @@ object PaletteDataTypesForm: TPaletteDataTypesForm
           Height = 179
           Align = alClient
           BorderStyle = bsSunkenPanel
-          Color = clBackground
+          Color = clBtnFace
           Columns = <
             item
               Tag = 0
@@ -88,7 +87,7 @@ object PaletteDataTypesForm: TPaletteDataTypesForm
           Width = 211
           Height = 227
           BorderStyle = bsSunkenPanel
-          Color = clBackground
+          Color = clBtnFace
           Columns = <
             item
               Tag = 0

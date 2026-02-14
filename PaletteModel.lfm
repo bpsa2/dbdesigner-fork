@@ -2,13 +2,12 @@ object PaletteModelFrom: TPaletteModelFrom
   Left = 682
   Top = 316
   ActiveControl = PageControl
-  AutoScroll = False
   BorderIcons = [biSystemMenu, biMaximize]
   BorderStyle = bsSizeToolWin
   Caption = 'DB Model'
   ClientHeight = 192
   ClientWidth = 221
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MaxWidth = 221
   Constraints.MinWidth = 221
   FormStyle = fsStayOnTop

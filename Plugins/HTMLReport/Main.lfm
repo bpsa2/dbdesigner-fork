@@ -7,7 +7,7 @@ object MainForm: TMainForm
   HorzScrollBar.Range = 583
   ActiveControl = SortOrderPosRBtn
   Caption = 'HTML Report Plugin |'
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsMDIForm
   Icon.Data = {
     0000010003002020100000000000E8020000360000002020000001000800A808

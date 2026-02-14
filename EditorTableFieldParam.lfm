@@ -2,12 +2,11 @@ object EditorTableFieldParamForm: TEditorTableFieldParamForm
   Left = 570
   Top = 459
   ActiveControl = ParamMaskEdit
-  AutoScroll = False
   BorderStyle = bsNone
   Caption = 'Edit Datatype Params'
   ClientHeight = 69
   ClientWidth = 149
-  Color = clBackground
+  Color = clBtnFace
   FormStyle = fsStayOnTop
   KeyPreview = True
   Position = poDefault

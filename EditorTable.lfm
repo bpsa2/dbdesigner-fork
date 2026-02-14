@@ -2,12 +2,11 @@ object EditorTableForm: TEditorTableForm
   Left = 274
   Top = 168
   ActiveControl = TableNameEd
-  AutoScroll = False
   BorderStyle = bsSizeToolWin
   Caption = 'Table Editor'
   ClientHeight = 491
   ClientWidth = 702
-  Color = clBackground
+  Color = clBtnFace
   Constraints.MinHeight = 491
   Constraints.MinWidth = 702
   KeyPreview = True
@@ -43,7 +42,7 @@ object EditorTableForm: TEditorTableForm
       Top = 6
       Width = 533
       Height = 23
-      Brush.Color = clBackground
+      Brush.Color = clBtnFace
       Brush.Style = bsClear
     end
     object TablePageControl: TPageControl
@@ -514,7 +513,7 @@ object EditorTableForm: TEditorTableForm
           Width = 533
           Height = 127
           Align = alClient
-          Font.CharSet = fcsLatin1
+          Font.CharSet = 0
           Font.Color = clBlack
           Font.Height = 12
           Font.Name = 'Microsoft Sans Serif'

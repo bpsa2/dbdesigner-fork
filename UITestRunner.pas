@@ -3,15 +3,17 @@ unit UITestRunner;
 
 //----------------------------------------------------------------------------------------------------------------------
 //
-// UITestRunner - Automated UI Button/Menu Click Tester
+// UITestRunner - Automated UI Self-Test Runner
 //
-// This unit provides a safe automated testing tool that simulates clicking
-// on buttons and menu items to detect unhandled exceptions. It logs results
-// with full stack traces to a file for later analysis.
-//
-// Usage:
-//   - Call RunUITests from any event handler (e.g., Test1Click in Main.pas)
-//   - Or run the app with --selftest to auto-run tests and exit
+// Comprehensive automated testing:
+//   Phase 0: Close startup dialogs (Tips etc.)
+//   Phase 1: Open a test model file (Examples/order.xml)
+//   Phase 2: Create tables and relationships programmatically
+//   Phase 3: Open and close modal dialogs (Options, Model Options, SQL Script)
+//   Phase 4: Export SQL create script to file
+//   Phase 5: Save model to a new file
+//   Phase 6: Click all menu items and check for exceptions
+//   Phase 7: Click all buttons and check for exceptions
 //
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -20,17 +22,14 @@ unit UITestRunner;
 interface
 
 uses
-  SysUtils, Classes, Forms, Controls, Menus, Buttons, StdCtrls;
+  SysUtils, Classes, Forms, Controls, Menus, Buttons, StdCtrls, ExtCtrls;
 
-{ RunUITests: Runs all safe UI click tests on AMainForm.
-  Results are written to LogFileName (default: UITestResults.log next to the exe).
-  Returns the number of FAIL results (0 = all passed). }
 function RunUITests(AMainForm: TForm; const LogFileName: string = ''): Integer;
-
-{ HasSelfTestParam: Returns True if --selftest was passed on the command line. }
 function HasSelfTestParam: Boolean;
 
 implementation
+
+uses EER, EERModel, EERExportSQLScript, OptionsModel, Options;
 
 type
   TTestResult = (trPass, trFail, trSkip);
@@ -43,14 +42,25 @@ type
     StackTrace: string;
   end;
 
+  { Helper class to provide TNotifyEvent for the modal-close timer }
+  TModalCloser = class
+    procedure OnTimer(Sender: TObject);
+  end;
+
 var
   TestLog: TStringList;
+  ModalCloseTimer: TTimer;
+  ModalCloser: TModalCloser;
+  // Track the last created EERForm so phases can share it
+  LastCreatedEERForm: TEERForm;
 
+// ---------------------------------------------------------------------------
+// Logging
+// ---------------------------------------------------------------------------
 procedure Log(const Msg: string);
 begin
   if Assigned(TestLog) then
     TestLog.Add(Msg);
-  // Also write to stdout immediately for --selftest mode
   WriteLn(Msg);
 end;
 
@@ -65,11 +75,9 @@ begin
   try
     TestLog.SaveToFile(FileName);
   except
-    // ignore flush errors
   end;
 end;
 
-{ Collect stack trace into a string }
 function GetExceptionStackTrace: string;
 var
   I: Integer;
@@ -98,40 +106,60 @@ begin
     end;
 end;
 
-{ Returns true if the component name is in the unsafe list }
+// ---------------------------------------------------------------------------
+// Modal-close timer
+// ---------------------------------------------------------------------------
+procedure TModalCloser.OnTimer(Sender: TObject);
+var
+  I: Integer;
+  F: TForm;
+begin
+  TTimer(Sender).Enabled := False;
+  for I := Screen.FormCount - 1 downto 0 do
+  begin
+    F := Screen.Forms[I];
+    if (F.Visible) and (fsModal in F.FormState) then
+    begin
+      Log('  [AUTO-CLOSE] Closing modal: ' + F.Name + ' (' + F.ClassName + ')');
+      F.ModalResult := mrCancel;
+      Exit;
+    end;
+  end;
+end;
+
+procedure ScheduleModalClose(DelayMs: Integer);
+begin
+  if not Assigned(ModalCloser) then
+    ModalCloser := TModalCloser.Create;
+  if not Assigned(ModalCloseTimer) then
+  begin
+    ModalCloseTimer := TTimer.Create(nil);
+    ModalCloseTimer.OnTimer := ModalCloser.OnTimer;
+  end;
+  ModalCloseTimer.Interval := DelayMs;
+  ModalCloseTimer.Enabled := True;
+end;
+
+// ---------------------------------------------------------------------------
+// Unsafe list
+// ---------------------------------------------------------------------------
 function IsUnsafe(const AName: string): Boolean;
 const
-  UnsafeNames: array[0..39] of string = (
-    // Application exit/close
+  UnsafeNames: array[0..26] of string = (
     'ExitMI', 'CloseMI', 'CloseAllMI',
-    // File open/save dialogs
     'SaveMI', 'SaveAsMI', 'SaveinDatabaseMI',
     'OpenMI', 'OpenfromDatabaseMI',
     'Save2DiskImg', 'Save2DBImg',
-    // Print
-    'PrintMI', 'PageSetupMI',
-    // Database operations
+    'PrintMI',
     'ConnecttoDatabaseMI', 'DisconnectfromDatabaseMI',
     'ConnectionSBtn', 'ReverseEngineeringMI',
     'DatabasesyncronisationMI', 'SyncImg',
-    // Destructive
     'DeleteMI', 'CutMI',
-    // Import/Export dialogs
     'ImportERwin41XMLModelMI',
     'AddLinkModelFromFileMI', 'AddLinkModelfromDBMI',
     'AddLinkModelfromOnlineLibraryMI',
     'ExportMDBXMLFileMI',
     'SaveModelasImageMI', 'ExportSelectedObjectsAsImgMi',
-    'CopyselectedObjectsasImageMI',
-    // SQL scripts (may need DB connection or open dialogs)
-    'SQLCreateScriptMI', 'SQLDropScriptMI',
-    'SQLOptimizeTableScriptMI', 'SQLRepairTableScriptMI',
-    // Browser/external
-    'OnlinedocumentationMI', 'VisitHomepageMI',
-    'CheckfornewversionsMI', 'SubmitabugfeaturerequestMI',
-    // Modal dialogs
-    'AboutMI', 'EERModelOptionsMI', 'DBDesignerOptionsMI',
-    // Our own test hook - avoid recursion!
     'Test1'
   );
 var
@@ -146,7 +174,9 @@ begin
     end;
 end;
 
-{ Attempts to click a TMenuItem, returns the test entry }
+// ---------------------------------------------------------------------------
+// Test helpers
+// ---------------------------------------------------------------------------
 function TestMenuItem(Item: TMenuItem; const FormName: string): TTestEntry;
 begin
   Result.ComponentName := FormName + '.' + Item.Name;
@@ -160,21 +190,18 @@ begin
     Result.ErrorMessage := 'In unsafe/skip list';
     Exit;
   end;
-
   if not Item.Enabled then
   begin
     Result.Result := trSkip;
     Result.ErrorMessage := 'Disabled';
     Exit;
   end;
-
   if (Item.Caption = '-') or (Item.Caption = '') then
   begin
     Result.Result := trSkip;
     Result.ErrorMessage := 'Separator';
     Exit;
   end;
-
   if Item.Count > 0 then
   begin
     Result.Result := trSkip;
@@ -185,7 +212,7 @@ begin
   try
     Item.Click;
     Application.ProcessMessages;
-    Sleep(2000);
+    Sleep(500);
     Application.ProcessMessages;
     Result.Result := trPass;
   except
@@ -198,7 +225,6 @@ begin
   end;
 end;
 
-{ Attempts to click a button (TSpeedButton, TButton, TBitBtn), returns the test entry }
 function TestButton(Btn: TControl; const FormName: string): TTestEntry;
 var
   BtnEnabled: Boolean;
@@ -238,7 +264,7 @@ begin
     else if Btn is TBitBtn then
       TBitBtn(Btn).Click;
     Application.ProcessMessages;
-    Sleep(2000);
+    Sleep(500);
     Application.ProcessMessages;
     Result.Result := trPass;
   except
@@ -282,7 +308,6 @@ begin
   end;
 end;
 
-{ Recursively collect all menu items }
 procedure CollectMenuItems(AItem: TMenuItem; var List: TList);
 var
   I: Integer;
@@ -292,125 +317,463 @@ begin
     CollectMenuItems(AItem.Items[I], List);
 end;
 
-function RunUITests(AMainForm: TForm; const LogFileName: string): Integer;
+// ---------------------------------------------------------------------------
+// Helper: Get the current model - prefer tracked form, fall back to ActiveMDIChild
+// ---------------------------------------------------------------------------
+function GetCurrentModel(AMainForm: TForm): TEERModel;
 var
-  ActualLogFile: string;
-  I, J: Integer;
-  Entry: TTestEntry;
-  PassCount, FailCount, SkipCount: Integer;
-  MenuItems: TList;
-  VisibleForms: TList;
-  ButtonList: TList;
-  Component: TComponent;
-  AForm: TForm;
-  StartTime: TDateTime;
-  Menu: TMainMenu;
+  MdiChild: TCustomForm;
 begin
-  if LogFileName = '' then
-    ActualLogFile := '/tmp/UITestResults.log'
-  else
-    ActualLogFile := LogFileName;
+  Result := nil;
+  // First try our tracked form
+  if Assigned(LastCreatedEERForm) and Assigned(LastCreatedEERForm.EERModel) then
+  begin
+    Result := LastCreatedEERForm.EERModel;
+    Exit;
+  end;
+  // Fall back to ActiveMDIChild
+  MdiChild := AMainForm.ActiveMDIChild;
+  if MdiChild = nil then Exit;
+  if MdiChild.ClassName <> 'TEERForm' then Exit;
+  Result := TEERForm(MdiChild).EERModel;
+end;
 
-  TestLog := TStringList.Create;
-  MenuItems := TList.Create;
-  try
-    PassCount := 0;
-    FailCount := 0;
-    SkipCount := 0;
-    StartTime := Now;
+// ---------------------------------------------------------------------------
+// Find test file
+// ---------------------------------------------------------------------------
+function FindTestFile: string;
+var
+  AppDir, Candidate: string;
+begin
+  Result := '';
+  AppDir := ExtractFilePath(Application.ExeName);
 
-    LogSeparator;
-    Log('UI TEST RUNNER - Automated Button/Menu Click Test');
-    Log('Started: ' + DateTimeToStr(StartTime));
-    Log('Form: ' + AMainForm.Name + ' (' + AMainForm.ClassName + ')');
-    LogSeparator;
-    Log('');
+  Candidate := AppDir + 'Examples' + PathDelim + 'order.xml';
+  if FileExists(Candidate) then begin Result := Candidate; Exit; end;
 
-    // =====================================================
-    // PHASE 0: Close any Tips/startup dialogs
-    // =====================================================
-    Log('--- Phase 0: Closing startup dialogs ---');
-    Log('');
-    WriteLn('[DEBUG] Phase 0: Closing startup dialogs...');
-    for I := Screen.FormCount - 1 downto 0 do
+  Candidate := 'bin' + PathDelim + 'Examples' + PathDelim + 'order.xml';
+  if FileExists(Candidate) then begin Result := Candidate; Exit; end;
+
+  Candidate := AppDir + '..' + PathDelim + 'test-base' + PathDelim + 'db-sql-create-test.xml';
+  if FileExists(Candidate) then begin Result := Candidate; Exit; end;
+end;
+
+// ===========================================================================
+// Phases
+// ===========================================================================
+
+{ Phase 0: Close startup dialogs }
+procedure Phase0_CloseStartupDialogs(AMainForm: TForm);
+var
+  I: Integer;
+begin
+  Log('--- Phase 0: Closing startup dialogs ---');
+  Log('');
+  for I := Screen.FormCount - 1 downto 0 do
+  begin
+    if (Screen.Forms[I] <> AMainForm) and Screen.Forms[I].Visible then
     begin
-      if (Screen.Forms[I] <> AMainForm) and Screen.Forms[I].Visible then
+      if (Pos('Tips', Screen.Forms[I].ClassName) > 0) or
+         (Pos('Tips', Screen.Forms[I].Name) > 0) then
       begin
-        if (Pos('Tips', Screen.Forms[I].ClassName) > 0) or
-           (Pos('Tips', Screen.Forms[I].Name) > 0) then
-        begin
-          Log('Closing: ' + Screen.Forms[I].Name + ' (' + Screen.Forms[I].ClassName + ')');
-          WriteLn('[DEBUG] Closing Tips form: ' + Screen.Forms[I].Name);
-          try
-            Screen.Forms[I].Close;
-            Application.ProcessMessages;
-            Sleep(500);
-            Application.ProcessMessages;
-          except
-            on E: Exception do
-              Log('WARNING: Could not close ' + Screen.Forms[I].Name + ': ' + E.Message);
-          end;
+        Log('Closing: ' + Screen.Forms[I].Name + ' (' + Screen.Forms[I].ClassName + ')');
+        try
+          Screen.Forms[I].Close;
+          Application.ProcessMessages;
+          Sleep(300);
+          Application.ProcessMessages;
+        except
+          on E: Exception do
+            Log('WARNING: Could not close ' + Screen.Forms[I].Name + ': ' + E.Message);
         end;
       end;
     end;
-    Log('');
+  end;
+  Log('');
+end;
 
-    // =====================================================
-    // PHASE 1: Create a new model so buttons have context
-    // =====================================================
-    Log('--- Phase 1: Creating new model for testing context ---');
-    Log('');
-    WriteLn('[DEBUG] Phase 1: Creating new model...');
+{ Phase 1: Open test file }
+procedure Phase1_OpenTestFile(AMainForm: TForm);
+var
+  TestFile: string;
+  NewForm: TEERForm;
+  I: Integer;
+begin
+  Log('--- Phase 1: Opening test file ---');
+  Log('');
+
+  TestFile := FindTestFile;
+  if TestFile = '' then
+  begin
+    Log('[SKIP] No test file found. Creating blank model instead.');
     try
       for I := 0 to AMainForm.ComponentCount - 1 do
-      begin
-        if CompareText(AMainForm.Components[I].Name, 'NewMI') = 0 then
+        if (CompareText(AMainForm.Components[I].Name, 'NewMI') = 0) and
+           (AMainForm.Components[I] is TMenuItem) then
         begin
-          if AMainForm.Components[I] is TMenuItem then
-          begin
-            Log('Clicking NewMI to create a blank model...');
-            WriteLn('[DEBUG] About to click NewMI...');
-            TMenuItem(AMainForm.Components[I]).Click;
-            WriteLn('[DEBUG] NewMI clicked, processing messages...');
-            Application.ProcessMessages;
-            Sleep(200);
-            Application.ProcessMessages;
-            Log('New model created successfully.');
-            WriteLn('[DEBUG] New model created.');
-          end;
+          TMenuItem(AMainForm.Components[I]).Click;
+          Application.ProcessMessages;
+          Sleep(300);
+          Application.ProcessMessages;
+          Log('[PASS] Created new blank model via NewMI.');
           Break;
         end;
+    except
+      on E: Exception do
+        Log('[FAIL] Could not create new model: ' + E.Message);
+    end;
+  end
+  else
+  begin
+    Log('Test file found: ' + TestFile);
+    try
+      NewForm := TEERForm.Create(AMainForm);
+      NewForm.EERModel.LoadFromFile(TestFile, True, False, True, False);
+      NewForm.WindowState := wsMaximized;
+      LastCreatedEERForm := NewForm;
+      Application.ProcessMessages;
+      Sleep(500);
+      Application.ProcessMessages;
+      Log('[PASS] Opened test file: ' + TestFile);
+    except
+      on E: Exception do
+        Log('[FAIL] Could not open test file: ' + E.ClassName + ': ' + E.Message);
+    end;
+  end;
+  Log('');
+end;
+
+{ Phase 2: Create tables and relationships }
+procedure Phase2_CreateTablesAndRelations(AMainForm: TForm);
+var
+  Model: TEERModel;
+  NewForm: TEERForm;
+  Tbl1, Tbl2, Tbl3: Pointer;
+  Rel: Pointer;
+begin
+  Log('--- Phase 2: Creating tables and relationships ---');
+  Log('');
+
+  try
+    NewForm := TEERForm.Create(AMainForm);
+    NewForm.WindowState := wsMaximized;
+    LastCreatedEERForm := NewForm;
+    Application.ProcessMessages;
+    Sleep(200);
+    Application.ProcessMessages;
+    Model := NewForm.EERModel;
+  except
+    on E: Exception do
+    begin
+      Log('[FAIL] Could not create new model: ' + E.Message);
+      Log('');
+      Exit;
+    end;
+  end;
+
+  Tbl1 := nil;
+  Tbl2 := nil;
+  Tbl3 := nil;
+
+  // Table 1: customers
+  try
+    Tbl1 := Model.NewTable(80, 80, True);
+    TEERTable(Tbl1).ObjName := 'customers';
+    TEERTable(Tbl1).RefreshObj;
+    Application.ProcessMessages;
+    Log('[PASS] Created table: customers');
+  except
+    on E: Exception do
+    begin
+      Log('[FAIL] Could not create table customers: ' + E.Message);
+      Log('');
+      Exit;
+    end;
+  end;
+
+  // Table 2: orders
+  try
+    Tbl2 := Model.NewTable(300, 80, True);
+    TEERTable(Tbl2).ObjName := 'orders';
+    TEERTable(Tbl2).RefreshObj;
+    Application.ProcessMessages;
+    Log('[PASS] Created table: orders');
+  except
+    on E: Exception do
+    begin
+      Log('[FAIL] Could not create table orders: ' + E.Message);
+      Log('');
+      Exit;
+    end;
+  end;
+
+  // Table 3: order_items
+  try
+    Tbl3 := Model.NewTable(520, 80, True);
+    TEERTable(Tbl3).ObjName := 'order_items';
+    TEERTable(Tbl3).RefreshObj;
+    Application.ProcessMessages;
+    Log('[PASS] Created table: order_items');
+  except
+    on E: Exception do
+    begin
+      Log('[FAIL] Could not create table order_items: ' + E.Message);
+      Log('');
+      Exit;
+    end;
+  end;
+
+  // Relation: customers -> orders (1:n non-identifying, rk_1nNonId=2)
+  try
+    Rel := Model.NewRelation(2, Tbl1, Tbl2, True);
+    Application.ProcessMessages;
+    Log('[PASS] Created relation: customers -> orders (1:n non-identifying)');
+  except
+    on E: Exception do
+      Log('[FAIL] Could not create relation customers->orders: ' + E.Message);
+  end;
+
+  // Relation: orders -> order_items (1:n identifying, rk_1n=1)
+  try
+    Rel := Model.NewRelation(1, Tbl2, Tbl3, True);
+    Application.ProcessMessages;
+    Log('[PASS] Created relation: orders -> order_items (1:n identifying)');
+  except
+    on E: Exception do
+      Log('[FAIL] Could not create relation orders->order_items: ' + E.Message);
+  end;
+
+  Application.ProcessMessages;
+  Sleep(300);
+  Application.ProcessMessages;
+  Log('');
+end;
+
+{ Phase 3: Open and close modal dialogs }
+procedure Phase3_OpenModalDialogs(AMainForm: TForm);
+var
+  Model: TEERModel;
+  OptFrm: TOptionsForm;
+  OptModelFrm: TOptionsModelForm;
+  SQLFrm: TEERExportSQLScriptFrom;
+begin
+  Log('--- Phase 3: Opening and closing modal dialogs ---');
+  Log('');
+
+  // DBDesigner Options
+  try
+    Log('  Opening DBDesigner Options...');
+    OptFrm := TOptionsForm.Create(AMainForm);
+    try
+      ScheduleModalClose(800);
+      OptFrm.ShowModal;
+    finally
+      OptFrm.Free;
+    end;
+    Application.ProcessMessages;
+    Log('[PASS] DBDesigner Options dialog opened and closed.');
+  except
+    on E: Exception do
+      Log('[FAIL] DBDesigner Options: ' + E.ClassName + ': ' + E.Message);
+  end;
+
+  // Model Options
+  Model := GetCurrentModel(AMainForm);
+  if Model <> nil then
+  begin
+    try
+      Log('  Opening Model Options...');
+      OptModelFrm := TOptionsModelForm.Create(AMainForm);
+      try
+        OptModelFrm.SetModel(Model);
+        ScheduleModalClose(800);
+        OptModelFrm.ShowModal;
+      finally
+        OptModelFrm.Free;
       end;
+      Application.ProcessMessages;
+      Log('[PASS] Model Options dialog opened and closed.');
+    except
+      on E: Exception do
+        Log('[FAIL] Model Options: ' + E.ClassName + ': ' + E.Message);
+    end;
+  end
+  else
+    Log('[SKIP] Model Options - no active model');
+
+  // SQL Create Script
+  Model := GetCurrentModel(AMainForm);
+  if Model <> nil then
+  begin
+    try
+      Log('  Opening SQL Create Script...');
+      SQLFrm := TEERExportSQLScriptFrom.Create(AMainForm);
+      try
+        SQLFrm.SetModel(Model);
+        ScheduleModalClose(800);
+        SQLFrm.ShowModal;
+      finally
+        SQLFrm.Free;
+      end;
+      Application.ProcessMessages;
+      Log('[PASS] SQL Create Script dialog opened and closed.');
+    except
+      on E: Exception do
+        Log('[FAIL] SQL Create Script: ' + E.ClassName + ': ' + E.Message);
+    end;
+  end
+  else
+    Log('[SKIP] SQL Create Script - no active model');
+
+  Application.ProcessMessages;
+  Log('');
+end;
+
+{ Phase 4: Export SQL create script to file }
+procedure Phase4_ExportSQL(AMainForm: TForm; const LogDir: string);
+var
+  Model: TEERModel;
+  Frm: TEERExportSQLScriptFrom;
+  SQL, SQLFile: string;
+  F: TextFile;
+begin
+  Log('--- Phase 4: Exporting SQL create script to file ---');
+  Log('');
+
+  Model := GetCurrentModel(AMainForm);
+  if Model = nil then
+  begin
+    Log('[SKIP] No active model for SQL export.');
+    Log('');
+    Exit;
+  end;
+
+  SQLFile := LogDir + 'selftest_export.sql';
+  Frm := TEERExportSQLScriptFrom.Create(AMainForm);
+  try
+    Frm.SetModel(Model, 0);
+    try
+      SQL := Frm.GetSQLScript;
     except
       on E: Exception do
       begin
-        Log('WARNING: Failed to create new model: ' + E.ClassName + ': ' + E.Message);
-        WriteLn('[DEBUG] NewMI EXCEPTION: ' + E.ClassName + ': ' + E.Message);
+        Log('[FAIL] GetSQLScript raised: ' + E.ClassName + ': ' + E.Message);
+        Log('');
+        Exit;
       end;
     end;
-    Log('');
-    FlushLog(ActualLogFile);
 
-    // =====================================================
-    // PHASE 2: Test all menu items
-    // =====================================================
-    Log('--- Phase 2: Testing Menu Items ---');
-    Log('');
-
-    for I := 0 to AMainForm.ComponentCount - 1 do
+    if SQL = '' then
+      Log('[WARN] SQL script is empty (model may have no tables).')
+    else
     begin
+      try
+        AssignFile(F, SQLFile);
+        Rewrite(F);
+        Write(F, SQL);
+        CloseFile(F);
+        Log('[PASS] SQL script exported to: ' + SQLFile);
+        Log('  SQL length: ' + IntToStr(Length(SQL)) + ' characters');
+      except
+        on E: Exception do
+          Log('[FAIL] Could not write SQL file: ' + E.ClassName + ': ' + E.Message);
+      end;
+    end;
+  finally
+    Frm.Free;
+  end;
+  Log('');
+end;
+
+{ Phase 5: Save model to a new file }
+procedure Phase5_SaveModel(AMainForm: TForm; const LogDir: string);
+var
+  Model: TEERModel;
+  SaveFile: string;
+  SR: TSearchRec;
+  FSize: Int64;
+begin
+  Log('--- Phase 5: Saving model to a new file ---');
+  Log('');
+
+  Model := GetCurrentModel(AMainForm);
+  if Model = nil then
+  begin
+    Log('[SKIP] No active model to save.');
+    Log('');
+    Exit;
+  end;
+
+  SaveFile := LogDir + 'selftest_saved_model.xml';
+  try
+    Model.SaveToFile(SaveFile);
+    Log('[PASS] Model saved to: ' + SaveFile);
+  except
+    on E: Exception do
+      Log('[FAIL] Could not save model: ' + E.ClassName + ': ' + E.Message);
+  end;
+
+  if FileExists(SaveFile) then
+  begin
+    if FindFirst(SaveFile, faAnyFile, SR) = 0 then
+    begin
+      FSize := SR.Size;
+      FindClose(SR);
+      Log('  Saved file size: ' + IntToStr(FSize) + ' bytes');
+      if FSize > 100 then
+        Log('[PASS] Saved file is non-trivial.')
+      else
+        Log('[WARN] Saved file seems too small.');
+    end;
+  end
+  else
+    Log('[FAIL] Saved file does not exist after SaveToFile call.');
+
+  Log('');
+end;
+
+{ Phase 6: Test all menu items }
+procedure Phase6_TestMenuItems(AMainForm: TForm; var PassCount, FailCount, SkipCount: Integer);
+var
+  I, J: Integer;
+  Entry: TTestEntry;
+  MenuItems: TList;
+  Menu: TMainMenu;
+  ItemName: string;
+begin
+  Log('--- Phase 6: Testing Menu Items ---');
+  Log('');
+
+  MenuItems := TList.Create;
+  try
+    for I := 0 to AMainForm.ComponentCount - 1 do
       if AMainForm.Components[I] is TMainMenu then
       begin
         Menu := TMainMenu(AMainForm.Components[I]);
         for J := 0 to Menu.Items.Count - 1 do
           CollectMenuItems(Menu.Items[J], MenuItems);
       end;
-    end;
 
-    WriteLn('[DEBUG] Phase 2: Testing ' + IntToStr(MenuItems.Count) + ' menu items...');
+    Log('Found ' + IntToStr(MenuItems.Count) + ' menu items to test.');
+    Log('');
+
     for I := 0 to MenuItems.Count - 1 do
     begin
-      WriteLn('[DEBUG] Testing menu item: ' + TMenuItem(MenuItems[I]).Name);
+      ItemName := TMenuItem(MenuItems[I]).Name;
+
+      // Schedule auto-close for menu items that open modal dialogs
+      if (CompareText(ItemName, 'AboutMI') = 0) or
+         (CompareText(ItemName, 'EERModelOptionsMI') = 0) or
+         (CompareText(ItemName, 'DBDesignerOptionsMI') = 0) or
+         (CompareText(ItemName, 'PageSetupMI') = 0) or
+         (CompareText(ItemName, 'SQLCreateScriptMI') = 0) or
+         (CompareText(ItemName, 'SQLDropScriptMI') = 0) or
+         (CompareText(ItemName, 'SQLOptimizeTableScriptMI') = 0) or
+         (CompareText(ItemName, 'SQLRepairTableScriptMI') = 0) then
+      begin
+        ScheduleModalClose(800);
+      end;
+
       Entry := TestMenuItem(TMenuItem(MenuItems[I]), AMainForm.Name);
       LogTestEntry(Entry);
       case Entry.Result of
@@ -420,101 +783,144 @@ begin
       end;
       Application.ProcessMessages;
     end;
+  finally
+    MenuItems.Free;
+  end;
+  Log('');
+end;
 
-    Log('');
-    FlushLog(ActualLogFile);
+{ Phase 7: Test buttons on MainForm and visible forms }
+procedure Phase7_TestButtons(AMainForm: TForm; var PassCount, FailCount, SkipCount: Integer);
+var
+  I, J: Integer;
+  Entry: TTestEntry;
+  Component: TComponent;
+  VisibleForms: TList;
+  ButtonList: TList;
+  AForm: TForm;
+begin
+  Log('--- Phase 7: Testing Buttons on MainForm ---');
+  Log('');
 
-    // =====================================================
-    // PHASE 3: Test all buttons on MainForm
-    // =====================================================
-    Log('--- Phase 3: Testing Buttons on MainForm ---');
-    Log('');
-    WriteLn('[DEBUG] Phase 3: Testing buttons on MainForm...');
-
-    for I := 0 to AMainForm.ComponentCount - 1 do
+  for I := 0 to AMainForm.ComponentCount - 1 do
+  begin
+    Component := AMainForm.Components[I];
+    if (Component is TSpeedButton) or (Component is TButton) or (Component is TBitBtn) then
     begin
-      Component := AMainForm.Components[I];
-      if (Component is TSpeedButton) or
-         (Component is TButton) or
-         (Component is TBitBtn) then
-      begin
-        WriteLn('[DEBUG] Testing button: ' + Component.Name);
-        Entry := TestButton(TControl(Component), AMainForm.Name);
-        LogTestEntry(Entry);
-        case Entry.Result of
-          trPass: Inc(PassCount);
-          trFail: Inc(FailCount);
-          trSkip: Inc(SkipCount);
+      Entry := TestButton(TControl(Component), AMainForm.Name);
+      LogTestEntry(Entry);
+      case Entry.Result of
+        trPass: Inc(PassCount);
+        trFail: Inc(FailCount);
+        trSkip: Inc(SkipCount);
+      end;
+      Application.ProcessMessages;
+    end;
+  end;
+
+  Log('');
+  Log('--- Phase 7b: Testing Buttons on Other Visible Forms ---');
+  Log('');
+
+  VisibleForms := TList.Create;
+  try
+    for I := 0 to Screen.FormCount - 1 do
+      if (Screen.Forms[I] <> AMainForm) and Screen.Forms[I].Visible then
+        VisibleForms.Add(Screen.Forms[I]);
+
+    for I := 0 to VisibleForms.Count - 1 do
+    begin
+      AForm := TForm(VisibleForms[I]);
+      Log('  Form: ' + AForm.Name + ' (' + AForm.ClassName + ')');
+
+      ButtonList := TList.Create;
+      try
+        for J := 0 to AForm.ComponentCount - 1 do
+        begin
+          Component := AForm.Components[J];
+          if (Component is TSpeedButton) or (Component is TButton) or (Component is TBitBtn) then
+            ButtonList.Add(Component);
         end;
-        Application.ProcessMessages;
+
+        for J := 0 to ButtonList.Count - 1 do
+        begin
+          Entry := TestButton(TControl(ButtonList[J]), AForm.Name);
+          LogTestEntry(Entry);
+          case Entry.Result of
+            trPass: Inc(PassCount);
+            trFail: Inc(FailCount);
+            trSkip: Inc(SkipCount);
+          end;
+          Application.ProcessMessages;
+        end;
+      finally
+        ButtonList.Free;
       end;
     end;
+  finally
+    VisibleForms.Free;
+  end;
+  Log('');
+end;
 
+// ===========================================================================
+// Main entry point
+// ===========================================================================
+function RunUITests(AMainForm: TForm; const LogFileName: string): Integer;
+var
+  ActualLogFile, LogDir: string;
+  PassCount, FailCount, SkipCount: Integer;
+  StartTime: TDateTime;
+begin
+  if LogFileName = '' then
+    ActualLogFile := '/tmp/UITestResults.log'
+  else
+    ActualLogFile := LogFileName;
+
+  LogDir := ExtractFilePath(ActualLogFile);
+  if LogDir = '' then
+    LogDir := '/tmp/';
+
+  LastCreatedEERForm := nil;
+  TestLog := TStringList.Create;
+  try
+    PassCount := 0;
+    FailCount := 0;
+    SkipCount := 0;
+    StartTime := Now;
+
+    LogSeparator;
+    Log('UI TEST RUNNER - Comprehensive Self-Test');
+    Log('Started: ' + DateTimeToStr(StartTime));
+    Log('Form: ' + AMainForm.Name + ' (' + AMainForm.ClassName + ')');
+    LogSeparator;
     Log('');
+
+    Phase0_CloseStartupDialogs(AMainForm);
     FlushLog(ActualLogFile);
 
-    // =====================================================
-    // PHASE 4: Test buttons on other visible forms
-    // =====================================================
-    Log('--- Phase 4: Testing Buttons on Other Visible Forms ---');
-    Log('');
-    WriteLn('[DEBUG] Phase 4: Testing buttons on other visible forms...');
-    WriteLn('[DEBUG] Screen.FormCount = ' + IntToStr(Screen.FormCount));
+    Phase1_OpenTestFile(AMainForm);
+    FlushLog(ActualLogFile);
 
-    // IMPORTANT: Snapshot visible forms first since button clicks may close forms,
-    // changing Screen.FormCount during iteration.
-    VisibleForms := TList.Create;
-    try
-      for I := 0 to Screen.FormCount - 1 do
-        if (Screen.Forms[I] <> AMainForm) and Screen.Forms[I].Visible then
-          VisibleForms.Add(Screen.Forms[I]);
+    Phase2_CreateTablesAndRelations(AMainForm);
+    FlushLog(ActualLogFile);
 
-      WriteLn('[DEBUG] Found ' + IntToStr(VisibleForms.Count) + ' visible non-main forms');
+    Phase3_OpenModalDialogs(AMainForm);
+    FlushLog(ActualLogFile);
 
-      for I := 0 to VisibleForms.Count - 1 do
-      begin
-        AForm := TForm(VisibleForms[I]);
-        WriteLn('[DEBUG] Form: ' + AForm.Name + ' (' + AForm.ClassName + ')');
-        Log('  Form: ' + AForm.Name + ' (' + AForm.ClassName + ')');
+    Phase4_ExportSQL(AMainForm, LogDir);
+    FlushLog(ActualLogFile);
 
-        // Snapshot buttons on this form too
-        ButtonList := TList.Create;
-        try
-          for J := 0 to AForm.ComponentCount - 1 do
-          begin
-            Component := AForm.Components[J];
-            if (Component is TSpeedButton) or
-               (Component is TButton) or
-               (Component is TBitBtn) then
-              ButtonList.Add(Component);
-          end;
+    Phase5_SaveModel(AMainForm, LogDir);
+    FlushLog(ActualLogFile);
 
-          for J := 0 to ButtonList.Count - 1 do
-          begin
-            WriteLn('[DEBUG]   Testing button: ' + AForm.Name + '.' + TControl(ButtonList[J]).Name);
-            Entry := TestButton(TControl(ButtonList[J]), AForm.Name);
-            LogTestEntry(Entry);
-            case Entry.Result of
-              trPass: Inc(PassCount);
-              trFail: Inc(FailCount);
-              trSkip: Inc(SkipCount);
-            end;
-            Application.ProcessMessages;
-          end;
-        finally
-          ButtonList.Free;
-        end;
-      end;
-    finally
-      VisibleForms.Free;
-    end;
+    Phase6_TestMenuItems(AMainForm, PassCount, FailCount, SkipCount);
+    FlushLog(ActualLogFile);
 
-    Log('');
+    Phase7_TestButtons(AMainForm, PassCount, FailCount, SkipCount);
+    FlushLog(ActualLogFile);
 
-    // =====================================================
-    // SUMMARY
-    // =====================================================
-    WriteLn('[DEBUG] Phase 4 complete. Writing summary...');
+    // Summary
     LogSeparator;
     Log('TEST SUMMARY');
     LogSeparator;
@@ -530,7 +936,6 @@ begin
 
     Result := FailCount;
 
-    // Write log to file
     try
       TestLog.SaveToFile(ActualLogFile);
     except
@@ -541,15 +946,19 @@ begin
       end;
     end;
 
-    // Also write to stdout for --selftest mode
-    if HasSelfTestParam then
-      for I := 0 to TestLog.Count - 1 do
-        WriteLn(TestLog[I]);
-
   finally
-    MenuItems.Free;
     TestLog.Free;
     TestLog := nil;
+    if Assigned(ModalCloseTimer) then
+    begin
+      ModalCloseTimer.Free;
+      ModalCloseTimer := nil;
+    end;
+    if Assigned(ModalCloser) then
+    begin
+      ModalCloser.Free;
+      ModalCloser := nil;
+    end;
   end;
 end;
 

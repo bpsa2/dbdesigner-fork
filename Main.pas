@@ -1393,13 +1393,17 @@ end;
 
 procedure TMainForm.SQLDropScriptMIClick(Sender: TObject);
 begin
-  EERExportSQLScriptFrom:=TEERExportSQLScriptFrom.Create(self);
-  try
-    EERExportSQLScriptFrom.SetModel(TEERForm(ActiveMDIChild).EERModel, 1);
-    EERExportSQLScriptFrom.ShowModal;
-  finally
-    EERExportSQLScriptFrom.Free;
-  end;
+  if(ActiveMDIChild<>nil)then
+    if(ActiveMDIChild.Classname='TEERForm')then
+    begin
+      EERExportSQLScriptFrom:=TEERExportSQLScriptFrom.Create(self);
+      try
+        EERExportSQLScriptFrom.SetModel(TEERForm(ActiveMDIChild).EERModel, 1);
+        EERExportSQLScriptFrom.ShowModal;
+      finally
+        EERExportSQLScriptFrom.Free;
+      end;
+    end;
 end;
 
 procedure TMainForm.OnlinedocumentationMIClick(Sender: TObject);
@@ -3431,13 +3435,17 @@ end;
 
 procedure TMainForm.SQLOptimizeTableScriptMIClick(Sender: TObject);
 begin
-  EERExportSQLScriptFrom:=TEERExportSQLScriptFrom.Create(self);
-  try
-    EERExportSQLScriptFrom.SetModel(TEERForm(ActiveMDIChild).EERModel, 2);
-    EERExportSQLScriptFrom.ShowModal;
-  finally
-    EERExportSQLScriptFrom.Free;
-  end;
+  if(ActiveMDIChild<>nil)then
+    if(ActiveMDIChild.Classname='TEERForm')then
+    begin
+      EERExportSQLScriptFrom:=TEERExportSQLScriptFrom.Create(self);
+      try
+        EERExportSQLScriptFrom.SetModel(TEERForm(ActiveMDIChild).EERModel, 2);
+        EERExportSQLScriptFrom.ShowModal;
+      finally
+        EERExportSQLScriptFrom.Free;
+      end;
+    end;
 end;
 
 procedure TMainForm.OpenMIClick(Sender: TObject);
@@ -3551,13 +3559,17 @@ end;
 
 procedure TMainForm.SQLRepairTableScriptMIClick(Sender: TObject);
 begin
-  EERExportSQLScriptFrom:=TEERExportSQLScriptFrom.Create(self);
-  try
-    EERExportSQLScriptFrom.SetModel(TEERForm(ActiveMDIChild).EERModel, 3);
-    EERExportSQLScriptFrom.ShowModal;
-  finally
-    EERExportSQLScriptFrom.Free;
-  end;
+  if(ActiveMDIChild<>nil)then
+    if(ActiveMDIChild.Classname='TEERForm')then
+    begin
+      EERExportSQLScriptFrom:=TEERExportSQLScriptFrom.Create(self);
+      try
+        EERExportSQLScriptFrom.SetModel(TEERForm(ActiveMDIChild).EERModel, 3);
+        EERExportSQLScriptFrom.ShowModal;
+      finally
+        EERExportSQLScriptFrom.Free;
+      end;
+    end;
 end;
 
 procedure TMainForm.NavInfoPBoxPaint(Sender: TObject);

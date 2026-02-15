@@ -171,7 +171,7 @@ var
 
 implementation
 
-uses MainDM, EERDM, DBDM, GUIDM, EER, EditorQuery;
+uses MainDM, EERDM, DBDM, GUIDM, EER, EditorQuery, Main;
 
 {$R *.lfm}
 
@@ -499,13 +499,10 @@ begin
 
   DMGUI.IgnoreSQLHistoryChange:=Not(IgnoreSQLHistoryChangeCBox.Checked);
 
-  for i:=0 to TForm(Application.MainForm).MDIChildCount-1 do
+  for i:=0 to MainForm.EERFormCount-1 do
   begin
-    if(TForm(Application.MainForm).MDIChildren[i].Classname='TEERForm')then
-    begin
-      TEERForm(TForm(Application.MainForm).MDIChildren[i]).EERModel.RefreshTblImgs;
-      TEERForm(TForm(Application.MainForm).MDIChildren[i]).EERModel.LoadReservedWordsFromIniFile;
-    end;
+    MainForm.EERFormAt(i).EERModel.RefreshTblImgs;
+    MainForm.EERFormAt(i).EERModel.LoadReservedWordsFromIniFile;
   end;
 
   DMEER.DoNotUseRelNameInRefDef:=DonotuseRelNameCbox.Checked;

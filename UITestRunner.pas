@@ -29,7 +29,7 @@ function HasSelfTestParam: Boolean;
 
 implementation
 
-uses EER, EERModel, EERExportSQLScript, OptionsModel, Options;
+uses EER, EERModel, EERExportSQLScript, OptionsModel, Options, Main;
 
 type
   TTestResult = (trPass, trFail, trSkip);
@@ -319,11 +319,9 @@ begin
 end;
 
 // ---------------------------------------------------------------------------
-// Helper: Get the current model - prefer tracked form, fall back to ActiveMDIChild
+// Helper: Get the current model - prefer tracked form, fall back to FActiveEERForm
 // ---------------------------------------------------------------------------
 function GetCurrentModel(AMainForm: TForm): TEERModel;
-var
-  MdiChild: TCustomForm;
 begin
   Result := nil;
   // First try our tracked form
@@ -332,11 +330,9 @@ begin
     Result := LastCreatedEERForm.EERModel;
     Exit;
   end;
-  // Fall back to ActiveMDIChild
-  MdiChild := AMainForm.ActiveMDIChild;
-  if MdiChild = nil then Exit;
-  if MdiChild.ClassName <> 'TEERForm' then Exit;
-  Result := TEERForm(MdiChild).EERModel;
+  // Fall back to MainForm.FActiveEERForm
+  if Assigned(MainForm.FActiveEERForm) and (MainForm.FActiveEERForm.ClassName = 'TEERForm') then
+    Result := TEERForm(MainForm.FActiveEERForm).EERModel;
 end;
 
 // ---------------------------------------------------------------------------

@@ -84,7 +84,7 @@ var
 
 implementation
 
-uses MainDM, EERDM;
+uses MainDM, EERDM, Main;
 
 {$R *.lfm}
 
@@ -127,6 +127,11 @@ begin
   NavPaletteTimer.Enabled:=True;
 
   Cursor:=crArrow;
+
+  // Embed this form inside MainForm's EERPanel (replaces MDI child behavior)
+  BorderStyle := bsNone;
+  Parent := MainForm.EERPanel;
+  Align := alClient;
 end;
 
 procedure TEERForm.FormActivate(Sender: TObject);
@@ -204,6 +209,9 @@ procedure TEERForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var theEvent: QCustomEventH;
 begin
   FormIsClosing:=True;
+
+  // Unregister from MainForm's EER form list
+  MainForm.UnregisterEERForm(Self);
 
   //Remove the ChildForms MenuItem from the Window Menu
   theEvent := QCustomEvent_create(QEventType_RemoveChildFormsMenuItem, theFormMenuItem);

@@ -7,7 +7,7 @@ object MainForm: TMainForm
   Color = clBtnShadow
   Constraints.MinHeight = 400
   Constraints.MinWidth = 600
-  FormStyle = fsMDIForm
+  FormStyle = fsNormal
   Icon.Data = {
     0000010001002020000001001800A80C00001600000028000000200000004000
     00000100180000000000000C0000120B0000120B00000000000000000000271C
@@ -3005,6 +3005,12 @@ object MainForm: TMainForm
     Color = clBtnShadow
     TabOrder = 6
     Visible = False
+  end
+  object EERPanel: TPanel
+    Align = alClient
+    BevelOuter = bvNone
+    Color = clBtnShadow
+    TabOrder = 7
   end
   object MainMenu: TMainMenu
     Left = 166

@@ -74,7 +74,7 @@ uses
   DBXpress, DB, SqlExpr, ImgList, Buttons, DBCtrls, QT, Printers,
   Clipbrd, QStyle,
 {$IFDEF USE_QTheming}QThemed,{$ENDIF}
-  EERModel;
+  EERModel, EER;
 
 
 const
@@ -206,6 +206,7 @@ type
     DatatypesFooterPnl: TPanel;
     ModelFooterPnl: TPanel;
     PaletteDockSepPnl: TPanel;
+    EERPanel: TPanel;
     DatatypesSepPnl: TPanel;
     DatatypesLeftPnl: TPanel;
     ModelLeftPnl: TPanel;
@@ -437,6 +438,7 @@ type
     KeyWasUp: Boolean;
 
     TabHidePalettes: TList;
+    FEERFormList: TList;
     TabHasBeenPressedBeforeInactive: Boolean;
 
     TabHasBeenPressed: Boolean;
@@ -461,6 +463,11 @@ type
 
     //The EditorQueryForm which is docked to the QueryPnl
     DockedEditorQueryForm: TForm;
+    function EERFormCount: Integer;
+    function EERFormAt(Index: Integer): TEERForm;
+    procedure RegisterEERForm(F: TEERForm);
+    procedure UnregisterEERForm(F: TEERForm);
+    procedure SwitchToEERForm(F: TEERForm);
   end;
 
 var
@@ -471,7 +478,7 @@ implementation
 
 {$R *.lfm}
 
-uses MainDM, ZoomSel, EER,
+uses MainDM, ZoomSel,
   PaletteTools, PaletteModel, PaletteDatatypes, OptionsModel, Options,
   EERPageSetup, PaletteNav, EERExportSQLScript, DBConnSelect,
   EERReverseEngineering, EERSynchronisation, EERStoreInDatabase, Splash,
@@ -482,6 +489,7 @@ uses MainDM, ZoomSel, EER,
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  FEERFormList := TList.Create;
   {$IFDEF FPC}
   // Register this form's EventFilter as the global Qt-style event handler
   RegisterQtEventHandler(EventFilter);
@@ -569,6 +577,7 @@ begin
   DMMain.SaveWinPos(self, True);
 
   EditorQueryDragTargetForm.Free;
+  FEERFormList.Free;
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -746,12 +755,9 @@ var theEERForm: TEERForm;
 begin
   theEERForm:=TEERForm.Create(self);
 
-  //theEERForm.WindowState:=wsMaximized;
   AddToMDIWindowMenu(theEERForm);
+  RegisterEERForm(theEERForm);
 
-  theEERForm.Show;
-
-  FActiveEERForm := theEERForm;
   NewEERModel:=theEERForm;
 end;
 
@@ -785,21 +791,21 @@ begin
     if(WindowsMI.Items[i].GroupIndex=59)then
       WindowsMI.Items[i].Checked:=False;
 
-  for i:=0 to MDIChildCount-1 do
-    if(TEERForm(MDIChildren[I]).theFormMenuItem=Sender)then
-      TEERForm(MDIChildren[I]).SetFocus;
+  for i:=0 to FEERFormList.Count-1 do
+    if(TEERForm(FEERFormList[I]).theFormMenuItem=Sender)then
+      SwitchToEERForm(TEERForm(FEERFormList[I]));
 
   TMenuItem(Sender).Checked:=True;
 end;
 
 procedure TMainForm.CascadeMIClick(Sender: TObject);
 begin
-  Cascade;
+  // Cascade not applicable for embedded forms
 end;
 
 procedure TMainForm.TileMIClick(Sender: TObject);
 begin
-  Tile;
+  // Tile not applicable for embedded forms
 end;
 
 procedure TMainForm.ToolsMIClick(Sender: TObject);
@@ -2308,7 +2314,7 @@ end;
 procedure TMainForm.DisplaySelectedWorkTool(WorkTool: integer);
 begin
   //Do actions before changing tool
-  if(MainForm.MDIChildCount>0)then
+  if(MainForm.EERFormCount>0)then
     if(MainForm.FActiveEERForm.Classname='TEERForm')then
       //Reset Rel_SrcTable if
       if(not((DMEER.CurrentWorkTool=wtRel1n)or(DMEER.CurrentWorkTool=wtRel1nSub)or(DMEER.CurrentWorkTool=wtRel11)))then
@@ -3432,16 +3438,10 @@ end;
 procedure TMainForm.CloseAllMIClick(Sender: TObject);
 var i: integer;
 begin
-  i:=0;
-  while(i<MDIChildCount)do
+  for i := FEERFormList.Count - 1 downto 0 do
   begin
-    if(MDIChildren[i] is TEERForm)then
-    begin
-      MDIChildren[i].Close;
-      Application.ProcessMessages;
-    end
-    else
-      inc(i);
+    TEERForm(FEERFormList[i]).Close;
+    Application.ProcessMessages;
   end;
 end;
 
@@ -3692,6 +3692,63 @@ begin
     end;
 end;
 
+
+// ---------------------------------------------------------------------------
+// EER Form List helpers (replace MDI child management)
+// ---------------------------------------------------------------------------
+
+function TMainForm.EERFormCount: Integer;
+begin
+  Result := FEERFormList.Count;
+end;
+
+function TMainForm.EERFormAt(Index: Integer): TEERForm;
+begin
+  Result := TEERForm(FEERFormList[Index]);
+end;
+
+procedure TMainForm.RegisterEERForm(F: TEERForm);
+var
+  i: Integer;
+begin
+  // Hide all existing EER forms
+  for i := 0 to FEERFormList.Count - 1 do
+    TEERForm(FEERFormList[i]).Visible := False;
+  // Add and show the new one
+  if FEERFormList.IndexOf(F) < 0 then
+    FEERFormList.Add(F);
+  F.Visible := True;
+  FActiveEERForm := F;
+end;
+
+procedure TMainForm.UnregisterEERForm(F: TEERForm);
+var
+  idx: Integer;
+begin
+  idx := FEERFormList.IndexOf(F);
+  if idx >= 0 then
+    FEERFormList.Delete(idx);
+  // If this was the active form, switch to another or clear
+  if FActiveEERForm = F then
+  begin
+    if FEERFormList.Count > 0 then
+      SwitchToEERForm(TEERForm(FEERFormList[FEERFormList.Count - 1]))
+    else
+      FActiveEERForm := nil;
+  end;
+end;
+
+procedure TMainForm.SwitchToEERForm(F: TEERForm);
+var
+  i: Integer;
+begin
+  // Hide all EER forms
+  for i := 0 to FEERFormList.Count - 1 do
+    TEERForm(FEERFormList[i]).Visible := False;
+  // Show the requested one
+  F.Visible := True;
+  FActiveEERForm := F;
+end;
 finalization
   StartupErrors.Free;
 

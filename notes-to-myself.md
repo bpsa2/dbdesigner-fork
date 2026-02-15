@@ -300,3 +300,48 @@ After fixes, verify by:
 ### Remaining Work
 - **Phase B**: TMenuItem.Bitmap restoration in PaletteModel.lfm (6 menu icons) — LOW PRIORITY
 - **Phase C**: TPanel.Bitmap backgrounds — COSMETIC, optional
+
+
+## Fix: Relationship Lines, Scrollbars, and Navigator (commit 40e2f50)
+
+### 1. Relationship Lines (White → Black) ✅
+**Problem**: Sub-paintbox OnPaint handlers (`DoPaint_RelMiddle`, `DoPaint_RelEnd`, `DoPaint_Caption`, 
+`DoPaint_StartInterval`, `DoPaint_EndInterval`) were empty stubs. In LCL, each TPaintBox must repaint 
+itself in its own OnPaint handler — the parent's DoPaint painting to sub-paintbox canvases doesn't 
+persist after LCL repaints them.
+
+**Fix**: Filled in the empty OnPaint handlers to call the corresponding `PaintObj2Canvas_*` methods.
+
+### 2. Scrollbars ✅
+**Problem**: The EER form was embedded in `MainForm.EERPanel` with `Align := alClient`, `BorderStyle := bsNone`. 
+The EERModel panel (4096×2842) exceeded the visible area but no scrollbars appeared because LCL's AutoScroll 
+on an embedded form with `Align=alClient` doesn't properly activate scrollbars.
+
+**Fix**: Added a `TScrollBox` inside `TEERForm` that hosts the `EERModel` panel:
+- `ScrollBox := TScrollBox.Create(self); ScrollBox.Align := alClient; ScrollBox.AutoScroll := True;`
+- `EERModel.Parent := ScrollBox;` (reparented from form to scrollbox)
+- Changed all 56 `TForm(parent)` references in `EERModel.pas` → `TScrollingWinControl(parent)` (scrollbar/size access)
+- Changed 6 `TForm(Parent)` Caption/ClassNameIs references → `TForm(Owner)` / `Owner.ClassNameIs(...)` (Owner = the form)
+- Removed hardcoded `HorzScrollBar.Range = 33` / `VertScrollBar.Range = 33` from `EER.lfm`
+
+### 3. Navigator ✅
+**Problem**: Navigator (`PaletteNav.pas`) used `FActiveEERForm.HorzScrollBar.Range/Position` — the form's 
+scrollbars which were not active.
+
+**Fix**: Updated all references to use `TEERForm(FActiveEERForm).ScrollBox.HorzScrollBar/VertScrollBar`.
+Updated viewport size references from `FActiveEERForm.Width/Height` to `ScrollBox.ClientWidth/ClientHeight`.
+Also updated `EER.pas` `NavPaletteTimerTimer` to check `ScrollBox.HorzScrollBar` instead of form scrollbars.
+
+### Files Modified
+- `EERModel.pas`: Sub-paintbox OnPaint handlers + TForm(parent) → TScrollingWinControl(parent) (62 changes)
+- `EER.pas`: ScrollBox creation, reparenting, timer update
+- `EER.lfm`: Removed AutoScroll and hardcoded scrollbar ranges  
+- `PaletteNav.pas`: ScrollBox scrollbar references
+
+## Important: Selftest Timeout
+When running the selftest (`bin/DBDesignerFork --selftest`), use **at least 300 seconds** for timeout:
+```bash
+run_os_command('bin/DBDesignerFork --selftest 2>&1', timeout=300, max_memory=1024*1024*1024)
+```
+The selftest clicks ~113 menu items and ~29 buttons with 2-second delays between each, plus opens/closes 
+dialogs, so it takes several minutes to complete. Previous runs have taken 2-4 minutes.

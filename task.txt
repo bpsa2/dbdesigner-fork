@@ -3,6 +3,6 @@ We have a very interesting/cool task today.
 
 Your task is:
 * Read the files port-to-lazarus.md, port-to-lazarus-task-list.md and then code as much as you would like. Each time you have progress, please commit.
-* Keeps a file notes-to-myself.md with everything that you consider important. If it does not exist, please create it.
+* Keep a file notes-to-myself.md with everything that you consider important. If it does not exist, please create it.
 
 If you succeed, you will be considered a rock-star.

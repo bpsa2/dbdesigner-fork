@@ -58,18 +58,6 @@ DBDesignerFork/
 └── test-base/             # Test XML models and SQL export reference files
 ```
 
-## Original Build Instructions
-
-### Windows
-- **Requirements:** Delphi 7 (Professional or Enterprise)
-- Open `DBDesignerFork.dpr` in Delphi, configure output directories, and build.
-
-### Linux
-- **Requirements:** Kylix 3 (Professional or Enterprise)
-- Open the project in Kylix, configure output directories, and build.
-
-See [`_How to compile DBDesigner4.txt`](_How%20to%20compile%20DBDesigner4.txt) for detailed original instructions.
-
 ## 🚀 Porting to Free Pascal / Lazarus
 
 **The primary goal of this repository is to port DBDesigner Fork from Delphi/Kylix to [Free Pascal (FPC)](https://www.freepascal.org/) and the [Lazarus IDE](https://www.lazarus-ide.org/).**

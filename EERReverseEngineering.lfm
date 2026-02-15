@@ -89,8 +89,7 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
     object StatusLbl: TLabel
       Left = 20
       Top = 3
-      Width = 122
-      Height = 12
+      AutoSize = True
       Caption = 'Not connected to a Database.'
       Font.CharSet = 0
       Font.Color = clBlack
@@ -273,8 +272,7 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
       object Label5: TLabel
         Left = 67
         Top = 60
-        Width = 112
-        Height = 13
+        AutoSize = True
         Caption = 'Tables placed in a Row'
       end
       object ImportSchemaCBox: TCheckBox
@@ -502,8 +500,7 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
     object Label1: TLabel
       Left = 20
       Top = 12
-      Width = 103
-      Height = 13
+      AutoSize = True
       Caption = 'Database Connection'
     end
     object DBConnEd: TEdit
@@ -517,15 +514,13 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
     object Label2: TLabel
       Left = 20
       Top = 58
-      Width = 32
-      Height = 13
+      AutoSize = True
       Caption = 'Tables'
     end
     object Label4: TLabel
       Left = 314
       Top = 58
-      Width = 39
-      Height = 13
+      AutoSize = True
       Caption = 'Schema'
     end
   end
@@ -590,8 +585,7 @@ object EERReverseEngineeringForm: TEERReverseEngineeringForm
         object Label3: TLabel
           Left = 18
           Top = 20
-          Width = 209
-          Height = 69
+          AutoSize = True
           AutoSize = False
           Caption = 
             'When connecting to Oracle or MS SQL databases please make sure t' +

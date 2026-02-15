@@ -42,16 +42,14 @@ object EditorTableFieldParamForm: TEditorTableFieldParamForm
       object Label1: TLabel
         Left = 61
         Top = 6
-        Width = 3
-        Height = 13
+        AutoSize = True
         Caption = ')'
       end
     end
     object DatatypeLbl: TLabel
       Left = 4
       Top = 8
-      Width = 51
-      Height = 13
+      AutoSize = True
       Caption = 'INTEGER('
     end
   end

@@ -21,8 +21,7 @@ object EditorRegionForm: TEditorRegionForm
   object Label1: TLabel
     Left = 20
     Top = 10
-    Width = 60
-    Height = 13
+    AutoSize = True
     Caption = 'Regionname'
   end
   object RegionNameEd: TEdit
@@ -54,8 +53,7 @@ object EditorRegionForm: TEditorRegionForm
   object Label2: TLabel
     Left = 166
     Top = 10
-    Width = 24
-    Height = 13
+    AutoSize = True
     Caption = 'Color'
   end
   object GroupBox1: TGroupBox
@@ -66,10 +64,9 @@ object EditorRegionForm: TEditorRegionForm
     Caption = 'Overwrite Table Settings'
     TabOrder = 4
     object Label3: TLabel
-      Left = 26
+      Left = 4
       Top = 30
-      Width = 49
-      Height = 13
+      Width = 71
       Alignment = taRightJustify
       Caption = 'Database:'
     end
@@ -87,10 +84,9 @@ object EditorRegionForm: TEditorRegionForm
       Text = 'Default'
     end
     object Label4: TLabel
-      Left = 18
+      Left = 0
       Top = 62
-      Width = 57
-      Height = 13
+      Width = 75
       Alignment = taRightJustify
       Caption = 'Table Type:'
     end
@@ -139,8 +135,7 @@ object EditorRegionForm: TEditorRegionForm
   object Label5: TLabel
     Left = 20
     Top = 174
-    Width = 49
-    Height = 13
+    AutoSize = True
     Caption = 'Comments'
   end
   object BottomPnl: TPanel

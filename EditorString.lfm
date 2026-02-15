@@ -17,8 +17,7 @@ object EditorStringForm: TEditorStringForm
   object PromtLbl: TLabel
     Left = 64
     Top = 24
-    Width = 30
-    Height = 13
+    AutoSize = True
     Caption = 'Promt:'
   end
   object InputPnl: TPanel

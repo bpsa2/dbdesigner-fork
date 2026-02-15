@@ -19,8 +19,7 @@ object SplashForm: TSplashForm
   object InfoLbl1: TLabel
     Left = 339
     Top = 185
-    Width = 337
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 
       'Fabulous Force Database Designer 4  for Windows 2k/XP and Linux ' +
@@ -36,10 +35,9 @@ object SplashForm: TSplashForm
     Visible = False
   end
   object VersionLbl: TLabel
-    Left = 650
+    Left = 627
     Top = 298
-    Width = 33
-    Height = 13
+    Width = 56
     Alignment = taRightJustify
     Caption = '4.0.0.0'
     Transparent = True
@@ -48,8 +46,7 @@ object SplashForm: TSplashForm
   object InfoLbl5: TLabel
     Left = 339
     Top = 241
-    Width = 332
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 
       'Distribution includes Edward Benson'#39's LGPL DBExpress driver 2.0.' +
@@ -68,8 +65,7 @@ object SplashForm: TSplashForm
   object InfoLbl2: TLabel
     Left = 339
     Top = 197
-    Width = 337
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 
       'Copyright (C) 2003 by Michael G. Zinner. This software is distri' +
@@ -88,8 +84,7 @@ object SplashForm: TSplashForm
   object InfoLbl4: TLabel
     Left = 339
     Top = 223
-    Width = 337
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 'Taxacher, Georg Richter, Jens Oberender.'
     Font.CharSet = 0
@@ -106,8 +101,7 @@ object SplashForm: TSplashForm
   object InfoLbl3: TLabel
     Left = 339
     Top = 210
-    Width = 337
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 
       'terms of the GNU GPL. Special thanks to Katharina Peter, Ulrich ' +
@@ -126,8 +120,7 @@ object SplashForm: TSplashForm
   object InfoLbl6: TLabel
     Left = 339
     Top = 253
-    Width = 332
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 
       'the SQLite Engine, Marco Wobben'#39's DBExpress driver 2.3.4 for SQL' +
@@ -146,8 +139,7 @@ object SplashForm: TSplashForm
   object InfoLbl7: TLabel
     Left = 339
     Top = 265
-    Width = 332
-    Height = 12
+    AutoSize = True
     AutoSize = False
     Caption = 'Stefan Heymann'#39's XML Parser.'
     Font.CharSet = 0

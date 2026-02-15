@@ -118,10 +118,9 @@ object DBConnEditorForm: TDBConnEditorForm
     object GeneralSheet: TTabSheet
       Caption = ' General'
       object Label6: TLabel
-        Left = 18
+        Left = 0
         Top = 24
-        Width = 88
-        Height = 13
+        Width = 106
         Alignment = taRightJustify
         Caption = 'Connection Name:'
       end
@@ -161,18 +160,16 @@ object DBConnEditorForm: TDBConnEditorForm
           Shape = bsTopLine
         end
         object HostIPLbl: TLabel
-          Left = 40
+          Left = 20
           Top = 30
-          Width = 51
-          Height = 13
+          Width = 71
           Alignment = taRightJustify
           Caption = 'Hostname:'
         end
         object DatabaseLbl: TLabel
-          Left = 12
+          Left = 0
           Top = 80
-          Width = 80
-          Height = 13
+          Width = 92
           Alignment = taRightJustify
           Caption = 'Database Name:'
         end
@@ -185,10 +182,9 @@ object DBConnEditorForm: TDBConnEditorForm
           OnExit = DBEdExit
         end
         object Label5: TLabel
-          Left = 35
+          Left = 0
           Top = 158
-          Width = 56
-          Height = 13
+          Width = 91
           Alignment = taRightJustify
           Caption = 'Description:'
         end
@@ -201,10 +197,9 @@ object DBConnEditorForm: TDBConnEditorForm
           OnExit = CommentEdExit
         end
         object UsernameLbl: TLabel
-          Left = 41
+          Left = 21
           Top = 114
-          Width = 51
-          Height = 13
+          Width = 71
           Alignment = taRightJustify
           Caption = 'Username:'
         end
@@ -226,18 +221,16 @@ object DBConnEditorForm: TDBConnEditorForm
           OnExit = PasswordEdExit
         end
         object PwdLbl: TLabel
-          Left = 213
+          Left = 191
           Top = 114
-          Width = 49
-          Height = 13
+          Width = 71
           Alignment = taRightJustify
           Caption = 'Password:'
         end
         object PortLbl: TLabel
-          Left = 285
+          Left = 266
           Top = 30
-          Width = 22
-          Height = 13
+          Width = 41
           Alignment = taRightJustify
           Caption = 'Port:'
           Enabled = False
@@ -270,10 +263,9 @@ object DBConnEditorForm: TDBConnEditorForm
         OnCloseUp = DatabaseTypesCBoxCloseUp
       end
       object Label1: TLabel
-        Left = 279
+        Left = 254
         Top = 24
-        Width = 31
-        Height = 13
+        Width = 56
         Alignment = taRightJustify
         Caption = 'Driver:'
       end

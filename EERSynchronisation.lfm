@@ -225,8 +225,7 @@ object EERSynchronisationForm: TEERSynchronisationForm
     object StatusLbl: TLabel
       Left = 20
       Top = 3
-      Width = 122
-      Height = 12
+      AutoSize = True
       Caption = 'Not connected to a Database.'
       Font.CharSet = 0
       Font.Color = clBlack
@@ -337,8 +336,7 @@ object EERSynchronisationForm: TEERSynchronisationForm
     object Label1: TLabel
       Left = 20
       Top = 12
-      Width = 103
-      Height = 13
+      AutoSize = True
       Caption = 'Database Connection'
     end
     object GroupBox1: TGroupBox

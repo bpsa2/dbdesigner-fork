@@ -27,8 +27,7 @@ object PrinterSettingsForm: TPrinterSettingsForm
   object Label1: TLabel
     Left = 30
     Top = 24
-    Width = 33
-    Height = 13
+    AutoSize = True
     Caption = 'Printer:'
   end
   object XSizeEd: TEdit

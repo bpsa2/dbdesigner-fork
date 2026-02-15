@@ -339,8 +339,7 @@ object EERExportSQLScriptFrom: TEERExportSQLScriptFrom
     object LabelTargetDB: TLabel
       Left = 128
       Top = 24
-      Width = 88
-      Height = 13
+      AutoSize = True
       Caption = 'Target Data Base:'
     end
     object CBTargetDataBase: TComboBox
@@ -391,15 +390,13 @@ object EERExportSQLScriptFrom: TEERExportSQLScriptFrom
     object LabColNameLastChange: TLabel
       Left = 293
       Top = 177
-      Width = 72
-      Height = 13
+      AutoSize = True
       Caption = 'Date col name:'
     end
     object LabLastChangeUserColName: TLabel
       Left = 293
       Top = 202
-      Width = 71
-      Height = 13
+      AutoSize = True
       Caption = 'User col name:'
     end
     object EdLastChangeUserColName: TEdit
@@ -440,15 +437,13 @@ object EERExportSQLScriptFrom: TEERExportSQLScriptFrom
     object LbAutoIncrementPrefix: TLabel
       Left = 24
       Top = 223
-      Width = 72
-      Height = 13
+      AutoSize = True
       Caption = 'Trigger prefix: '
     end
     object LbAutoIncrementSeqName: TLabel
       Left = 24
       Top = 248
-      Width = 80
-      Height = 13
+      AutoSize = True
       Caption = 'Sequence name:'
     end
     object EdAutoIncrementSeqName: TEdit
@@ -463,8 +458,7 @@ object EERExportSQLScriptFrom: TEERExportSQLScriptFrom
     object LbLastChangeTriggerPrefix: TLabel
       Left = 293
       Top = 226
-      Width = 69
-      Height = 13
+      AutoSize = True
       Caption = 'Trigger prefix:'
     end
     object EdLastChangeTriggerPrefix: TEdit
@@ -479,8 +473,7 @@ object EERExportSQLScriptFrom: TEERExportSQLScriptFrom
     object LbLastDeleteTriggerPrefix: TLabel
       Left = 295
       Top = 129
-      Width = 69
-      Height = 13
+      AutoSize = True
       Caption = 'Trigger prefix:'
     end
     object EdLastDeleteTriggerPrefix: TEdit
@@ -504,15 +497,13 @@ object EERExportSQLScriptFrom: TEERExportSQLScriptFrom
     object LbLastDeleteColName: TLabel
       Left = 295
       Top = 105
-      Width = 72
-      Height = 13
+      AutoSize = True
       Caption = 'Date col name:'
     end
     object LbLastDeleteTbName: TLabel
       Left = 295
       Top = 80
-      Width = 62
-      Height = 13
+      AutoSize = True
       Caption = 'Table name: '
     end
     object EdLastDeleteTbName: TEdit

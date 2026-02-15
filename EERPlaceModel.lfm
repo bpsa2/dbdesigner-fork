@@ -42,8 +42,7 @@ object EERPlaceModelForm: TEERPlaceModelForm
       object PageControlTitleLbl: TLabel
         Left = 6
         Top = 4
-        Width = 64
-        Height = 13
+        AutoSize = True
         Caption = 'Linked Model'
         Transparent = True
       end
@@ -74,10 +73,9 @@ object EERPlaceModelForm: TEERPlaceModelForm
         Shape = bsTopLine
       end
       object FNameLbl: TLabel
-        Left = 38
+        Left = 12
         Top = 50
-        Width = 45
-        Height = 13
+        Width = 71
         Alignment = taRightJustify
         Caption = 'Filename:'
       end
@@ -110,10 +108,9 @@ object EERPlaceModelForm: TEERPlaceModelForm
         OnClick = LinkedFromFileRBtnClick
       end
       object DBConnLbl: TLabel
-        Left = 40
+        Left = 23
         Top = 130
-        Width = 43
-        Height = 13
+        Width = 60
         Alignment = taRightJustify
         Caption = 'DBConn:'
       end
@@ -126,10 +123,9 @@ object EERPlaceModelForm: TEERPlaceModelForm
         TabOrder = 5
       end
       object DriverLbl: TLabel
-        Left = 224
+        Left = 199
         Top = 130
-        Width = 31
-        Height = 13
+        Width = 56
         Alignment = taRightJustify
         Caption = 'Driver:'
       end
@@ -144,10 +140,9 @@ object EERPlaceModelForm: TEERPlaceModelForm
         TabOrder = 7
       end
       object HostLbl: TLabel
-        Left = 58
+        Left = 42
         Top = 160
-        Width = 25
-        Height = 13
+        Width = 41
         Alignment = taRightJustify
         Caption = 'Host:'
       end
@@ -168,18 +163,16 @@ object EERPlaceModelForm: TEERPlaceModelForm
         TabOrder = 10
       end
       object IPLbl: TLabel
-        Left = 244
+        Left = 231
         Top = 160
-        Width = 13
-        Height = 13
+        Width = 26
         Alignment = taRightJustify
         Caption = 'IP:'
       end
       object DBLbl: TLabel
-        Left = 34
+        Left = 12
         Top = 190
-        Width = 49
-        Height = 13
+        Width = 71
         Alignment = taRightJustify
         Caption = 'Database:'
       end
@@ -192,10 +185,9 @@ object EERPlaceModelForm: TEERPlaceModelForm
         TabOrder = 13
       end
       object Label1: TLabel
-        Left = 211
+        Left = 186
         Top = 190
-        Width = 46
-        Height = 13
+        Width = 71
         Alignment = taRightJustify
         Caption = 'Model ID:'
       end
@@ -208,10 +200,9 @@ object EERPlaceModelForm: TEERPlaceModelForm
         TabOrder = 15
       end
       object UserLbl: TLabel
-        Left = 32
+        Left = 12
         Top = 220
-        Width = 51
-        Height = 13
+        Width = 71
         Alignment = taRightJustify
         Caption = 'Username:'
       end

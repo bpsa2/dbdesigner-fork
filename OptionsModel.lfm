@@ -4,8 +4,8 @@ object OptionsModelForm: TOptionsModelForm
   ActiveControl = PageControl
   BorderStyle = bsToolWindow
   Caption = 'Model Options'
-  ClientHeight = 307
-  ClientWidth = 743
+  ClientHeight = 500
+  ClientWidth = 900
   Color = clBtnFace
   FormStyle = fsStayOnTop
   Position = poOwnerFormCenter
@@ -15,18 +15,20 @@ object OptionsModelForm: TOptionsModelForm
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   object PageControlTitleShape: TShape
-    Left = 169
+    Left = 186
     Top = 14
-    Width = 555
-    Height = 23
+    Width = 700
+    Height = 28
     Brush.Color = clBtnFace
     Brush.Style = bsClear
+    Pen.Color = clSilver
   end
   object PageControl: TPageControl
-    Left = 164
-    Top = 42
-    Width = 563
-    Height = 223
+    Left = 186
+    Top = 44
+    Width = 700
+    Height = 410
+    Anchors = [akTop, akLeft, akRight, akBottom]
     ActivePage = EditOptionsSheet
     ShowTabs = False
     TabOrder = 0
@@ -35,16 +37,14 @@ object OptionsModelForm: TOptionsModelForm
       Caption = 'GeneralSheet'
       object Label11: TLabel
         Left = 348
-        Top = 32
-        Width = 66
-        Height = 13
+        Top = 36
+        AutoSize = True
         Caption = 'Region Colors'
       end
       object Label10: TLabel
         Left = 348
-        Top = 168
-        Width = 153
-        Height = 13
+        Top = 210
+        AutoSize = True
         Caption = '(Format: Colorname=#RRGGBB)'
         Color = clBtnFace
         Font.Color = clGray
@@ -57,71 +57,67 @@ object OptionsModelForm: TOptionsModelForm
       end
       object RegionColorsMemo: TMemo
         Left = 348
-        Top = 46
-        Width = 207
-        Height = 119
+        Top = 54
+        Width = 330
+        Height = 150
         ScrollBars = ssVertical
         TabOrder = 4
       end
       object Label1: TLabel
-        Left = 20
+        Left = 0
         Top = 8
-        Width = 63
-        Height = 13
+        Width = 83
         Alignment = taRightJustify
         Caption = 'Model Name:'
       end
       object ModelNameEd: TEdit
         Left = 88
         Top = 4
-        Width = 195
-        Height = 21
+        Width = 240
+        Height = 25
         TabOrder = 0
       end
       object Label2: TLabel
         Left = 348
         Top = 8
-        Width = 61
-        Height = 13
+        Width = 95
         Alignment = taRightJustify
         Caption = 'Default Font:'
       end
       object FontCBox: TComboBox
-        Left = 416
+        Left = 448
         Top = 4
-        Width = 137
-        Height = 21
+        Width = 228
+        Height = 25
         DropDownCount = 16
         ItemHeight = 15
         TabOrder = 3
       end
       object Label12: TLabel
-        Left = 31
+        Left = 11
         Top = 68
-        Width = 52
-        Height = 13
+        Width = 72
         Alignment = taRightJustify
         Caption = 'Comments:'
       end
       object ModelCommentsMemo: TMemo
         Left = 88
         Top = 68
-        Width = 195
-        Height = 111
+        Width = 240
+        Height = 150
         TabOrder = 2
       end
       object VersionEd: TEdit
         Left = 88
-        Top = 32
-        Width = 195
-        Height = 21
+        Top = 34
+        Width = 240
+        Height = 25
         TabOrder = 1
       end
       object Label13: TLabel
-        Left = 45
+        Left = 19
         Top = 36
-        Width = 38
-        Height = 13
+        Width = 64
         Alignment = taRightJustify
         Caption = 'Version:'
       end
@@ -130,17 +126,16 @@ object OptionsModelForm: TOptionsModelForm
       Caption = 'EditOptionsSheet'
       ImageIndex = 3
       object GroupBox1: TGroupBox
-        Left = 396
-        Top = 0
-        Width = 159
-        Height = 83
+        Left = 490
+        Top = 4
+        Width = 190
+        Height = 90
         Caption = ' '
         TabOrder = 0
         object GridWidthLbl: TLabel
-          Left = 17
+          Left = 0
           Top = 24
-          Width = 50
-          Height = 13
+          Width = 67
           Alignment = taRightJustify
           Caption = 'Grid width:'
         end
@@ -152,10 +147,9 @@ object OptionsModelForm: TOptionsModelForm
           TabOrder = 1
         end
         object GridHeightLbl: TLabel
-          Left = 13
+          Left = 0
           Top = 52
-          Width = 54
-          Height = 13
+          Width = 67
           Alignment = taRightJustify
           Caption = 'Grid height:'
         end
@@ -169,46 +163,43 @@ object OptionsModelForm: TOptionsModelForm
         object GridWidthUnitsLbl: TLabel
           Left = 116
           Top = 24
-          Width = 24
-          Height = 13
+          AutoSize = True
           Caption = 'Units'
         end
         object GridHeightUnitsLbl: TLabel
           Left = 116
           Top = 52
-          Width = 24
-          Height = 13
+          AutoSize = True
           Caption = 'Units'
         end
       end
       object UsePosGridCBox: TCheckBox
-        Left = 406
-        Top = -3
-        Width = 121
+        Left = 500
+        Top = 1
+        Width = 160
         Height = 19
         Caption = 'Enable Snap to Grid'
         TabOrder = 1
         OnClick = UsePosGridCBoxClick
       end
       object GroupBox2: TGroupBox
-        Left = 2
-        Top = 152
-        Width = 375
-        Height = 55
+        Left = 4
+        Top = 170
+        Width = 470
+        Height = 60
         Caption = 'Default Table Settings (MySql only)'
         TabOrder = 2
         object Label18: TLabel
           Left = 21
           Top = 24
-          Width = 94
-          Height = 13
+          AutoSize = True
           Caption = 'Default Table Type:'
         end
         object DefaultTableTypeCBox: TComboBox
-          Left = 123
-          Top = 20
-          Width = 214
-          Height = 21
+          Left = 140
+          Top = 24
+          Width = 310
+          Height = 25
           Style = csDropDownList
           ItemHeight = 15
           Items.Strings = (
@@ -224,17 +215,16 @@ object OptionsModelForm: TOptionsModelForm
         end
       end
       object GroupBox3: TGroupBox
-        Left = 2
-        Top = 2
-        Width = 375
-        Height = 145
+        Left = 4
+        Top = 4
+        Width = 470
+        Height = 160
         Caption = 'Default Relation Settings / Foreign Keys Settings'
         TabOrder = 3
         object Label19: TLabel
           Left = 41
           Top = 64
-          Width = 289
-          Height = 13
+          AutoSize = True
           Caption = 'Reference Definition is activated for the Relation (for InnoDB)'
           Transparent = True
         end
@@ -254,8 +244,7 @@ object OptionsModelForm: TOptionsModelForm
         object Label23: TLabel
           Left = 22
           Top = 113
-          Width = 88
-          Height = 13
+          AutoSize = True
           Caption = 'Foreign Key Prefix:'
         end
         object FKPrefixEd: TEdit
@@ -271,8 +260,7 @@ object OptionsModelForm: TOptionsModelForm
         object Label24: TLabel
           Left = 171
           Top = 113
-          Width = 93
-          Height = 13
+          AutoSize = True
           Caption = 'Foreign Key Postfix:'
         end
         object FKPostfixEd: TEdit
@@ -313,17 +301,16 @@ object OptionsModelForm: TOptionsModelForm
         end
       end
       object GroupBox4: TGroupBox
-        Left = 396
-        Top = 94
-        Width = 159
-        Height = 85
+        Left = 490
+        Top = 100
+        Width = 190
+        Height = 90
         Caption = 'Canvas Size'
         TabOrder = 4
         object Label20: TLabel
-          Left = 36
+          Left = 18
           Top = 24
-          Width = 31
-          Height = 13
+          Width = 49
           Alignment = taRightJustify
           Caption = 'Width:'
         end
@@ -338,15 +325,13 @@ object OptionsModelForm: TOptionsModelForm
         object Label21: TLabel
           Left = 116
           Top = 24
-          Width = 24
-          Height = 13
+          AutoSize = True
           Caption = 'Units'
         end
         object Label22: TLabel
-          Left = 33
+          Left = 11
           Top = 53
-          Width = 34
-          Height = 13
+          Width = 56
           Alignment = taRightJustify
           Caption = 'Height:'
         end
@@ -361,8 +346,7 @@ object OptionsModelForm: TOptionsModelForm
         object Label25: TLabel
           Left = 116
           Top = 53
-          Width = 24
-          Height = 13
+          AutoSize = True
           Caption = 'Units'
         end
       end
@@ -371,7 +355,7 @@ object OptionsModelForm: TOptionsModelForm
       Caption = 'DatabaseSheet'
       ImageIndex = 2
       object NewTblPrefixBtn: TSpeedButton
-        Left = 516
+        Left = 646
         Top = 4
         Width = 23
         Height = 22
@@ -406,7 +390,7 @@ object OptionsModelForm: TOptionsModelForm
         OnClick = NewTblPrefixBtnClick
       end
       object DelTblPrefixBtn: TSpeedButton
-        Left = 516
+        Left = 646
         Top = 28
         Width = 23
         Height = 22
@@ -448,27 +432,25 @@ object OptionsModelForm: TOptionsModelForm
         Shape = bsTopLine
       end
       object Label4: TLabel
-        Left = 246
+        Left = 248
         Top = 14
-        Width = 70
-        Height = 13
+        Width = 116
         Alignment = taRightJustify
         Caption = 'Table Prefixes:'
       end
       object TablePrefixCLBox: TCheckListBox
-        Left = 322
+        Left = 370
         Top = 4
-        Width = 187
-        Height = 97
+        Width = 270
+        Height = 120
         TabOrder = 1
         OnClickCheck = TablePrefixCLBoxClickCheck
         OnDblClick = TablePrefixCLBoxDblClick
       end
       object Label5: TLabel
-        Left = 322
-        Top = 106
-        Width = 215
-        Height = 17
+        Left = 370
+        Top = 130
+        AutoSize = True
         AutoSize = False
         Caption = '(use Table Prefixes to work with several'
         Font.Color = clGray
@@ -480,10 +462,9 @@ object OptionsModelForm: TOptionsModelForm
         Transparent = True
       end
       object Label6: TLabel
-        Left = 322
-        Top = 154
-        Width = 209
-        Height = 17
+        Left = 370
+        Top = 178
+        AutoSize = True
         AutoSize = False
         Caption = '(when working with Oracle use the Table'
         Font.Color = clGray
@@ -495,35 +476,33 @@ object OptionsModelForm: TOptionsModelForm
         Transparent = True
       end
       object DefDatatypeCBox: TComboBox
-        Left = 100
+        Left = 140
         Top = 10
-        Width = 125
-        Height = 21
+        Width = 120
+        Height = 25
         Style = csDropDownList
         ItemHeight = 15
         TabOrder = 4
       end
       object Label7: TLabel
-        Left = 12
+        Left = 0
         Top = 14
-        Width = 83
-        Height = 13
+        Width = 135
         Alignment = taRightJustify
         Caption = 'Default Datatype:'
       end
       object Label3: TLabel
-        Left = 19
+        Left = 0
         Top = 80
-        Width = 76
-        Height = 13
+        Width = 135
         Alignment = taRightJustify
         Caption = 'Database Type:'
         Visible = False
       end
       object DBTypeEd: TEdit
-        Left = 100
+        Left = 140
         Top = 76
-        Width = 125
+        Width = 85
         Height = 21
         Color = clBtnHighlight
         ReadOnly = True
@@ -531,10 +510,9 @@ object OptionsModelForm: TOptionsModelForm
         Visible = False
       end
       object Label14: TLabel
-        Left = 322
-        Top = 120
-        Width = 215
-        Height = 17
+        Left = 370
+        Top = 144
+        AutoSize = True
         AutoSize = False
         Caption = 'MySQL-DBs at once, e.g. store.product and'
         Font.Color = clGray
@@ -546,10 +524,9 @@ object OptionsModelForm: TOptionsModelForm
         Transparent = True
       end
       object Label15: TLabel
-        Left = 322
-        Top = 134
-        Width = 215
-        Height = 17
+        Left = 370
+        Top = 158
+        AutoSize = True
         AutoSize = False
         Caption = 'stock.inventory)'
         Font.Color = clGray
@@ -561,10 +538,9 @@ object OptionsModelForm: TOptionsModelForm
         Transparent = True
       end
       object Label16: TLabel
-        Left = 322
-        Top = 182
-        Width = 209
-        Height = 17
+        Left = 370
+        Top = 210
+        AutoSize = True
         AutoSize = False
         Caption = 'e.g. scott.product and tom.statistic)'
         Font.Color = clGray
@@ -576,10 +552,9 @@ object OptionsModelForm: TOptionsModelForm
         Transparent = True
       end
       object Label17: TLabel
-        Left = 322
-        Top = 168
-        Width = 215
-        Height = 17
+        Left = 370
+        Top = 196
+        AutoSize = True
         AutoSize = False
         Caption = 'Prefixes to access tables from different users,'
         Font.Color = clGray
@@ -610,15 +585,14 @@ object OptionsModelForm: TOptionsModelForm
       object Label8: TLabel
         Left = 2
         Top = 2
-        Width = 58
-        Height = 13
+        AutoSize = True
         Caption = 'Plugin Data:'
       end
       object PluginRecordsStringGrid: TStringGrid
-        Left = 2
-        Top = 16
-        Width = 197
-        Height = 157
+        Left = 4
+        Top = 20
+        Width = 250
+        Height = 330
         ColCount = 2
         DefaultRowHeight = 16
         FixedCols = 0
@@ -627,17 +601,16 @@ object OptionsModelForm: TOptionsModelForm
         OnClick = PluginRecordsStringGridClick
       end
       object Label9: TLabel
-        Left = 217
+        Left = 268
         Top = 2
-        Width = 104
-        Height = 13
+        AutoSize = True
         Caption = 'Data Sub-Parameters:'
       end
       object PluginParamsStringGrid: TStringGrid
-        Left = 216
-        Top = 16
-        Width = 339
-        Height = 191
+        Left = 268
+        Top = 20
+        Width = 410
+        Height = 330
         ColCount = 1
         DefaultColWidth = 600
         DefaultRowHeight = 16
@@ -646,10 +619,10 @@ object OptionsModelForm: TOptionsModelForm
         TabOrder = 3
       end
       object RemovePluginData: TBitBtn
-        Left = 2
-        Top = 182
-        Width = 197
-        Height = 25
+        Left = 4
+        Top = 356
+        Width = 250
+        Height = 28
         Caption = 'Remove selected Plugin Data'
         TabOrder = 4
         OnClick = RemovePluginDataClick
@@ -658,259 +631,38 @@ object OptionsModelForm: TOptionsModelForm
   end
   object BottomPnl: TPanel
     Left = 0
-    Top = 272
-    Width = 743
-    Height = 35
+    Top = 458
+    Width = 900
+    Height = 42
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    object AbortBtn: TSpeedButton
-      Left = 700
-      Top = 0
-      Width = 23
-      Height = 22
-      Enabled = False
-      Flat = True
-      Glyph.Data = {
-        360C0000424D360C000000000000360000002800000040000000100000000100
-        180000000000000C0000120B0000120B00000000000000000000E9EBEBE9EBEB
-        E0E2E2C6C8C8BABCBCD0D2D2E5E7E7E9EBEBE9EBEBE8EAEADDDFDFC4C6C6BCBE
-        BED3D5D5E6E8E8E9EBEBE9EBEBE9EBEBE6E8E8DFE1E1DBDDDDE2E4E4E8EAEAE9
-        EBEBE9EBEBE9EBEBE5E7E7DEE0E0DCDEDEE3E5E5E8EAEAE9EBEBE9EBEBE9EBEB
-        E0E2E2C6C8C8BABCBCD0D2D2E5E7E7E9EBEBE9EBEBE8EAEADDDFDFC4C6C6BCBE
-        BED3D5D5E6E8E8E9EBEBE9EBEBE9EBEBE0E2E2C6C8C8BABCBCD0D2D2E5E7E7E9
-        EBEBE9EBEBE8EAEADDDFDFC4C6C6BCBEBED3D5D5E6E8E8E9EBEBE9EBEBE0E2E2
-        B9BBBB6C6E6E4F5050858686CFD1D1E5E7E7E8EAEADDDFDFB1B2B26768685253
-        538D8E8ED2D4D4E6E8E8E9EBEBE6E8E8D9DBDBA6A8A8878888B3B4B4E2E4E4E8
-        EAEAE9EBEBE5E7E7D2D4D4A1A2A28B8C8CB9BABAE3E5E5E8EAEAE9EBEBE0E2E2
-        B9BBBB6C6E6E4F5050858686CFD1D1E5E7E7E8EAEADDDFDFB1B2B26768685253
-        538D8E8ED2D4D4E6E8E8E9EBEBE0E2E2B9BBBB6C6E6E4F5050858686CFD1D1E5
-        E7E7E8EAEADDDFDFB1B2B26768685253538D8E8ED2D4D4E6E8E8E5E7E7C3C5C5
-        48494901010905054A0000007E7F7FCECFCFD9DBDBB1B2B23535350000130000
-        41000000929292DBDDDDE8EAEADCDDDD6E6F6F0404041D1D1D010101AAACACE1
-        E3E3E4E6E6D2D4D4575858070707161616010101B7B9B9E5E7E7E5E7E7C3C5C5
-        48494901010905054A0000007E7F7FCECFCFD9DBDBB1B2B23535350000130000
-        41000000929292DBDDDDE5E7E7C3C5C548494901010905054A0000007E7F7FCE
-        CFCFD9DBDBB1B2B2353535000013000041000000929292DBDDDDDFE1E1656666
-        0101091414BD1818F908085D000000797A7A9E9F9F3535350101130303CC0202
-        F600004A010101B9BABAE3E5E57778780505054D4D4D636363242424010101A9
-        AAAACDCFCF575858080808474747535353191919010101C4C5C5DFE1E1656666
-        0101091414BD1818F908085D000000797A7A9E9F9F3535350101130303CC0202
-        F600004A010101B9BABADFE1E16566660101091414BD1818F908085D00000079
-        7A7A9E9F9F3535350101130303CC0202F600004A010101B9BABABCBDBD03030A
-        1E1EBE2424FE2020FE1C1CF909095D0000001717170101130A0ACC0A0AFF0707
-        FF0505F60202474E4E4EBDBFBF0505055353536C6C6C6A6A6A66666625252501
-        01012E2E2E0808084B4B4B5B5B5B5A5A5A5555551919194F5050BCBDBD03030A
-        1E1EBE2424FE2020FE1C1CF909095D0000001717170101130A0ACC0A0AFF0707
-        FF0505F60202474E4E4EBCBDBD03030A1E1EBE2424FE2020FE1C1CF909095D00
-        00001717170101130A0ACC0A0AFF0707FF0505F60202474E4E4EDDDFDF8384BF
-        3333FC2D2DFE2929FE2525FE2020F90B0B5D0202131212CB1414FF1111FF0E0E
-        FF0B0BFF3334E3C6C8C8DDDFDF9899997676767272727070706D6D6D69696927
-        27270909095050506262626060605E5E5E5C5C5C6F6F6FC6C8C8DDDFDF8384BF
-        3333FC2D2DFE2929FE2525FE2020F90B0B5D0202131212CB1414FF1111FF0E0E
-        FF0B0BFF3334E3C6C8C8DDDFDF8384BF3333FC2D2DFE2929FE2525FE2020F90B
-        0B5D0202131212CB1414FF1111FF0E0EFF0B0BFF3334E3C6C8C8E9EBEBE9EBEB
-        A7A8EF3939FD3232FE2E2EFE2A2AFE2525F91E1ED91F1FFE1B1BFE1818FE1515
-        FE4747F8E1E3ECE9EBEBE9EBEBE9EBEBC0C2C27A7A7A7676767373737070706C
-        6C6C5C5C5C696969676767656565626262828383E4E6E6E9EBEBE9EBEBE9EBEB
-        A7A8EF3939FD3232FE2E2EFE2A2AFE2525F91E1ED91F1FFE1B1BFE1818FE1515
-        FE4747F8E1E3ECE9EBEBE9EBEBE9EBEBA7A8EF3939FD3232FE2E2EFE2A2AFE25
-        25F91E1ED91F1FFE1B1BFE1818FE1515FE4747F8E1E3ECE9EBEBE9EBEBE9EBEB
-        E8EAEAA1A2E73D3DFC3737FE3333FE2F2FFE2C2CFE2828FE2424FE2020FE4848
-        F0DEE0E8E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBBFC0C07E7E7E79797976767674
-        74747171716F6F6F6C6C6C6A6A6A868787E3E5E5E9EBEBE9EBEBE9EBEBE9EBEB
-        E8EAEAA1A2E73D3DFC3737FE3333FE2F2FFE2C2CFE2828FE2424FE2020FE4848
-        F0DEE0E8E9EBEBE9EBEBE9EBEBE9EBEBE8EAEAA1A2E73D3DFC3737FE3333FE2F
-        2FFE2C2CFE2828FE2424FE2020FE4848F0DEE0E8E9EBEBE9EBEBE9EBEBE8EAEA
-        DDDFDFB7B8B86767AA4141FA3D3DFE3939FE3535FE3131FE2D2DFE3838D69799
-        A0CFD1D1E5E7E7E9EBEBE9EBEBE9EBEBE5E7E7DADCDCAFB0B08080807C7C7C7A
-        7A7A777777757575727272858585CED0D0E2E4E4E8EAEAE9EBEBE9EBEBE8EAEA
-        DDDFDFB7B8B86767AA4141FA3D3DFE3939FE3535FE3131FE2D2DFE3838D69799
-        A0CFD1D1E5E7E7E9EBEBE9EBEBE8EAEADDDFDFB7B8B86767AA4141FA3D3DFE39
-        39FE3535FE3131FE2D2DFE3838D69799A0CFD1D1E5E7E7E9EBEBE8EAEADDDFDF
-        B1B2B21D1E1E0606134141DA4646FD4242FD3E3EFE3A3AFE3636FE1515670000
-        007B7C7CCFD1D1E5E7E7E9EBEBE5E7E7D2D4D43031310B0B0B76767683838380
-        80807D7D7D7B7B7B787878323232010101A6A8A8E2E4E4E8EAEAE8EAEADDDFDF
-        B1B2B21D1E1E0606134141DA4646FD4242FD3E3EFE3A3AFE3636FE1515670000
-        007B7C7CCFD1D1E5E7E7E8EAEADDDFDFB1B2B21D1E1E0606134141DA4646FD42
-        42FD3E3EFE3A3AFE3636FE1515670000007B7C7CCFD1D1E5E7E7E5E7E7BDBEBE
-        3839390707134646CA5353FD4F4FFD4B4BFD4747FD4343FD3F3FFD3A3AF91414
-        5D000000868888D9DBDBE8EAEAD6D8D85858580C0C0C7272728B8B8B89898986
-        86868383838181817E7E7E7A7A7A2D2D2D010101ADAFAFE4E6E6E5E7E7BDBEBE
-        3839390707134646CA5353FD4F4FFD4B4BFD4747FD4343FD3F3FFD3A3AF91414
-        5D000000868888D9DBDBE5E7E7BDBEBE3839390707134646CA5353FD4F4FFD4B
-        4BFD4747FD4343FD3F3FFD3A3AF914145D000000868888D9DBDBDBDDDD505151
-        0808134F4FCA5F5FFD5C5CFD5858FD5454FD5050FD4D4DFD4949FD4545FD4040
-        F816165D010101ADAFAFDFE1E15E5F5F0C0C0C7777779393939191918E8E8E8C
-        8C8C8989898787878484848282827D7D7D2E2E2E010101B9BABADBDDDD505151
-        0808134F4FCA5F5FFD5C5CFD5858FD5454FD5050FD4D4DFD4949FD4545FD4040
-        F816165D010101ADAFAFDBDDDD5051510808134F4FCA5F5FFD5C5CFD5858FD54
-        54FD5050FD4D4DFD4949FD4545FD4040F816165D010101ADAFAFB3B5B5090914
-        5757CA6A6AFC6767FD6464FD6161FD7E7FF6ADAEF05858FC5252FD4E4EFD4A4A
-        FD4545F819195D373737B5B7B70D0D0D7D7D7D9A9A9A989898969696949494A7
-        A8A8C4C6C68F8F8F8A8A8A8888888585858080802F2F2F383838B3B5B5090914
-        5757CA6A6AFC6767FD6464FD6161FD7E7FF6ADAEF05858FC5252FD4E4EFD4A4A
-        FD4545F819195D373737B3B5B50909145757CA6A6AFC6767FD6464FD6161FD7E
-        7FF6ADAEF05858FC5252FD4E4EFD4A4AFD4545F819195D373737E9EBEBA3A4C8
-        7575FA7171FC6E6EFC6B6BFC8787F5E4E6ECE9EBEBB4B5EF5D5DFC5757FD5353
-        FD4F4FFD6666E7D0D2D2E9EBEBB1B2B2A1A2A29F9F9F9D9D9D9B9B9BADADADE6
-        E8E8E9EBEBC9CACA9292928E8E8E8B8B8B898989929292D0D2D2E9EBEBA3A4C8
-        7575FA7171FC6E6EFC6B6BFC8787F5E4E6ECE9EBEBB4B5EF5D5DFC5757FD5353
-        FD4F4FFD6666E7D0D2D2E9EBEBA3A4C87575FA7171FC6E6EFC6B6BFC8787F5E4
-        E6ECE9EBEBB4B5EF5D5DFC5757FD5353FD4F4FFD6666E7D0D2D2E9EBEBE9EBEB
-        C0C1EE7979FB7575FC8E8FF6E5E7ECE9EBEBE9EBEBE9EBEBB6B7EF6161FC5C5C
-        FD7B7BF6E4E6ECE9EBEBE9EBEBE9EBEBD1D2D2A4A4A4A1A1A1B1B2B2E6E8E8E9
-        EBEBE9EBEBE9EBEBCACBCB959595919191A4A5A5E6E8E8E9EBEBE9EBEBE9EBEB
-        C0C1EE7979FB7575FC8E8FF6E5E7ECE9EBEBE9EBEBE9EBEBB6B7EF6161FC5C5C
-        FD7B7BF6E4E6ECE9EBEBE9EBEBE9EBEBC0C1EE7979FB7575FC8E8FF6E5E7ECE9
-        EBEBE9EBEBE9EBEBB6B7EF6161FC5C5CFD7B7BF6E4E6ECE9EBEBE9EBEBE9EBEB
-        E9EBEBC3C4F19899F7E4E6EBE5E7E7E5E7E7E8EAEAE9EBEBE9EBEBBABBF28989
-        F8E4E6ECE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBD2D3D3B7B7B7E7E8E8E9EBEBE9
-        EBEBE8EAEAE5E7E7E5E7E7CBCCCCADADADE6E8E8E9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBC3C4F19899F7E5E7ECE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBB9BAF18788
-        F7E0E2E8E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBC3C4F19899F7E5E7ECE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBBABBF28989F8E4E6ECE8EAEAE5E7E7}
-      Margin = 3
-      NumGlyphs = 4
-      Transparent = False
+    object AbortBtn: TButton
+      Left = 720
+      Top = 8
+      Width = 80
+      Height = 28
+      Anchors = [akRight, akBottom]
+      Caption = 'Cancel'
+      TabOrder = 1
       OnClick = AbortBtnClick
-      OnMouseEnter = SubmitBtnMouseEnter
-      OnMouseLeave = SubmitBtnMouseLeave
     end
-    object SubmitBtn: TSpeedButton
-      Left = 672
-      Top = 0
-      Width = 23
-      Height = 22
-      Enabled = False
-      Flat = True
-      Glyph.Data = {
-        760E0000424D760E00000000000036000000280000004C000000100000000100
-        180000000000400E0000120B0000120B00000000000000000000E9EBEBE9EBEB
-        E9EBEBE9EBEBE8EAEADBDDDDC4C6C6C2C3C3D9DADAE8EAEAE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8
-        EAEADBDDDDC4C6C6C2C3C3D9DADAE8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDC4C6
-        C6C2C3C3D9DADAE8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDC4C6C6C2C3C3D9DADA
-        E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB6869696263639FA0A0D8D9D9E8EAEAE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E8EAEADBDDDDA9ABAB6869696263639FA0A0D8D9D9E8EAEAE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9
-        ABAB6869696263639FA0A0D8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB6869696263
-        639FA0A0D8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB2829291C0901250D021616169E9F9F
-        D8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE8EAEADBDDDDA9ABAB2829290A0A0A0E0E0E1616169E9F9FD8D9D9E8EAEAE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDD
-        A9ABAB2829291C0901250D021616169E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB2829291C
-        0901250D021616169E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB2829291C0901D54A0DEC55132A10
-        041414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE8EAEADBDDDDA9ABAB2829290A0A0A5050505D5D5D1111111414149E9F9F
-        D8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDD
-        DDA9ABAB2829291C0901D54A0DEC55132A10041414149E9F9FD8D9D9E8EAEAE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB282929
-        1C0901D54A0DEC55132A10041414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB2829291C0901D54A0DFF5C14FF
-        5F18EC5B1B2A11061414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE8EAEADBDDDDA9ABAB2829290A0A0A5050506363636767676262621212
-        121414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADB
-        DDDDA9ABAB2829291C0901D54A0DFF5C14FF5F18EC5B1B2A11061414149E9F9F
-        D8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE8EAEADBDDDDA9ABAB2829
-        291C0901D54A0DFF5C14FF5F18EC5B1B2A11061414149E9F9FD8D9D9E8EAEAE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE2E4E4B2B4B4292A2A1C0901D54A0DFF5C13
-        FF5F18FF621DFF6522EC61242A12071414149E9F9FD8D9D9E8EAEAE9EBEBE9EB
-        EBE9EBEBE9EBEBE2E4E4B2B4B4292A2A0A0A0A5050506363636666666A6A6A6D
-        6D6D6969691313131414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEB
-        E2E4E4B2B4B4292A2A1C0901D54A0DFF5C13FF5F18FF621DFF6522EC61242A12
-        071414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBE2E4E4B2B4B429
-        2A2A1C0901D54A0DFF5C13FF5F18FF621DFF6522EC61242A12071414149E9F9F
-        D8D9D9E8EAEAE9EBEBE9EBEBE9EBEBE9EBEBD2D4D43B3B3B1C0901D54A0DFF5B
-        13FF5E18FF621CFF6521FF6926FF6C2CEC682D2A13091414149E9F9FD8D9D9E8
-        EAEAE9EBEBE9EBEBE9EBEBD2D4D43B3B3B0A0A0A5050506363636666666A6A6A
-        6D6D6D7171717575756F6F6F1414141414149E9F9FD8D9D9E8EAEAE9EBEBE9EB
-        EBE9EBEBD2D4D43B3B3B1C0901D54A0DFF5B13FF5E18FF621CFF6521FF6926FF
-        6C2CEC682D2A13091414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEBD2D4D4
-        3B3B3B1C0901D54A0DFF5B13FF5E18FF621CFF6521FF6926FF6C2CEC682D2A13
-        091414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBE9EBEB9293931D0A02D54A0DFF
-        5B13FF5E17FF621CFC6D2FFB753AFF6C2BFF7031FF7436EC6E372A140B141414
-        9E9F9FD8D9D9E8EAEAE9EBEBE9EBEB9293930B0B0B5050506363636666666969
-        697575757C7D7D7474747878787C7C7C7676761616161414149E9F9FD8D9D9E8
-        EAEAE9EBEBE9EBEB9293931D0A02D54A0DFF5B13FF5E17FF621CFC6D2FFB753A
-        FF6C2BFF7031FF7436EC6E372A140B1414149E9F9FD8D9D9E8EAEAE9EBEBE9EB
-        EB9293931D0A02D54A0DFF5B13FF5E17FF621CFC6D2FFB753AFF6C2BFF7031FF
-        7436EC6E372A140B1414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBCFD1D1C97B58
-        FF5B13FF5E17FF611CFC6E2FECCDBEEBDCD5FB7C43FF7336FF773BFF7B40EC75
-        412A150C1414149E9F9FD8D9D9E8EAEAE9EBEBCFD1D17D7E7E62626266666669
-        6969757575CDCECEDBDDDD8383837C7C7C8080808383837D7D7D171717141414
-        9E9F9FD8D9D9E8EAEAE9EBEBCFD1D1C97B58FF5B13FF5E17FF611CFC6E2FECCD
-        BEEBDCD5FB7C43FF7336FF773BFF7B40EC75412A150C1414149E9F9FD8D9D9E8
-        EAEAE9EBEBCFD1D1C97B58FF5B13FF5E17FF611CFC6E2FECCDBEEBDCD5FB7C43
-        FF7336FF773BFF7B40EC75412A150C1414149E9F9FD8D9D9E8EAEAE9EBEBE9EB
-        EBE9EBEBF39971FF611BFD6D2EECCDBEE9EBEBE9EBEBEBDDD6FB824CFF7A40FF
-        7E45FF824AEC7B492A170E1414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEB9C9D9D
-        696969757575CDCECEE9EBEBE9EBEBDCDEDE8989898383838787878B8B8B8383
-        831818181414149E9F9FD8D9D9E8EAEAE9EBEBE9EBEBF39971FF611BFD6D2EEC
-        CDBEE9EBEBE9EBEBEBDDD6FB824CFF7A40FF7E45FF824AEC7B492A170E141414
-        9E9F9FD8D9D9E8EAEAE9EBEBE9EBEBF39971FF611BFD6D2EECCDBEE9EBEBE9EB
-        EBEBDDD6FB824CFF7A40FF7E45FF824AEC7B492A170E1414149E9F9FD8D9D9E8
-        EAEAE9EBEBE9EBEBE9EBEBF5A480EECEC0E9EBEBE9EBEBE9EBEBE9EBEBEBDED7
-        FB8856FF824AFF854FFF8854EC82522A180F141414A5A7A7E0E2E2E9EBEBE9EB
-        EBE9EBEBA7A8A8CED0D0E9EBEBE9EBEBE9EBEBE9EBEBDDDFDF9090908A8A8A8E
-        8E8E9292928A8A8A191919141414A5A7A7E0E2E2E9EBEBE9EBEBE9EBEBF5A480
-        EECEC0E9EBEBE9EBEBE9EBEBE9EBEBEBDED7FB8856FF824AFF854FFF8854EC82
-        522A180F141414A5A7A7E0E2E2E9EBEBE9EBEBE9EBEBF5A480EECEC0E9EBEBE9
-        EBEBE9EBEBE9EBEBEBDED7FB8856FF824AFF854FFF8854EC82522A180F141414
-        A5A7A7E0E2E2E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBEBDED8FB8F5EFF8854FF8C58FF8F5DEC875A2A18111D1D1DC8CACAE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBDEDFDF
-        9697979191919595959898988F8F8F1A1A1A1D1D1DC8CACAE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBDED8FB8F5EFF8854FF
-        8C58FF8F5DEC875A2A18111D1D1DC8CACAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBDED8FB8F5EFF8854FF8C58FF8F5DEC87
-        5A2A18111D1D1DC8CACAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBEBDFD9FB9466FF8E5DFF9161FF9465EC8C602B1A12
-        787979E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBDEE0E09D9D9D9898989B9B9B9E9E9E9494941C1C1C787979E9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBDFD9
-        FB9466FF8E5DFF9161FF9465EC8C602B1A12787979E9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBDFD9FB9466FF8E5DFF
-        9161FF9465EC8C602B1A12787979E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBE0DAFB996EFF9464FF9668FF99
-        6BD49B81C8CACAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBDFE1E1A2A2A29E9E9EA0A0A0A3A3A3A0A1A1C8CACA
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBEBE0DAFB996EFF9464FF9668FF996BD49B81C8CACAE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBE0DA
-        FB996EFF9464FF9668FF996BD49B81C8CACAE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBE1DBFC9E76FF
-        996BF5B497E9E9E9E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE0E2E2A7A7A7A2A2A2BABABAE8EA
-        EAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBEBE1DBFC9E76FF996BF5B497E9E9E9E9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBEBE1DBFC9E76FF996BF5B497E9E9E9E9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        EBE2DDF5BDA4E9E9E9E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE1E3E3C2C3C3E8
-        EAEAE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEB
-        E9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBEBE2DDF5BDA4E9E9E9E9EBEBE9EB
-        EBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9EBEBE9
-        EBEBE9EBEBE9EBEBE9EBEBEBE2DDF5BDA4E9E9E9E9EBEBE9EBEB}
-      NumGlyphs = 4
+    object SubmitBtn: TButton
+      Left = 808
+      Top = 8
+      Width = 80
+      Height = 28
+      Anchors = [akRight, akBottom]
+      Caption = 'OK'
+      Default = True
+      TabOrder = 2
       OnClick = SubmitBtnClick
-      OnMouseEnter = SubmitBtnMouseEnter
-      OnMouseLeave = SubmitBtnMouseLeave
     end
     object MakeEditSettingsDefaultBtn: TBitBtn
-      Left = 172
-      Top = 0
-      Width = 321
-      Height = 23
+      Left = 10
+      Top = 8
+      Width = 380
+      Height = 28
       Caption = 'Make these Settings the Default Settings for all new Models'
       TabOrder = 0
       Visible = False
@@ -918,10 +670,11 @@ object OptionsModelForm: TOptionsModelForm
     end
   end
   object PageControlTreeView: TTreeView
-    Left = 17
+    Left = 10
     Top = 15
-    Width = 142
-    Height = 242
+    Width = 170
+    Height = 438
+    Anchors = [akTop, akLeft, akBottom]
     Items.Data = {
       0400000028000000FFFFFFFFFFFFFFFF0020EE02000000000000000000000000
       0F47656E6572616C204F7074696F6E7328000000FFFFFFFFFFFFFFFF0020EE02
@@ -934,19 +687,25 @@ object OptionsModelForm: TOptionsModelForm
     OnChange = PageControlTreeViewChange
   end
   object PageControlTitlePnl: TPanel
-    Left = 170
-    Top = 15
-    Width = 553
-    Height = 21
+    Left = 186
+    Top = 14
+    Width = 700
+    Height = 28
+    Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
-    Color = clBtnShadow
+    Color = clHighlight
+    Font.Color = clWhite
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 3
     object PageControlTitleLbl: TLabel
-      Left = 6
-      Top = 4
-      Width = 34
-      Height = 13
+      Left = 8
+      Top = 5
+      AutoSize = True
       Caption = 'Indices'
+      Font.Color = clWhite
+      Font.Style = [fsBold]
+      ParentFont = False
       Transparent = True
     end
   end

@@ -152,8 +152,7 @@ object PaletteDataTypesReplaceForm: TPaletteDataTypesReplaceForm
   object Label1: TLabel
     Left = 20
     Top = 14
-    Width = 98
-    Height = 13
+    AutoSize = True
     Caption = 'Datatype to Replace'
   end
   object DestCBox: TComboBox
@@ -169,8 +168,7 @@ object PaletteDataTypesReplaceForm: TPaletteDataTypesReplaceForm
   object Label2: TLabel
     Left = 206
     Top = 14
-    Width = 62
-    Height = 13
+    AutoSize = True
     Caption = 'Replace with'
   end
   object GroupBox1: TGroupBox
@@ -218,8 +216,7 @@ object PaletteDataTypesReplaceForm: TPaletteDataTypesReplaceForm
   object Label3: TLabel
     Left = 266
     Top = 58
-    Width = 38
-    Height = 13
+    AutoSize = True
     Caption = 'Params:'
   end
   object DestParamEd: TEdit

@@ -1115,8 +1115,7 @@ object PaletteModelFrom: TPaletteModelFrom
       object Label1: TLabel
         Left = 4
         Top = 6
-        Width = 46
-        Height = 13
+        AutoSize = True
         Caption = 'All Tables'
       end
     end

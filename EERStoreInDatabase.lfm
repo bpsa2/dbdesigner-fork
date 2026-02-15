@@ -84,8 +84,7 @@ object EERStoreInDatabaseForm: TEERStoreInDatabaseForm
     object StatusLbl: TLabel
       Left = 20
       Top = 3
-      Width = 122
-      Height = 12
+      AutoSize = True
       Caption = 'Not connected to a Database.'
       Font.CharSet = 0
       Font.Color = clBlack
@@ -308,8 +307,7 @@ object EERStoreInDatabaseForm: TEERStoreInDatabaseForm
     object Label1: TLabel
       Left = 20
       Top = 12
-      Width = 103
-      Height = 13
+      AutoSize = True
       Caption = 'Database Connection'
     end
     object DBConnEd: TEdit
@@ -332,8 +330,7 @@ object EERStoreInDatabaseForm: TEERStoreInDatabaseForm
     object Label2: TLabel
       Left = 20
       Top = 12
-      Width = 60
-      Height = 13
+      AutoSize = True
       Caption = 'Model Name'
     end
     object ModelNameEd: TEdit
@@ -366,8 +363,7 @@ object EERStoreInDatabaseForm: TEERStoreInDatabaseForm
     object VersionLbl: TLabel
       Left = 246
       Top = 12
-      Width = 35
-      Height = 13
+      AutoSize = True
       Caption = 'Version'
     end
     object UseVersionCBox: TCheckBox
@@ -440,8 +436,7 @@ object EERStoreInDatabaseForm: TEERStoreInDatabaseForm
     object Label3: TLabel
       Left = 20
       Top = 14
-      Width = 84
-      Height = 13
+      AutoSize = True
       Caption = 'Model Information'
     end
     object InfoMemo: TMemo

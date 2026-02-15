@@ -94,15 +94,13 @@ object EditorQueryForm: TEditorQueryForm
     object TableLbl: TLabel
       Left = 30
       Top = 18
-      Width = 27
-      Height = 13
+      AutoSize = True
       Caption = 'Table'
     end
     object Label1: TLabel
       Left = 428
       Top = 18
-      Width = 103
-      Height = 13
+      AutoSize = True
       Caption = 'Database Connection'
     end
     object DBConnEd: TEdit

@@ -21,8 +21,7 @@ object EditorDatatypeForm: TEditorDatatypeForm
   object Label1: TLabel
     Left = 20
     Top = 14
-    Width = 74
-    Height = 13
+    AutoSize = True
     Caption = 'Datatype Name'
   end
   object DatatypeNameEd: TEdit
@@ -35,8 +34,7 @@ object EditorDatatypeForm: TEditorDatatypeForm
   object Label3: TLabel
     Left = 150
     Top = 14
-    Width = 29
-    Height = 13
+    AutoSize = True
     Caption = 'Group'
   end
   object GroupLU: TComboBox
@@ -66,8 +64,7 @@ object EditorDatatypeForm: TEditorDatatypeForm
   object Label2: TLabel
     Left = 20
     Top = 58
-    Width = 53
-    Height = 13
+    AutoSize = True
     Caption = 'Description'
   end
   object GroupBox1: TGroupBox
@@ -227,8 +224,7 @@ object EditorDatatypeForm: TEditorDatatypeForm
   object Label4: TLabel
     Left = 304
     Top = 14
-    Width = 61
-    Height = 13
+    AutoSize = True
     Caption = 'Synonymgrp.'
   end
   object BottomPnl: TPanel
@@ -500,8 +496,7 @@ object EditorDatatypeForm: TEditorDatatypeForm
     object Label5: TLabel
       Left = 31
       Top = 26
-      Width = 88
-      Height = 13
+      AutoSize = True
       Caption = 'Physical Datatype:'
     end
     object PhysicalDatatypeEd: TEdit

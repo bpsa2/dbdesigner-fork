@@ -104,8 +104,8 @@ type
     Label18: TLabel;
     DefaultTableTypeCBox: TComboBox;
     BottomPnl: TPanel;
-    AbortBtn: TSpeedButton;
-    SubmitBtn: TSpeedButton;
+    AbortBtn: TButton;
+    SubmitBtn: TButton;
     RemovePluginData: TBitBtn;
     MakeEditSettingsDefaultBtn: TBitBtn;
     GroupBox3: TGroupBox;
@@ -144,8 +144,7 @@ type
     procedure SubmitBtnClick(Sender: TObject);
     procedure AbortBtnClick(Sender: TObject);
     procedure ApplyChanges;
-    procedure SubmitBtnMouseEnter(Sender: TObject);
-    procedure SubmitBtnMouseLeave(Sender: TObject);
+
     procedure UsePosGridCBoxClick(Sender: TObject);
     procedure RemovePluginDataClick(Sender: TObject);
     procedure PageControlChange(Sender: TObject);
@@ -441,15 +440,7 @@ begin
   Close;
 end;
 
-procedure TOptionsModelForm.SubmitBtnMouseEnter(Sender: TObject);
-begin
-  TSpeedButton(Sender).Enabled:=True;
-end;
 
-procedure TOptionsModelForm.SubmitBtnMouseLeave(Sender: TObject);
-begin
-  TSpeedButton(Sender).Enabled:=False;
-end;
 
 procedure TOptionsModelForm.UsePosGridCBoxClick(Sender: TObject);
 begin

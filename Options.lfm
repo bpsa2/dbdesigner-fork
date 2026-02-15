@@ -15,17 +15,17 @@ object OptionsForm: TOptionsForm
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   object PageControlTitleShape: TShape
-    Left = 169
+    Left = 197
     Top = 14
-    Width = 555
+    Width = 527
     Height = 23
     Brush.Color = clBtnFace
     Brush.Style = bsClear
   end
   object PageControl: TPageControl
-    Left = 164
+    Left = 192
     Top = 40
-    Width = 563
+    Width = 535
     Height = 263
     ActivePage = DBOptionsSheet
     ShowTabs = False
@@ -41,10 +41,9 @@ object OptionsForm: TOptionsForm
         Caption = 'Startup'
         TabOrder = 0
         object Label2: TLabel
-          Left = 21
+          Left = 0
           Top = 26
-          Width = 102
-          Height = 13
+          Width = 123
           Alignment = taRightJustify
           Caption = 'Splash Screen Delay:'
         end
@@ -58,8 +57,7 @@ object OptionsForm: TOptionsForm
         object Label3: TLabel
           Left = 194
           Top = 26
-          Width = 13
-          Height = 13
+          AutoSize = True
           Caption = 'ms'
         end
         object ReopenLastFileCBox: TCheckBox
@@ -204,8 +202,7 @@ object OptionsForm: TOptionsForm
         object Label12: TLabel
           Left = 14
           Top = 26
-          Width = 51
-          Height = 13
+          AutoSize = True
           Caption = 'Language:'
         end
         object LanguageCBox: TComboBox
@@ -256,8 +253,7 @@ object OptionsForm: TOptionsForm
       object Label1: TLabel
         Left = 290
         Top = 6
-        Width = 106
-        Height = 13
+        AutoSize = True
         Caption = 'Default Region Colors:'
       end
       object RegionColorsMemo: TMemo
@@ -271,8 +267,7 @@ object OptionsForm: TOptionsForm
       object Label4: TLabel
         Left = 290
         Top = 116
-        Width = 153
-        Height = 13
+        AutoSize = True
         Caption = '(Format: Colorname=#RRGGBB)'
         Color = clBtnFace
         Font.Color = clGray
@@ -284,10 +279,9 @@ object OptionsForm: TOptionsForm
         ParentFont = False
       end
       object Label13: TLabel
-        Left = 4
+        Left = 0
         Top = 12
-        Width = 79
-        Height = 13
+        Width = 83
         Alignment = taRightJustify
         Caption = 'Application Font:'
       end
@@ -360,15 +354,13 @@ object OptionsForm: TOptionsForm
         object Label6: TLabel
           Left = 18
           Top = 54
-          Width = 76
-          Height = 13
+          AutoSize = True
           Caption = 'Header Preview'
         end
         object Label5: TLabel
-          Left = 70
+          Left = 47
           Top = 28
-          Width = 26
-          Height = 13
+          Width = 49
           Alignment = taRightJustify
           Caption = 'Style:'
         end
@@ -388,10 +380,9 @@ object OptionsForm: TOptionsForm
       Caption = 'DBOptionsSheet'
       ImageIndex = 3
       object Label7: TLabel
-        Left = 2
+        Left = 0
         Top = 212
-        Width = 113
-        Height = 13
+        Width = 115
         Alignment = taRightJustify
         Caption = 'Default Database Type:'
         Visible = False
@@ -417,10 +408,9 @@ object OptionsForm: TOptionsForm
         TabOrder = 2
       end
       object Label10: TLabel
-        Left = 32
+        Left = 0
         Top = 10
-        Width = 83
-        Height = 13
+        Width = 115
         Alignment = taRightJustify
         Caption = 'Reserved Words:'
       end
@@ -432,10 +422,9 @@ object OptionsForm: TOptionsForm
         Caption = 'Various'
         TabOrder = 4
         object Label11: TLabel
-          Left = 15
+          Left = 0
           Top = 145
-          Width = 87
-          Height = 13
+          Width = 102
           Alignment = taRightJustify
           Caption = 'Font for SQL Text:'
         end
@@ -524,8 +513,7 @@ object OptionsForm: TOptionsForm
         object Label18: TLabel
           Left = 21
           Top = 24
-          Width = 94
-          Height = 13
+          AutoSize = True
           Caption = 'Default Table Type:'
         end
         object DefaultTableTypeCBox: TComboBox
@@ -557,8 +545,7 @@ object OptionsForm: TOptionsForm
         object Label19: TLabel
           Left = 41
           Top = 64
-          Width = 297
-          Height = 13
+          AutoSize = True
           Caption = 
             'if Reference Definition is activated for the Relation (for InnoD' +
             'B)'
@@ -579,8 +566,7 @@ object OptionsForm: TOptionsForm
         object Label23: TLabel
           Left = 22
           Top = 113
-          Width = 88
-          Height = 13
+          AutoSize = True
           Caption = 'Foreign Key Prefix:'
         end
         object FKPrefixEd: TEdit
@@ -596,8 +582,7 @@ object OptionsForm: TOptionsForm
         object Label24: TLabel
           Left = 171
           Top = 113
-          Width = 93
-          Height = 13
+          AutoSize = True
           Caption = 'Foreign Key Postfix:'
         end
         object FKPostfixEd: TEdit
@@ -645,10 +630,9 @@ object OptionsForm: TOptionsForm
         Caption = ' '
         TabOrder = 3
         object GridWidthLbl: TLabel
-          Left = 17
+          Left = 0
           Top = 24
-          Width = 50
-          Height = 13
+          Width = 67
           Alignment = taRightJustify
           Caption = 'Grid width:'
         end
@@ -660,10 +644,9 @@ object OptionsForm: TOptionsForm
           TabOrder = 1
         end
         object GridHeightLbl: TLabel
-          Left = 13
+          Left = 0
           Top = 52
-          Width = 54
-          Height = 13
+          Width = 67
           Alignment = taRightJustify
           Caption = 'Grid height:'
         end
@@ -677,15 +660,13 @@ object OptionsForm: TOptionsForm
         object GridWidthUnitsLbl: TLabel
           Left = 116
           Top = 24
-          Width = 24
-          Height = 13
+          AutoSize = True
           Caption = 'Units'
         end
         object GridHeightUnitsLbl: TLabel
           Left = 116
           Top = 52
-          Width = 24
-          Height = 13
+          AutoSize = True
           Caption = 'Units'
         end
       end
@@ -709,8 +690,7 @@ object OptionsForm: TOptionsForm
         object Label8: TLabel
           Left = 8
           Top = 4
-          Width = 143
-          Height = 39
+          AutoSize = True
           AutoSize = False
           Caption = 
             'These parameters are the default settings when a new model is cr' +
@@ -720,8 +700,7 @@ object OptionsForm: TOptionsForm
         object Label9: TLabel
           Left = 8
           Top = 48
-          Width = 145
-          Height = 53
+          AutoSize = True
           AutoSize = False
           Caption = 
             'They can be turned on/off for each model individually using the ' +
@@ -986,7 +965,7 @@ object OptionsForm: TOptionsForm
   object PageControlTreeView: TTreeView
     Left = 17
     Top = 15
-    Width = 142
+    Width = 170
     Height = 284
     Items.Data = {
       0400000028000000FFFFFFFFFFFFFFFF7805AF09000000000000000000000000
@@ -1000,9 +979,9 @@ object OptionsForm: TOptionsForm
     OnChange = PageControlTreeViewChange
   end
   object PageControlTitlePnl: TPanel
-    Left = 170
+    Left = 198
     Top = 15
-    Width = 553
+    Width = 525
     Height = 21
     BevelOuter = bvNone
     Color = clBtnShadow
@@ -1010,8 +989,7 @@ object OptionsForm: TOptionsForm
     object PageControlTitleLbl: TLabel
       Left = 6
       Top = 4
-      Width = 76
-      Height = 13
+      AutoSize = True
       Caption = 'General Options'
       Transparent = True
     end

@@ -119,8 +119,7 @@ object PaletteNavForm: TPaletteNavForm
         object ZoomLbl: TLabel
           Left = 0
           Top = 3
-          Width = 39
-          Height = 13
+          AutoSize = True
           Alignment = taCenter
           AutoSize = False
           Caption = '100%'
@@ -185,18 +184,16 @@ object PaletteNavForm: TPaletteNavForm
           Shape = bsTopLine
         end
         object Label1: TLabel
-          Left = 20
+          Left = 0
           Top = 26
-          Width = 21
-          Height = 13
+          Width = 41
           Alignment = taRightJustify
           Caption = 'Left:'
         end
         object Label2: TLabel
-          Left = 19
+          Left = 7
           Top = 48
-          Width = 22
-          Height = 13
+          Width = 34
           Alignment = taRightJustify
           Caption = 'Top:'
         end
@@ -252,18 +249,16 @@ object PaletteNavForm: TPaletteNavForm
           OnKeyDown = NameEditKeyDown
         end
         object Label3: TLabel
-          Left = 10
+          Left = 0
           Top = 2
-          Width = 31
-          Height = 13
+          Width = 41
           Alignment = taRightJustify
           Caption = 'Name:'
         end
         object Label4: TLabel
-          Left = 118
+          Left = 100
           Top = 26
-          Width = 31
-          Height = 13
+          Width = 49
           Alignment = taRightJustify
           Caption = 'Width:'
         end
@@ -285,10 +280,9 @@ object PaletteNavForm: TPaletteNavForm
           OnKeyDown = WidthEdKeyDown
         end
         object Label5: TLabel
-          Left = 115
+          Left = 93
           Top = 48
-          Width = 34
-          Height = 13
+          Width = 56
           Alignment = taRightJustify
           Caption = 'Height:'
         end
@@ -310,10 +304,9 @@ object PaletteNavForm: TPaletteNavForm
           OnKeyDown = WidthEdKeyDown
         end
         object Label6: TLabel
-          Left = 6
+          Left = 0
           Top = 88
-          Width = 35
-          Height = 13
+          Width = 41
           Alignment = taRightJustify
           Caption = 'Linked:'
         end

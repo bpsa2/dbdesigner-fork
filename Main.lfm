@@ -335,8 +335,7 @@ object MainForm: TMainForm
     object ZoomLbl: TLabel
       Left = 2
       Top = 2
-      Width = 39
-      Height = 13
+      AutoSize = True
       Alignment = taCenter
       AutoSize = False
       Caption = '100%'
@@ -353,8 +352,7 @@ object MainForm: TMainForm
     object StatusCaptionLbl: TLabel
       Left = 119
       Top = 2
-      Width = 414
-      Height = 12
+      AutoSize = True
       Caption = 
         'Pointer [Q] (Click on a Tables, Note, ... to select this object.' +
         ' Hold Ctrl to select more than one objects.)'
@@ -445,8 +443,7 @@ object MainForm: TMainForm
       object QueryStatusLbl: TLabel
         Left = 24
         Top = 2
-        Width = 119
-        Height = 12
+        AutoSize = True
         Caption = 'Not connected to a Database'
         Font.CharSet = 0
         Font.Color = clBlack
@@ -3416,6 +3413,7 @@ object MainForm: TMainForm
       Caption = 'Options'
       object EERModelOptionsMI: TMenuItem
         Caption = 'Model Options'
+        ShortCut = 16461
         OnClick = EERModelOptionsMIClick
       end
       object N3: TMenuItem

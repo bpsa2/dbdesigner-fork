@@ -748,6 +748,8 @@ begin
   //theEERForm.WindowState:=wsMaximized;
   AddToMDIWindowMenu(theEERForm);
 
+  theEERForm.Show;
+
   NewEERModel:=theEERForm;
 end;
 

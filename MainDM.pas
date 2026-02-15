@@ -913,7 +913,7 @@ begin
     DMMain.CreateProz('explorer '+s, '', 1, 0);
 {$ENDIF}
 {$IFDEF LINUX}
-    DMMain.CreateProz('konqueror '+s, '', 1, 0);
+    DMMain.CreateProz('xdg-open '+s, '', 1, 0);
 {$ENDIF}
   end
   else

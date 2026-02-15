@@ -8220,6 +8220,7 @@ begin
     if(Not(DMEER.DisableTextOutput))then
     begin
       Font.Height:=ParentEERModel.GetFontHeight;
+      Brush.Style := bsClear;
       TextOut(xo+EvalZoomFac(4), yo+EvalZoomFac(3), ObjName);
     end;
 
@@ -8294,6 +8295,7 @@ begin
 
         //Write Field Name
         if(Not(DMEER.DisableTextOutput))then
+          Brush.Style := bsClear;
           TextOut(xo+EvalZoomFac(4+16), yo+EvalZoomFac(20+17*ypos), txt);
 
         //Store PK info for comparison with next column
@@ -8340,6 +8342,7 @@ begin
           Font.Style:=[fsItalic];
           Font.Color:=$00222222;
           if(Not(DMEER.DisableTextOutput))then
+            Brush.Style := bsClear;
             TextOut(xo+EvalZoomFac(4+16), yo+EvalZoomFac(20+17*ypos), TEERIndex(Indices[i]).IndexName);
           Font.Style:=[];
           inc(ypos);
@@ -8368,6 +8371,7 @@ begin
                   ParentEERModel.FieldBmp);
 
               if(Not(DMEER.DisableTextOutput))then
+                Brush.Style := bsClear;
                 TextOut(xo+EvalZoomFac(4+16+16), yo+EvalZoomFac(20+17*ypos), theCol.ColName);
             end;
 
@@ -13034,6 +13038,7 @@ begin
     begin
       Font.Height:=ParentEERModel.GetFontHeight;
       Font.Color:=clGray;
+      Brush.Style := bsClear;
       TextOut(xo+EvalZoomFac(4), yo+EvalZoomFac(3), ObjName);
     end;
 

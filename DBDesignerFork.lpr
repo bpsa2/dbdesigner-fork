@@ -8,7 +8,7 @@ program DBDesignerFork;
 //
 //----------------------------------------------------------------------------------------------------------------------
 
-{$I DBDesigner4.inc}
+{$I src/DBDesigner4.inc}
 
 uses
   {$IFDEF UNIX}
@@ -20,45 +20,45 @@ uses
 //-------------------------------------------------------------
 // Include all units
 
-  Main in 'Main.pas' {MainForm},
-  MainDM in 'MainDM.pas' {DMMain: TDataModule},
-  Splash in 'Splash.pas' {SplashForm},
-  EER in 'EER.pas' {EERForm},
-  PaletteTools in 'PaletteTools.pas' {PaletteToolsForm},
-  EERModel in 'EERModel.pas',
-  ZoomSel in 'ZoomSel.pas' {ZoomSelForm},
-  PaletteModel in 'PaletteModel.pas' {PaletteModelFrom},
-  PaletteDatatypes in 'PaletteDatatypes.pas' {PaletteDataTypesForm},
-  EditorTable in 'EditorTable.pas' {EditorTableForm},
-  EditorDatatype in 'EditorDatatype.pas' {EditorDatatypeForm},
-  EditorString in 'EditorString.pas' {EditorStringForm},
-  EditorRegion in 'EditorRegion.pas' {EditorRegionForm},
-  EditorNote in 'EditorNote.pas' {EditorNoteForm},
-  OptionsModel in 'OptionsModel.pas' {OptionsModelForm},
-  EditorRelation in 'EditorRelation.pas' {EditorRelationForm},
-  Options in 'Options.pas' {OptionsForm},
-  EERPageSetup in 'EERPageSetup.pas' {EERPageSetupForm},
-  PaletteNav in 'PaletteNav.pas' {PaletteNavForm},
-  EditorImage in 'EditorImage.pas' {EditorImageForm},
-  EERExportSQLScript in 'EERExportSQLScript.pas' {EERExportSQLScriptFrom},
-  DBConnSelect in 'DBConnSelect.pas' {DBConnSelectForm},
-  PaletteDataTypesReplace in 'PaletteDataTypesReplace.pas' {PaletteDataTypesReplaceForm},
-  EERReverseEngineering in 'EERReverseEngineering.pas' {EERReverseEngineeringForm},
-  EERSynchronisation in 'EERSynchronisation.pas' {EERSynchronisationForm},
-  DBConnEditor in 'DBConnEditor.pas' {DBConnEditorForm},
-  DBConnLogin in 'DBConnLogin.pas' {DBConnLoginForm},
-  EERStoreInDatabase in 'EERStoreInDatabase.pas' {EERStoreInDatabaseForm},
-  EERDM in 'EERDM.pas' {DMEER: TDataModule},
-  EditorTableField in 'EditorTableField.pas',
-  EditorTableFieldDatatypeInplace in 'EditorTableFieldDatatypeInplace.pas',
-  GUIDM in 'GUIDM.pas' {DMGUI: TDataModule},
-  DBDM in 'DBDM.pas' {DMDB: TDataModule},
-  DBEERDM in 'DBEERDM.pas' {DMDBEER: TDataModule},
-  EditorTableFieldParam in 'EditorTableFieldParam.pas' {EditorTableFieldParamForm},
-  Tips in 'Tips.pas' {TipsForm},
-  EditorQuery in 'EditorQuery.pas' {EditorQueryForm},
-  EditorQueryDragTarget in 'EditorQueryDragTarget.pas' {EditorQueryDragTargetForm},
-  EERExportImportDM in 'EERExportImportDM.pas',
+  Main in 'src/Main.pas' {MainForm},
+  MainDM in 'src/MainDM.pas' {DMMain: TDataModule},
+  Splash in 'src/Splash.pas' {SplashForm},
+  EER in 'src/EER.pas' {EERForm},
+  PaletteTools in 'src/PaletteTools.pas' {PaletteToolsForm},
+  EERModel in 'src/EERModel.pas',
+  ZoomSel in 'src/ZoomSel.pas' {ZoomSelForm},
+  PaletteModel in 'src/PaletteModel.pas' {PaletteModelFrom},
+  PaletteDatatypes in 'src/PaletteDatatypes.pas' {PaletteDataTypesForm},
+  EditorTable in 'src/EditorTable.pas' {EditorTableForm},
+  EditorDatatype in 'src/EditorDatatype.pas' {EditorDatatypeForm},
+  EditorString in 'src/EditorString.pas' {EditorStringForm},
+  EditorRegion in 'src/EditorRegion.pas' {EditorRegionForm},
+  EditorNote in 'src/EditorNote.pas' {EditorNoteForm},
+  OptionsModel in 'src/OptionsModel.pas' {OptionsModelForm},
+  EditorRelation in 'src/EditorRelation.pas' {EditorRelationForm},
+  Options in 'src/Options.pas' {OptionsForm},
+  EERPageSetup in 'src/EERPageSetup.pas' {EERPageSetupForm},
+  PaletteNav in 'src/PaletteNav.pas' {PaletteNavForm},
+  EditorImage in 'src/EditorImage.pas' {EditorImageForm},
+  EERExportSQLScript in 'src/EERExportSQLScript.pas' {EERExportSQLScriptFrom},
+  DBConnSelect in 'src/DBConnSelect.pas' {DBConnSelectForm},
+  PaletteDataTypesReplace in 'src/PaletteDataTypesReplace.pas' {PaletteDataTypesReplaceForm},
+  EERReverseEngineering in 'src/EERReverseEngineering.pas' {EERReverseEngineeringForm},
+  EERSynchronisation in 'src/EERSynchronisation.pas' {EERSynchronisationForm},
+  DBConnEditor in 'src/DBConnEditor.pas' {DBConnEditorForm},
+  DBConnLogin in 'src/DBConnLogin.pas' {DBConnLoginForm},
+  EERStoreInDatabase in 'src/EERStoreInDatabase.pas' {EERStoreInDatabaseForm},
+  EERDM in 'src/EERDM.pas' {DMEER: TDataModule},
+  EditorTableField in 'src/EditorTableField.pas',
+  EditorTableFieldDatatypeInplace in 'src/EditorTableFieldDatatypeInplace.pas',
+  GUIDM in 'src/GUIDM.pas' {DMGUI: TDataModule},
+  DBDM in 'src/DBDM.pas' {DMDB: TDataModule},
+  DBEERDM in 'src/DBEERDM.pas' {DMDBEER: TDataModule},
+  EditorTableFieldParam in 'src/EditorTableFieldParam.pas' {EditorTableFieldParamForm},
+  Tips in 'src/Tips.pas' {TipsForm},
+  EditorQuery in 'src/EditorQuery.pas' {EditorQueryForm},
+  EditorQueryDragTarget in 'src/EditorQueryDragTarget.pas' {EditorQueryDragTargetForm},
+  EERExportImportDM in 'src/EERExportImportDM.pas',
 
 //-------------------------------------------------------------
 // Include SynEdit if USE_SYNEDIT is defined
@@ -71,31 +71,31 @@ uses
 //-------------------------------------------------------------
 // Include EmbeddedPDF
 
-  EmbeddedPdfDoc in 'EmbeddedPDF/EmbeddedPdfDoc.pas',
-  EmbeddedPdfFonts in 'EmbeddedPDF/EmbeddedPdfFonts.pas',
-  EmbeddedPdfTypes in 'EmbeddedPDF/EmbeddedPdfTypes.pas',
-  EmbeddedPdfImages in 'EmbeddedPDF/EmbeddedPdfImages.pas',
-  EmbeddedPdfDB in 'EmbeddedPDF/EmbeddedPdfDB.pas',
+  EmbeddedPdfDoc in 'src/EmbeddedPDF/EmbeddedPdfDoc.pas',
+  EmbeddedPdfFonts in 'src/EmbeddedPDF/EmbeddedPdfFonts.pas',
+  EmbeddedPdfTypes in 'src/EmbeddedPDF/EmbeddedPdfTypes.pas',
+  EmbeddedPdfImages in 'src/EmbeddedPDF/EmbeddedPdfImages.pas',
+  EmbeddedPdfDB in 'src/EmbeddedPDF/EmbeddedPdfDB.pas',
 
 //-------------------------------------------------------------
 // Include XML model support if USE_IXMLDBMODELType is defined
 
 {$IFDEF USE_IXMLDBMODELType}
-  EERModel_XML_ERwin41_Import in 'EERModel_XML_ERwin41_Import.pas',
-  EERModel_XML in 'EERModel_XML.pas',
+  EERModel_XML_ERwin41_Import in 'src/EERModel_XML_ERwin41_Import.pas',
+  EERModel_XML in 'src/EERModel_XML.pas',
 {$ENDIF}
 
 //-------------------------------------------------------------
 // Include the new LibXmlParser
 
-  LibXmlParser in 'LibXmlParser.pas',
+  LibXmlParser in 'src/LibXmlParser.pas',
 
-  EERPlaceModel in 'EERPlaceModel.pas',
+  EERPlaceModel in 'src/EERPlaceModel.pas',
   // RegExpr, // using system regexpr
-  GlobalSysFunctions in 'GlobalSysFunctions.pas',
-  UITestRunner in 'UITestRunner.pas';
+  GlobalSysFunctions in 'src/GlobalSysFunctions.pas',
+  UITestRunner in 'src/UITestRunner.pas';
 
-{$R *.res}
+{$R src/DBDesignerFork.res}
 
 begin
   Application.Initialize;

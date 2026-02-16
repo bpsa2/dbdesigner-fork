@@ -106,6 +106,12 @@ The main areas that require attention during the port include:
 | SimpleWebFront Plugin | 40,096 | `bin/DBDplugin_SimpleWebFront` |
 | **Total** | **~150,000** | |
 
+### AI-Assisted Porting
+
+The porting of this codebase from Delphi/CLX to Free Pascal/Lazarus has been carried out entirely by Artificial Intelligence, with guidance and review from human developers. This includes the CLX-to-LCL migration, the creation of the compatibility shim layer, form conversions, database driver replacements, and the automated test infrastructure.
+
+This project serves as a real-world benchmark of how far AI-assisted software engineering has evolved — from understanding legacy codebases, to making architectural decisions, to producing working, compilable code across a ~175,000-line project.
+
 ### Building with Lazarus
 
 **Requirements:**

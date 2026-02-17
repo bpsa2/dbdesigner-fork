@@ -345,3 +345,26 @@ run_os_command('bin/DBDesignerFork --selftest 2>&1', timeout=300, max_memory=102
 ```
 The selftest clicks ~113 menu items and ~29 buttons with 2-second delays between each, plus opens/closes 
 dialogs, so it takes several minutes to complete. Previous runs have taken 2-4 minutes.
+
+
+## Important: Always use `--build-all` after editing `.lfm` files
+
+The Free Pascal Compiler (FPC) does **not** track `.lfm` file changes during incremental builds. If you only edit a `.lfm` form file without touching its corresponding `.pas` unit, the compiler will consider the precompiled `.ppu` unit up-to-date and skip recompilation — meaning your `.lfm` changes will **not** appear in the binary.
+
+### What to do
+
+After editing any `.lfm` file, always rebuild with:
+
+```bash
+lazbuild --build-all DBDesignerFork.lpi
+```
+
+Or in the Lazarus IDE use **Run → Build All** (`Ctrl+Shift+F9`) instead of **Run → Build** (`Shift+F9`).
+
+### Why this happens
+
+The `{$R *.lfm}` directive embeds form data into the `.ppu`/`.o` file at unit compilation time. FPC only checks `.pas` file timestamps to decide whether to recompile a unit — it does not check the timestamp of the corresponding `.lfm` file. So an incremental build will silently use stale form data from the previous compilation.
+
+### Verified experimentally
+1. Changed `Caption` in `src/Splash.lfm` → ran `lazbuild` (incremental) → only 164 lines compiled (just `.lpr`), binary had OLD caption
+2. Ran `lazbuild --build-all` → 58,102 lines compiled (full rebuild), binary had NEW caption

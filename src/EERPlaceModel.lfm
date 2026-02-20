@@ -16,7 +16,7 @@ object EERPlaceModelForm: TEERPlaceModelForm
   Font.Height = -11
   Font.Name = 'Sans'
   TextHeight = 13
-  TextWidth = 6
+  TextHeight = 14
   object LMPnl: TPanel
     Left = 0
     Top = 0

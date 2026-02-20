@@ -9,7 +9,6 @@ object EERPageSetupForm: TEERPageSetupForm
   Color = clBtnFace
   Position = poMainFormCenter
   Scaled = False
-  OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
